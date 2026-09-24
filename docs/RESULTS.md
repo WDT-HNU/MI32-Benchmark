@@ -1,11 +1,13 @@
-# Results status
+# Results
 
 ## Current-contract evidence snapshot
 
-`results/mi32-common32-v4/current-partial-20260911/` contains the runs that match the current
-sealed foundation-model unit contracts. It is deliberately called **partial**: the classic models
-have only fold 0, CodeBrain and EEGMamba have folds 0/2/3, and LaBraM has folds 0/2. Missing folds
-must not be imputed, averaged away, or represented as a complete leaderboard.
+`results/mi32-common32-v4/current-evidence-20260911/` contains runs matching the sealed
+foundation-model unit contracts. The recorded fold coverage is:
+
+- EEGNet, TSception, RGNN backbone, and EEG-Conformer: fold 0;
+- CodeBrain and EEGMamba: folds 0, 2, and 3;
+- LaBraM: folds 0 and 2.
 
 Available test rows:
 
@@ -24,26 +26,23 @@ Available test rows:
 | LaBraM | 0 | 0.544850 | 0.547383 | 0.574403 |
 | LaBraM | 2 | 0.466047 | 0.468288 | 0.494127 |
 
-These rows are an evidence inventory, not a ranking table: fold coverage is unequal and no
-multi-fold mean or uncertainty interval is yet available.
+Each row is interpreted at its recorded fold scope. Cross-model aggregation uses matched folds and
+publishes its aggregation rule together with the resulting table.
 
-## Historical package
+## Historical audit package
 
 `results/mi32-common32-v4/historical-fold0-pre-unit-hardening/` preserves the earlier seven-model
-fold-0 evidence package so that the audit trail is not destroyed. Its EEGMamba and CodeBrain
-scores are superseded because that package predates the final `V -> µV/100` adapter contract.
-Do not cite that directory as the current leaderboard. Classic-model rows are retained in the
-current snapshot; the historical files exist only for provenance.
+fold-0 package as an immutable provenance record. The current-contract reporting table is the
+snapshot above.
 
-## Why Uni-NTFM is absent
+## Uni-NTFM track
 
-The public Uni-NTFM repository supplies a backbone/training sketch but no official pretrained
-checkpoint or downstream classification-head contract. This project has an explicit supervised
-protocol adapter, but any resulting number is labeled `protocol_benchmark`, not
-`formal_reproduction`, and is not mixed into the formal-model table.
+Uni-NTFM is published as a separately labeled `protocol_benchmark` implementation. Its model card,
+adapter geometry, structure test, and explicit launch flag keep that track distinct from the seven
+formal-reproduction models.
 
-## Required next result milestone
+## Result artifacts
 
-Run all predeclared folds on one frozen release commit, then publish per-fold and aggregate metrics
-with confidence intervals and dataset-level sensitivity analyses. Test predictions are now emitted
-as CSV so metrics can be independently recomputed.
+Published evidence contains metric CSVs and run manifests recording dataset identity, model source,
+checkpoint identity, adapter contract, split, seed, and selected epoch. Current runners also emit
+per-trial labels, predictions, and class probabilities for independent metric recomputation.

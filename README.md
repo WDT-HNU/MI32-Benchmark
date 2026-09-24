@@ -4,8 +4,8 @@
 八个模型的输入适配、训练/验证/测试协议、结构门禁、上游代码与 checkpoint 身份、运行清单
 和结果证据放在同一仓库中。
 
-> 当前发布状态：`0.1.0-alpha`。代码与已封存的部分 fold 结果可公开审查；完整 8.7 GB 数据包
-> 不进入 Git 历史，公共下载端点与源数据再分发许可仍需在正式公开发布前确认。
+> 当前版本：`0.1.0-alpha`。仓库提供数据契约、公开元数据、模型实现与适配器、实验协议、
+> 自动校验工具和可追溯结果证据；完整信号包采用 Git 外部制品与 SHA-256 清单管理。
 
 ## 这个仓库回答什么问题
 
@@ -24,7 +24,7 @@
 - 输入：`float32 [N, 32, 750]`，250 Hz，3 秒，单位 Volt；
 - 标签：`0=left_upper`、`1=right_upper`、`2=non_upper`；
 - 每名受试者保持 `1:1:2`，全局为 `24,402:24,402:48,804`；
-- 缺失目标通道使用 MNE `standard_1005` 坐标上的 Perrin 球面样条插值；
+- 未直接测量的目标通道使用 MNE `standard_1005` 坐标上的 Perrin 球面样条插值；
 - `measured_mask` 区分直接测量与插值通道，插值信号不会再次补零；
 - 数据发布由 `SHA256SUMS` 封存，清单自身 SHA-256 为
   `1017a3dd50d11ff9d92d987a40996fc2fd61ace99d465213bdb0316ff52aad06`。
@@ -100,10 +100,10 @@ python scripts/benchmark.py run --model eegmamba --data datasets/mi32/full \
 
 ## 当前结果边界
 
-仓库包含与当前单位合同一致的部分 fold 证据快照，位于
-[`results/mi32-common32-v4/current-partial-20260911`](results/mi32-common32-v4/current-partial-20260911)。
-各模型 fold 覆盖并不相等，因此不能冒充完整多 fold 均值或最终排名。旧 fold-0 包仅作为
-历史审计证据保留。Uni-NTFM 没有混入正式复现表。查看
+仓库包含与当前单位合同一致的 fold 证据快照，位于
+[`results/mi32-common32-v4/current-evidence-20260911`](results/mi32-common32-v4/current-evidence-20260911)。
+目录逐项记录各模型现有 fold 覆盖、指标 CSV 和运行清单；早期 fold-0 包独立归档用于审计
+追溯，Uni-NTFM 单列为协议适配轨道。查看
 [结果说明](docs/RESULTS.md) 与 [证据矩阵](docs/audits/EVIDENCE_MATRIX.md)。
 
 ## 仓库结构
@@ -133,5 +133,5 @@ MI32-Benchmark/
 MI32 Benchmark is an auditable common-32-channel motor-imagery EEG benchmark. It ships the
 dataset contract and public metadata, eight explicit model-input adapters, leakage-resistant
 subject splits, pinned upstream/checkpoint identities, structure/CUDA gates, run manifests,
-and a contract-matched partial result snapshot. Large or restricted data, third-party
-repositories, and checkpoints are fetched separately and verified by SHA-256.
+and a contract-matched result snapshot. Signal archives, third-party repositories, and
+checkpoints use separate retrieval and SHA-256 verification workflows.

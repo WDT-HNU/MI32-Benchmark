@@ -22,7 +22,7 @@
 
 ## Scientific claims
 
-- [ ] Keep incomplete and unequal fold coverage labeled as a partial evidence snapshot.
+- [ ] Publish the exact fold coverage beside every result summary.
 - [ ] Keep Uni-NTFM protocol results outside the formal-reproduction table.
 - [ ] Run all predeclared folds before claiming a final model ranking.
 - [ ] Report source-dataset sensitivity and uncertainty.

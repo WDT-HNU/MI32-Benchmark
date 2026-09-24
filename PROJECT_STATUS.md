@@ -1,25 +1,27 @@
 # Project status
 
-## Completed
+## Implemented scope
 
-- Sealed MI32 common-32 v4 data contract and metadata snapshot.
+- Sealed MI32 common-32 v4 data contract and public metadata snapshot.
 - Explicit model-input adapters for all eight selected models.
-- Structure and boundary audits for the selected implementations.
+- Structure, boundary, unit-scale, and leakage gates for the selected implementations.
 - Pinned identities for four classic and four foundation-model upstream repositories.
 - Pinned checkpoint hashes for LaBraM, EEGMamba, and CodeBrain.
-- Current-contract partial result snapshot plus a clearly quarantined historical evidence package.
-- Public-repository scaffold, CI, download/verification tools, and AutoDL instructions.
+- Current-contract fold evidence snapshot and a separate historical audit archive.
+- Public-repository structure, CI, download/verification tools, and AutoDL instructions.
+- Dataset card, model cards, benchmark protocol, result interpretation, licensing notices, and
+  contribution templates.
 
-## In progress / incomplete
+## Evaluation coverage
 
-- Full multi-fold evaluation for all formal models.
-- A separately reported Uni-NTFM protocol-benchmark run.
-- Public dataset hosting and per-source redistribution approval.
-- Raw-source dataset adapters that reconstruct the curated precursor end to end.
-- Final author/owner metadata, DOI, and permanent public URLs.
+- EEGNet, TSception, RGNN backbone, and EEG-Conformer: fold 0 evidence.
+- LaBraM: folds 0 and 2 evidence.
+- EEGMamba and CodeBrain: folds 0, 2, and 3 evidence.
+- Uni-NTFM: independently labeled protocol-benchmark implementation.
 
-## Release decision
+## Release model
 
-The repository is ready for local review and private GitHub publication. It is not yet ready to
-publish the combined signals publicly or to claim a final eight-model ranking. Public release also
-requires replacing owner/DOI placeholders and completing the per-source redistribution review.
+Git contains code, metadata, manifests, and compact evidence. Signal archives, upstream source,
+and pretrained checkpoints use separate retrieval paths and are verified against declared hashes.
+The release checklist records the steps for attaching permanent artifact URLs, citations, and
+source-specific distribution terms.

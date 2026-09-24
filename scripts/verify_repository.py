@@ -77,7 +77,7 @@ def main() -> None:
         if not target.is_file() or digest(target) != expected:
             errors.append(f"result package mismatch: {relative}")
 
-    current_results = ROOT / "results" / "mi32-common32-v4" / "current-partial-20260911"
+    current_results = ROOT / "results" / "mi32-common32-v4" / "current-evidence-20260911"
     for result_csv in sorted(current_results.glob("*_results.csv")):
         manifest = result_csv.with_name(result_csv.name.replace("_results.csv", "_run_manifest.json"))
         if not manifest.is_file():
