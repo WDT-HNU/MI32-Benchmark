@@ -1,0 +1,446 @@
+{
+  "model_identity": "LaBraM pretrained faithful adaptation to MI-32",
+  "source_snapshot": {
+    "adapter_source": "/root/autodl-tmp/outputs_mi32_common32_v4/labram_final_fold0/source_snapshot/mi3_foundation.py",
+    "adapter_sha256": "1ccf4e3247c28b6a8d883ba5102316bd78ba919918658c76e2a7ee042d76f462",
+    "braindecode_source": "/root/autodl-tmp/outputs_mi32_common32_v4/labram_final_fold0/source_snapshot/braindecode_labram.py",
+    "braindecode_source_sha256": "4102baa7e509c8674c663fa0d30937e389f452e414b33c0588b5f59721eb4e45",
+    "braindecode_version": "1.7.0",
+    "required_braindecode_version": "1.7.0"
+  },
+  "checkpoint": {
+    "checkpoint_path": "/root/autodl-tmp/projects/LaBraM/checkpoints/pytorch_model.bin",
+    "checkpoint_bytes": 23351447,
+    "checkpoint_sha256": "86a40de11088b85291eb47b788b049d784e619a6b3f8e84accbf640b2c59eec3",
+    "checkpoint_expected_sha256": "86a40de11088b85291eb47b788b049d784e619a6b3f8e84accbf640b2c59eec3",
+    "checkpoint_source": "https://huggingface.co/braindecode/labram-pretrained/resolve/0563b6c626e7b40d9a36653b763715db94d945d7/pytorch_model.bin",
+    "checkpoint_revision": "0563b6c626e7b40d9a36653b763715db94d945d7",
+    "checkpoint_conversion_source": "https://huggingface.co/braindecode/Labram-Braindecode",
+    "author_checkpoint_source": "https://github.com/935963004/LaBraM/blob/c431221e6cfd23dbfa9950e0180682fb322b0548/checkpoints/labram-base.pth",
+    "author_checkpoint_sha256": "7c50583826afac76c4ab18f43d958df40496c8229accc09ed6a227c9bb57c37c",
+    "author_to_converted_equivalence": "all 221 converted tensors / 5,819,936 parameters independently compared; max_abs_error=0",
+    "checkpoint_identity_verified": true,
+    "checkpoint_parameter_count": 5819936,
+    "model_parameter_count": 5817939,
+    "backbone_parameter_count_excluding_new_head": 5817336,
+    "exact_loaded_parameter_count": 5816736,
+    "temporally_adapted_parameter_count": 600,
+    "backbone_coverage": 1.0,
+    "bit_exact_backbone_ratio": 0.9998968600060234,
+    "reinitialized_parameters": {
+      "final_layer.weight": 600,
+      "final_layer.bias": 3
+    },
+    "checkpoint_missing": [
+      "final_layer.weight",
+      "final_layer.bias"
+    ],
+    "checkpoint_unexpected": [],
+    "shape_mismatch_after_permitted_adaptation": {},
+    "normalization_key_mapping": {
+      "norm.weight": "fc_norm.weight",
+      "norm.bias": "fc_norm.bias"
+    },
+    "numerical_load_all_non_temporal_max_abs_error": 0.0,
+    "numerical_load_sample": {
+      "blocks.0.attn.k_norm.bias": 0.0,
+      "blocks.1.gamma_1": 0.0,
+      "blocks.10.norm2.bias": 0.0,
+      "blocks.2.attn.q_norm.weight": 0.0,
+      "blocks.3.mlp.2.weight": 0.0,
+      "blocks.5.attn.proj.weight": 0.0,
+      "blocks.6.mlp.0.weight": 0.0,
+      "blocks.8.attn.k_norm.bias": 0.0,
+      "blocks.9.gamma_2": 0.0,
+      "position_embedding": 0.0
+    },
+    "temporal_embedding": {
+      "checkpoint_shape": [
+        1,
+        16,
+        200
+      ],
+      "model_shape": [
+        1,
+        3,
+        200
+      ],
+      "interpolation_axis": 1,
+      "method": "linear",
+      "align_corners": false,
+      "other_axes_unchanged": true
+    },
+    "matched_channels": 32,
+    "unknown_channels": [],
+    "channel_mapping": [
+      {
+        "input_index": 0,
+        "input_name": "Fp1",
+        "official_name": "FP1",
+        "official_index_zero_based": 0,
+        "model_embedding_id_with_cls_offset": 1
+      },
+      {
+        "input_index": 1,
+        "input_name": "Fp2",
+        "official_name": "FP2",
+        "official_index_zero_based": 2,
+        "model_embedding_id_with_cls_offset": 3
+      },
+      {
+        "input_index": 2,
+        "input_name": "AF3",
+        "official_name": "AF3",
+        "official_index_zero_based": 6,
+        "model_embedding_id_with_cls_offset": 7
+      },
+      {
+        "input_index": 3,
+        "input_name": "AF4",
+        "official_name": "AF4",
+        "official_index_zero_based": 10,
+        "model_embedding_id_with_cls_offset": 11
+      },
+      {
+        "input_index": 4,
+        "input_name": "F7",
+        "official_name": "F7",
+        "official_index_zero_based": 15,
+        "model_embedding_id_with_cls_offset": 16
+      },
+      {
+        "input_index": 5,
+        "input_name": "F3",
+        "official_name": "F3",
+        "official_index_zero_based": 17,
+        "model_embedding_id_with_cls_offset": 18
+      },
+      {
+        "input_index": 6,
+        "input_name": "Fz",
+        "official_name": "FZ",
+        "official_index_zero_based": 19,
+        "model_embedding_id_with_cls_offset": 20
+      },
+      {
+        "input_index": 7,
+        "input_name": "F4",
+        "official_name": "F4",
+        "official_index_zero_based": 21,
+        "model_embedding_id_with_cls_offset": 22
+      },
+      {
+        "input_index": 8,
+        "input_name": "F8",
+        "official_name": "F8",
+        "official_index_zero_based": 23,
+        "model_embedding_id_with_cls_offset": 24
+      },
+      {
+        "input_index": 9,
+        "input_name": "FC5",
+        "official_name": "FC5",
+        "official_index_zero_based": 27,
+        "model_embedding_id_with_cls_offset": 28
+      },
+      {
+        "input_index": 10,
+        "input_name": "FC3",
+        "official_name": "FC3",
+        "official_index_zero_based": 28,
+        "model_embedding_id_with_cls_offset": 29
+      },
+      {
+        "input_index": 11,
+        "input_name": "FCz",
+        "official_name": "FCZ",
+        "official_index_zero_based": 30,
+        "model_embedding_id_with_cls_offset": 31
+      },
+      {
+        "input_index": 12,
+        "input_name": "FC4",
+        "official_name": "FC4",
+        "official_index_zero_based": 32,
+        "model_embedding_id_with_cls_offset": 33
+      },
+      {
+        "input_index": 13,
+        "input_name": "FC6",
+        "official_name": "FC6",
+        "official_index_zero_based": 33,
+        "model_embedding_id_with_cls_offset": 34
+      },
+      {
+        "input_index": 14,
+        "input_name": "T7",
+        "official_name": "T7",
+        "official_index_zero_based": 37,
+        "model_embedding_id_with_cls_offset": 38
+      },
+      {
+        "input_index": 15,
+        "input_name": "C3",
+        "official_name": "C3",
+        "official_index_zero_based": 39,
+        "model_embedding_id_with_cls_offset": 40
+      },
+      {
+        "input_index": 16,
+        "input_name": "Cz",
+        "official_name": "CZ",
+        "official_index_zero_based": 41,
+        "model_embedding_id_with_cls_offset": 42
+      },
+      {
+        "input_index": 17,
+        "input_name": "C4",
+        "official_name": "C4",
+        "official_index_zero_based": 43,
+        "model_embedding_id_with_cls_offset": 44
+      },
+      {
+        "input_index": 18,
+        "input_name": "T8",
+        "official_name": "T8",
+        "official_index_zero_based": 45,
+        "model_embedding_id_with_cls_offset": 46
+      },
+      {
+        "input_index": 19,
+        "input_name": "CP5",
+        "official_name": "CP5",
+        "official_index_zero_based": 49,
+        "model_embedding_id_with_cls_offset": 50
+      },
+      {
+        "input_index": 20,
+        "input_name": "CP3",
+        "official_name": "CP3",
+        "official_index_zero_based": 50,
+        "model_embedding_id_with_cls_offset": 51
+      },
+      {
+        "input_index": 21,
+        "input_name": "CPz",
+        "official_name": "CPZ",
+        "official_index_zero_based": 52,
+        "model_embedding_id_with_cls_offset": 53
+      },
+      {
+        "input_index": 22,
+        "input_name": "CP4",
+        "official_name": "CP4",
+        "official_index_zero_based": 54,
+        "model_embedding_id_with_cls_offset": 55
+      },
+      {
+        "input_index": 23,
+        "input_name": "CP6",
+        "official_name": "CP6",
+        "official_index_zero_based": 55,
+        "model_embedding_id_with_cls_offset": 56
+      },
+      {
+        "input_index": 24,
+        "input_name": "P7",
+        "official_name": "P7",
+        "official_index_zero_based": 59,
+        "model_embedding_id_with_cls_offset": 60
+      },
+      {
+        "input_index": 25,
+        "input_name": "P3",
+        "official_name": "P3",
+        "official_index_zero_based": 61,
+        "model_embedding_id_with_cls_offset": 62
+      },
+      {
+        "input_index": 26,
+        "input_name": "Pz",
+        "official_name": "PZ",
+        "official_index_zero_based": 63,
+        "model_embedding_id_with_cls_offset": 64
+      },
+      {
+        "input_index": 27,
+        "input_name": "P4",
+        "official_name": "P4",
+        "official_index_zero_based": 65,
+        "model_embedding_id_with_cls_offset": 66
+      },
+      {
+        "input_index": 28,
+        "input_name": "P8",
+        "official_name": "P8",
+        "official_index_zero_based": 67,
+        "model_embedding_id_with_cls_offset": 68
+      },
+      {
+        "input_index": 29,
+        "input_name": "O1",
+        "official_name": "O1",
+        "official_index_zero_based": 80,
+        "model_embedding_id_with_cls_offset": 81
+      },
+      {
+        "input_index": 30,
+        "input_name": "Oz",
+        "official_name": "OZ",
+        "official_index_zero_based": 81,
+        "model_embedding_id_with_cls_offset": 82
+      },
+      {
+        "input_index": 31,
+        "input_name": "O2",
+        "official_name": "O2",
+        "official_index_zero_based": 82,
+        "model_embedding_id_with_cls_offset": 83
+      }
+    ],
+    "braindecode_version": "1.7.0",
+    "braindecode_labram_source_sha256": "4102baa7e509c8674c663fa0d30937e389f452e414b33c0588b5f59721eb4e45",
+    "input_normalization": "LaBraM-specific physical scaling from corpus volts to microvolts (x1e6); no per-trial or per-channel z-score",
+    "resampling": {
+      "input_hz": 250,
+      "output_hz": 200,
+      "input_samples": 750,
+      "output_samples": 600,
+      "method": "Hann-windowed sinc polyphase bandlimited interpolation",
+      "anti_aliasing": true,
+      "lowpass_filter_width": 6,
+      "rolloff": 0.99,
+      "trial_local": true,
+      "deterministic": true
+    },
+    "patching": {
+      "patch_samples": 200,
+      "patch_seconds": 1.0,
+      "patches_per_channel": 3,
+      "channel_time_tokens": 96,
+      "transformer_tokens_including_cls": 97,
+      "token_order": "channel-major, then temporal patch"
+    },
+    "pooling": "mean of all 96 non-CLS channel-time tokens, followed by fc_norm",
+    "classifier": "single Linear(200, 3)"
+  },
+  "structure_audit": {
+    "status": "PASS",
+    "input_shape": [
+      2,
+      32,
+      750
+    ],
+    "resampled_shape": [
+      2,
+      32,
+      600
+    ],
+    "segments": [
+      2,
+      32,
+      3,
+      200
+    ],
+    "channel_time_tokens": [
+      2,
+      96,
+      200
+    ],
+    "mean_pool_input": [
+      2,
+      200
+    ],
+    "transformer_tokens_including_cls": 97,
+    "output_shape": [
+      2,
+      3
+    ],
+    "channel_ids": [
+      1,
+      3,
+      7,
+      11,
+      16,
+      18,
+      20,
+      22,
+      24,
+      28,
+      29,
+      31,
+      33,
+      34,
+      38,
+      40,
+      42,
+      44,
+      46,
+      50,
+      51,
+      53,
+      55,
+      56,
+      60,
+      62,
+      64,
+      66,
+      68,
+      81,
+      82,
+      83
+    ],
+    "checkpoint_sha256": "86a40de11088b85291eb47b788b049d784e619a6b3f8e84accbf640b2c59eec3",
+    "backbone_coverage": 1.0,
+    "bit_exact_backbone_ratio": 0.9998968600060234,
+    "non_temporal_max_abs_error": 0.0,
+    "pooling": "mean of all 96 non-CLS channel-time tokens, followed by fc_norm",
+    "classifier": "single Linear(200, 3)"
+  },
+  "adapter_manifest": {
+    "adapter_kind": "model_input_adapter",
+    "adapter": "labram",
+    "model": "LaBraM",
+    "official_reference": "Jiang et al. 2024 (LaBraM, ICLR); \u4f5c\u8005\u9884\u5904\u7406: \u7269\u7406 \u00b5V + 200Hz + \u901a\u9053\u540d\u6620\u5c04 + 3x200 patch (braindecode 1.7.0 \u5c01\u5370); MI-32 \u9002\u914d: V->\u00b5V x1e6 + 250->200Hz sinc \u6297\u6df7\u53e0 (B \u7c7b)",
+    "input_contract": {
+      "channels": 32,
+      "samples": 750,
+      "fs": 250,
+      "unit": "V"
+    },
+    "output_contract": {
+      "channels": 32,
+      "samples": 600,
+      "fs": 200,
+      "unit": "uV",
+      "note": "\u901a\u9053\u91cd\u6392/embedding \u6620\u5c04\u4fdd\u7559\u5728\u6a21\u578b\u5c42 (\u4e0e braindecode backbone \u8026\u5408)"
+    },
+    "source_sha256": "07bebe0dab765724edb86ad368e79a47bc175db7383dd4cac8a26b9de55a7cc2",
+    "stats": {
+      "source_split": "train",
+      "split_hash": "3dce346c8ab7f6db74de2fd51eabd9dcfb67fb072088b1c91663f0bbcd0d1f12",
+      "n_subjects": 140,
+      "n_trials": 59372,
+      "fit_timestamp": "2026-09-02T16:41:58Z",
+      "values": {}
+    },
+    "ablation_states": [
+      "naive",
+      "none",
+      "official"
+    ]
+  },
+  "dataset_manifest_sha256": "1017a3dd50d11ff9d92d987a40996fc2fd61ace99d465213bdb0316ff52aad06",
+  "data_artifact_sha256": {
+    "config.json": "3b94a0d39904bea1a14a636f225d258e4bbc896000d020dfbbc607b73ca16270",
+    "subjects.csv": "d66ce4bfc66b1061f69621035e1be3bf9cd12af536a5cdfa22a78885e7e08619",
+    "splits.csv": "75dd4df0e474044bdc6055230fae464b4c3f7166670ab5b5c585accf84fb5c10",
+    "trials.csv": "9741fc0ea78e87ff88d810880e7bfe8133b208ae4428ca340dbbbd6812eb81ec",
+    "provenance.csv": "d791a4d4497b99b5ae196d66a84f50e249a7fe8cd3af1bc2da562bfe5b28238e",
+    "quality_flags.csv": "1f669e66c3177c69660b4a943a0c3ae31edefc3c80d3e5a30b37db1f99e258ed",
+    "release_audit.json": "8a9a71cce6ae537ddd89bc8998347dc4b4182884d7746fb99f5fef57113c8df8",
+    "electrode_adjacency.npy": "c9adbf4313e1a48e799d05d4a635ed463f540ce965b2bd1411dd020cdffbfb03",
+    "SHA256SUMS": "1017a3dd50d11ff9d92d987a40996fc2fd61ace99d465213bdb0316ff52aad06"
+  },
+  "structure_audit_used_dataset_samples": false
+}

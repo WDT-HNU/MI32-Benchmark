@@ -1,0 +1,40 @@
+[build-system]
+requires = ["setuptools>=75", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mi32-benchmark"
+version = "0.1.0a0"
+description = "Auditable common-32 motor-imagery EEG benchmark"
+readme = "README.md"
+requires-python = ">=3.12,<3.13"
+license = { text = "Apache-2.0" }
+dependencies = [
+  "numpy==2.3.2",
+  "pandas==3.0.5",
+  "scipy==1.18.0",
+  "scikit-learn>=1.7,<2",
+  "mne==1.12.1",
+  "einops==0.8.1",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.4,<9", "ruff>=0.12,<1"]
+labram = ["braindecode==1.7.0"]
+eegmamba = ["mamba_ssm==2.2.5", "causal_conv1d==1.6.2.post1"]
+
+[tool.setuptools]
+py-modules = []
+
+[tool.pytest.ini_options]
+testpaths = ["tests", "model_adapters/tests"]
+addopts = "-ra"
+markers = [
+  "external: requires a pinned upstream repository or checkpoint",
+  "cuda: requires a real CUDA runtime",
+  "dataset: requires the complete sealed MI32 dataset",
+]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 120

@@ -1,0 +1,31 @@
+{
+  "adapter_kind": "model_input_adapter",
+  "adapter": "rgnn",
+  "model": "RGNN backbone (without NodeDAT/EmotionDL)",
+  "official_reference": "Zhong et al. 2019 (RGNN, IEEE T-AFFC); 本项目限定: 归纳式图骨干, 节点特征=五频带 log-power surrogate (非官方 DE+LDS, C 类明示); 邻接=距离初始化+论文全局对",
+  "input_contract": {
+    "channels": 32,
+    "samples": 750,
+    "fs": 250,
+    "unit": "V"
+  },
+  "output_contract": {
+    "shape": "[B, 32, 5]",
+    "features": "五频带 log-power (delta/theta/alpha/beta/gamma)",
+    "note": "特征提取无参数、无训练集统计; 邻接由数据文件提供"
+  },
+  "source_sha256": "c8952f09e859a74030d7fc0eb61f5db15ee75fe2b71b66d84db20bb265e654a0",
+  "stats": {
+    "source_split": "train",
+    "split_hash": "3dce346c8ab7f6db74de2fd51eabd9dcfb67fb072088b1c91663f0bbcd0d1f12",
+    "n_subjects": 140,
+    "n_trials": 59372,
+    "fit_timestamp": "2026-09-02T15:08:58Z",
+    "values": {}
+  },
+  "ablation_states": [
+    "naive",
+    "none",
+    "official"
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "adapter_kind": "model_input_adapter",
+  "adapter": "labram",
+  "model": "LaBraM",
+  "official_reference": "Jiang et al. 2024 (LaBraM, ICLR); 作者预处理: 物理 µV + 200Hz + 通道名映射 + 3x200 patch (braindecode 1.7.0 封印); MI-32 适配: V->µV x1e6 + 250->200Hz sinc 抗混叠 (B 类)",
+  "input_contract": {
+    "channels": 32,
+    "samples": 750,
+    "fs": 250,
+    "unit": "V"
+  },
+  "output_contract": {
+    "channels": 32,
+    "samples": 600,
+    "fs": 200,
+    "unit": "uV",
+    "note": "通道重排/embedding 映射保留在模型层 (与 braindecode backbone 耦合)"
+  },
+  "source_sha256": "07bebe0dab765724edb86ad368e79a47bc175db7383dd4cac8a26b9de55a7cc2",
+  "stats": {
+    "source_split": "train",
+    "split_hash": "3dce346c8ab7f6db74de2fd51eabd9dcfb67fb072088b1c91663f0bbcd0d1f12",
+    "n_subjects": 140,
+    "n_trials": 59372,
+    "fit_timestamp": "2026-09-02T16:41:58Z",
+    "values": {}
+  },
+  "ablation_states": [
+    "naive",
+    "none",
+    "official"
+  ]
+}

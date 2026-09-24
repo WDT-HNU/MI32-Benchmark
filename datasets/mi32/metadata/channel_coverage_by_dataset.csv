@@ -1,0 +1,9 @@
+source_dataset,n_subjects,min_measured,max_measured,interpolated
+BNCI2014_001,9,11,11,21
+PhysionetMI,109,32,32,0
+Schirrmeister2017,14,32,32,0
+Stieger2021,62,32,32,0
+Wairagkar2018,14,19,19,13
+Weibo2014,10,32,32,0
+Zhou2016,4,14,14,18
+Zhou2020,8,16,16,16

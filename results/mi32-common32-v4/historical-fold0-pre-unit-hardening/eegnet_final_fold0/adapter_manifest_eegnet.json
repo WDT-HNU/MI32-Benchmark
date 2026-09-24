@@ -1,0 +1,37 @@
+{
+  "adapter_kind": "model_input_adapter",
+  "adapter": "eegnet",
+  "model": "EEGNet-8,2",
+  "official_reference": "Lawhern et al. 2018 (EEGNet: compact CNN for EEG-BCI); MI-32 适配: V->mV x1000 + 训练集全局 affine 标定 (B 类, 依据 mi3_eegnet.py EEGNetCalibratedTrials)",
+  "input_contract": {
+    "channels": 32,
+    "samples": 750,
+    "fs": 250,
+    "unit": "V"
+  },
+  "output_contract": {
+    "channels": 32,
+    "samples": 750,
+    "fs": 250,
+    "unit": "scaled: (V*1000 - train_mean) / train_std",
+    "dtype": "float32"
+  },
+  "source_sha256": "74a0beb6968ad5782786274c9cffad1b5b0dcd2f4aff92b16159999d64ebc17e",
+  "stats": {
+    "source_split": "train",
+    "split_hash": "3dce346c8ab7f6db74de2fd51eabd9dcfb67fb072088b1c91663f0bbcd0d1f12",
+    "n_subjects": 140,
+    "n_trials": 59372,
+    "fit_timestamp": "2026-09-02T13:35:29Z",
+    "values": {
+      "unit_scale": 1000.0,
+      "mean": -1.4939587344997562e-07,
+      "std": 0.0106687406077981
+    }
+  },
+  "ablation_states": [
+    "naive",
+    "none",
+    "official"
+  ]
+}

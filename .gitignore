@@ -1,0 +1,39 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.venv/
+venv/
+
+# Large/restricted artifacts never enter Git history.
+datasets/mi32/full/
+datasets/mi32/downloads/
+third_party/
+checkpoints/
+outputs/
+logs/
+*.pt
+*.pth
+*.ckpt
+*.bin
+*.npz
+*.npy
+!datasets/mi32/metadata/electrode_adjacency.npy
+
+# Local configuration and credentials.
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*credentials*
+*secret*
+
+# Editors and operating systems.
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+desktop.ini

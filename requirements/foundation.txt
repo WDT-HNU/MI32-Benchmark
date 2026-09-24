@@ -1,0 +1,3 @@
+braindecode==1.7.0
+mamba_ssm==2.2.5
+causal_conv1d==1.6.2.post1

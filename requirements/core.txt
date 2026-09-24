@@ -1,0 +1,8 @@
+# Verified AutoDL base environment: Python 3.12.3, CUDA 12.8, RTX 4090 D.
+# Install torch/torchaudio from the matching PyTorch CUDA index before this file.
+numpy==2.3.2
+pandas==3.0.5
+scipy==1.18.0
+scikit-learn>=1.7,<2
+mne==1.12.1
+einops==0.8.1

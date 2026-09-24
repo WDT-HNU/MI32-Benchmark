@@ -1,0 +1,48 @@
+{
+  "status": "PASS",
+  "dataset_version": "4.0-common32",
+  "subjects": 230,
+  "trials": 97608,
+  "labels": {
+    "0": 24402,
+    "1": 24402,
+    "2": 48804
+  },
+  "binary_channel_order_exact_casefold_match": true,
+  "direct_measured_channels_max_abs_error": 0.0,
+  "sample_signal_percentiles_volts": {
+    "p50_abs": 3.987755007983651e-06,
+    "p95_abs": 2.630239941936452e-05,
+    "p99_abs": 5.07250806549564e-05,
+    "p999_abs": 0.0001125737398979254,
+    "max_abs": 0.0018280763179063797
+  },
+  "finite_values": true,
+  "per_subject_label_ratio": "1:1:2 PASS",
+  "subject_split_coverage": "230/230 exactly once",
+  "source_signal_quality": {
+    "nan_trials": 0,
+    "inf_trials": 0,
+    "flat_trials": 0,
+    "robust_extreme_review_flags": 501,
+    "flags_by_dataset": {
+      "PhysionetMI": 3,
+      "Schirrmeister2017": 3,
+      "Stieger2021": 19,
+      "Wairagkar2018": 1,
+      "Zhou2016": 7,
+      "Zhou2020": 468
+    },
+    "policy": "review flags retained; no automatic artifact rejection was applied",
+    "quality_flags_file": "quality_flags.csv",
+    "flagged_global_trial_ids_unique": true
+  },
+  "known_semantic_limitations": [
+    "class 2 is a heterogeneous non_upper superclass that can include feet, tongue, or rest depending on source dataset; upstream v2.4 excludes hands/both_hands/both_hand boundary events",
+    "standard_1005 template coordinates are used for cross-dataset spatial interpolation rather than subject-specific digitized electrode positions"
+  ],
+  "errors": [],
+  "warnings": [
+    "501 source trials carry robust_extreme_review flags and should be covered by a declared artifact policy or sensitivity analysis"
+  ]
+}

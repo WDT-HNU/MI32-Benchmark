@@ -1,0 +1,8 @@
+{
+  "status": "RELEASE",
+  "subjects": 230,
+  "trials": 97608,
+  "channels": 32,
+  "unique_source_channel_patterns": 7,
+  "method": "Perrin spherical-spline interpolation from all measured source channels"
+}

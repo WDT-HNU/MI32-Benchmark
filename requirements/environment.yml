@@ -1,0 +1,14 @@
+name: mi32-benchmark
+channels:
+  - pytorch
+  - nvidia
+  - conda-forge
+dependencies:
+  - python=3.12.3
+  - pip
+  - pytorch=2.8.0
+  - torchaudio=2.8.0
+  - pytorch-cuda=12.8
+  - pip:
+      - -r requirements/core.txt
+      - -r requirements/foundation.txt

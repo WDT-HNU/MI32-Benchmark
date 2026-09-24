@@ -1,0 +1,16 @@
+cff-version: 1.2.0
+message: "If you use this benchmark, cite this repository and the original datasets and models listed in THIRD_PARTY.md."
+title: "MI32 Benchmark: a reproducible common-32 motor-imagery EEG benchmark"
+type: software
+version: 0.1.0-alpha
+date-released: 2026-09-24
+authors:
+  - family-names: "Benchmark Contributors"
+repository-code: "https://github.com/OWNER/MI32-Benchmark"
+license: Apache-2.0
+keywords:
+  - EEG
+  - motor imagery
+  - benchmark
+  - foundation model
+  - reproducibility

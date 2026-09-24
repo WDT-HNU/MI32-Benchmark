@@ -1,0 +1,8 @@
+{
+  "models": 7,
+  "rows": 14,
+  "validation_rows": 7,
+  "test_rows": 7,
+  "unique_test_row_per_model": true,
+  "all_test_selection_flags_false": true
+}

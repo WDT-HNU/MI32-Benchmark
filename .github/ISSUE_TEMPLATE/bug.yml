@@ -1,0 +1,33 @@
+name: Reproducibility bug
+description: Report an identity, data-contract, runtime, or result mismatch.
+title: "[Bug]: "
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: Do not include EEG signals, credentials, signed URLs, or private participant data.
+  - type: input
+    id: version
+    attributes:
+      label: Repository commit or release
+    validations:
+      required: true
+  - type: textarea
+    id: command
+    attributes:
+      label: Exact command and environment
+      description: Include Python, PyTorch, CUDA, GPU, dataset manifest hash, and model/checkpoint identity.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+    validations:
+      required: true

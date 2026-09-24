@@ -1,0 +1,40 @@
+{
+  "benchmark": "MI32-common32-v4",
+  "dataset_version": "4.0-common32",
+  "dataset_manifest_sha256": "1017a3dd50d11ff9d92d987a40996fc2fd61ace99d465213bdb0316ff52aad06",
+  "seed": 20260813,
+  "selection_metric": "validation macro_f1",
+  "test_policy": "instantiate/evaluate only after hyperparameters are frozen",
+  "input": {
+    "channels": 32,
+    "samples": 750,
+    "sampling_rate_hz": 250,
+    "duration_seconds": 3.0,
+    "dtype": "float32",
+    "unit": "V"
+  },
+  "labels": {
+    "0": "left_upper",
+    "1": "right_upper",
+    "2": "non_upper"
+  },
+  "splits": {
+    "test": "requested fold",
+    "validation": "fold 1 when test fold is 0, otherwise fold 0",
+    "training": "all remaining subjects"
+  },
+  "metrics": [
+    "accuracy",
+    "macro_f1",
+    "balanced_accuracy",
+    "per_class_recall",
+    "upper_vs_non_accuracy",
+    "upper_lr_conditional_accuracy",
+    "confusion_matrix"
+  ],
+  "tuning": {
+    "traditional_learning_rates": [0.001, 0.0003],
+    "foundation_learning_rates": [0.0001, 0.00003],
+    "uni_ntfm_learning_rates": [0.0002, 0.00005]
+  }
+}

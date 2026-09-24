@@ -1,0 +1,9 @@
+MI32 Benchmark
+Copyright 2026 MI32 Benchmark contributors
+
+This distribution contains original benchmark orchestration, model-input
+adapters, audits, and documentation under the Apache License 2.0.
+
+It does not relicense the source EEG datasets, third-party model repositories,
+or pretrained checkpoints. Those artifacts remain subject to their respective
+authors' terms. See THIRD_PARTY.md and datasets/mi32/DATASET_CARD.md.

@@ -1,0 +1,17 @@
+* text=auto eol=lf
+*.py text eol=lf
+*.sh text eol=lf
+*.ps1 text eol=crlf
+*.csv text eol=lf
+*.json text eol=lf
+*.md text eol=lf
+*.npy binary
+*.npz binary
+*.pth binary
+*.pt binary
+*.bin binary
+
+# Evidence and sealed metadata are byte-addressed by SHA-256 manifests. Never
+# normalize their line endings or checkout would invalidate the audit trail.
+datasets/mi32/metadata/** -text
+results/** -text

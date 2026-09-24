@@ -1,0 +1,36 @@
+{
+  "adapter_kind": "model_input_adapter",
+  "adapter": "eegconformer",
+  "model": "EEG-Conformer",
+  "official_reference": "Song et al. 2022 (EEG Conformer, IEEE TNSRE); 官方实现训练集全局标准化预处理; MI-32 适配: 全局 mean/std (B 类, 无单位换算)",
+  "input_contract": {
+    "channels": 32,
+    "samples": 750,
+    "fs": 250,
+    "unit": "V"
+  },
+  "output_contract": {
+    "channels": 32,
+    "samples": 750,
+    "fs": 250,
+    "unit": "standardized: (V - train_mean) / train_std",
+    "dtype": "float32"
+  },
+  "source_sha256": "55c86591a17ab8b7f804ebce831ed81e175f432ea36ff65b32d2f43aa19c0f78",
+  "stats": {
+    "source_split": "train",
+    "split_hash": "3dce346c8ab7f6db74de2fd51eabd9dcfb67fb072088b1c91663f0bbcd0d1f12",
+    "n_subjects": 140,
+    "n_trials": 59372,
+    "fit_timestamp": "2026-09-02T15:38:56Z",
+    "values": {
+      "mean": -1.4939587067441806e-10,
+      "std": 1.0668741197150666e-05
+    }
+  },
+  "ablation_states": [
+    "naive",
+    "none",
+    "official"
+  ]
+}

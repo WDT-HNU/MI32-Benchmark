@@ -1,0 +1,166 @@
+{
+  "model": "TSception",
+  "implementation": "official TSception-v2 topology with official MI-32 channel reordering",
+  "official_repository_commit": "9efd666b618d006e32e6da1d30dbc79b1d190604",
+  "official_paper_url": "https://doi.org/10.1109/TAFFC.2022.3169001",
+  "official_repository_url": "https://github.com/yi-ding-cs/TSception",
+  "data_version": "4.0-common32",
+  "data_artifact_sha256": {
+    "config.json": "3b94a0d39904bea1a14a636f225d258e4bbc896000d020dfbbc607b73ca16270",
+    "subjects.csv": "d66ce4bfc66b1061f69621035e1be3bf9cd12af536a5cdfa22a78885e7e08619",
+    "splits.csv": "75dd4df0e474044bdc6055230fae464b4c3f7166670ab5b5c585accf84fb5c10",
+    "trials.csv": "9741fc0ea78e87ff88d810880e7bfe8133b208ae4428ca340dbbbd6812eb81ec",
+    "provenance.csv": "d791a4d4497b99b5ae196d66a84f50e249a7fe8cd3af1bc2da562bfe5b28238e",
+    "quality_flags.csv": "1f669e66c3177c69660b4a943a0c3ae31edefc3c80d3e5a30b37db1f99e258ed",
+    "release_audit.json": "8a9a71cce6ae537ddd89bc8998347dc4b4182884d7746fb99f5fef57113c8df8",
+    "SHA256SUMS": "1017a3dd50d11ff9d92d987a40996fc2fd61ace99d465213bdb0316ff52aad06",
+    "electrode_adjacency.npy": "c9adbf4313e1a48e799d05d4a635ed463f540ce965b2bd1411dd020cdffbfb03"
+  },
+  "checkpoint_sha256": "0e049e21a66591ea277c65cce302bc4134a2f44ba9b997b421bc5e899f7d321f",
+  "complete_run_config": "/root/autodl-tmp/outputs_mi32_common32_v4/tsception_final_fold0/run_config.json",
+  "structure_audit": {
+    "status": "PASS",
+    "variant": "TSception-v2 (TAFFC 2022/2023)",
+    "synthetic_input_shape": [
+      2,
+      32,
+      750
+    ],
+    "feature_map_shape": [
+      2,
+      15,
+      1,
+      31
+    ],
+    "selected_channel_count": 26,
+    "selected_channel_order": [
+      "Fp1",
+      "AF3",
+      "F7",
+      "F3",
+      "FC5",
+      "FC3",
+      "T7",
+      "C3",
+      "CP5",
+      "CP3",
+      "P7",
+      "P3",
+      "O1",
+      "Fp2",
+      "AF4",
+      "F8",
+      "F4",
+      "FC6",
+      "FC4",
+      "T8",
+      "C4",
+      "CP6",
+      "CP4",
+      "P8",
+      "P4",
+      "O2"
+    ],
+    "channel_indices": [
+      0,
+      2,
+      4,
+      5,
+      9,
+      10,
+      14,
+      15,
+      19,
+      20,
+      24,
+      25,
+      29,
+      1,
+      3,
+      8,
+      7,
+      13,
+      12,
+      18,
+      17,
+      23,
+      22,
+      28,
+      27,
+      31
+    ],
+    "temporal_kernels": [
+      125,
+      62,
+      31
+    ],
+    "feature_shapes": {
+      "t1": [
+        2,
+        15,
+        26,
+        78
+      ],
+      "t2": [
+        2,
+        15,
+        26,
+        86
+      ],
+      "t3": [
+        2,
+        15,
+        26,
+        90
+      ],
+      "bn_t": [
+        2,
+        15,
+        26,
+        254
+      ],
+      "s1": [
+        2,
+        15,
+        1,
+        127
+      ],
+      "s2": [
+        2,
+        15,
+        2,
+        127
+      ],
+      "bn_s": [
+        2,
+        15,
+        3,
+        127
+      ],
+      "fusion": [
+        2,
+        15,
+        1,
+        31
+      ],
+      "bn_fusion": [
+        2,
+        15,
+        1,
+        31
+      ]
+    },
+    "output_shape": [
+      2,
+      3
+    ],
+    "trainable_parameters": 13511,
+    "initialization": "PyTorch Conv2d/Linear/BatchNorm defaults (official repository behavior)",
+    "official_paper_url": "https://doi.org/10.1109/TAFFC.2022.3169001",
+    "official_repository_url": "https://github.com/yi-ding-cs/TSception"
+  },
+  "source_file": "/root/autodl-tmp/projects/mi3_eegnet.py",
+  "source_snapshot": "/root/autodl-tmp/outputs_mi32_common32_v4/tsception_final_fold0/source_snapshot/mi3_eegnet.py",
+  "source_sha256": "9f1137737bb595383f88c92bc2a875a5c5c85ea84d748c6c2733e20cccd13248",
+  "git_commit": null
+}

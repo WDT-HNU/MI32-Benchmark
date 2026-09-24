@@ -1,0 +1,234 @@
+{
+  "model_identity": "CodeBrain pretrained faithful adaptation to MI-32",
+  "source_snapshot": {
+    "official_repository": "https://github.com/YjMajy/CodeBrain",
+    "official_commit": "22d350caf68246d2fda4f630ef837420db3fb130",
+    "official_sources": {
+      "Models/SSSM.py": {
+        "path": "/root/autodl-tmp/outputs_mi3_sampled_folds_v1/codebrain_final_fold2/source_snapshot_codebrain/Models__SSSM.py",
+        "sha256": "e2fe5f7364907129507f3a9e946df9f9e44e10c3511efdcf772fab46d6fa278f"
+      },
+      "Models/model_for_tuev.py": {
+        "path": "/root/autodl-tmp/outputs_mi3_sampled_folds_v1/codebrain_final_fold2/source_snapshot_codebrain/Models__model_for_tuev.py",
+        "sha256": "74ff71c8711c6219ea1238de0fd602c5dcfc8b32e87f023b1f8e4306c582502d"
+      },
+      "Models/model_for_tuab.py": {
+        "path": "/root/autodl-tmp/outputs_mi3_sampled_folds_v1/codebrain_final_fold2/source_snapshot_codebrain/Models__model_for_tuab.py",
+        "sha256": "c9efaceecef847b95576b9bc096a15fe724579ad93f5e32909fc9967df56f45d"
+      },
+      "Downstream/finetune_main.py": {
+        "path": "/root/autodl-tmp/outputs_mi3_sampled_folds_v1/codebrain_final_fold2/source_snapshot_codebrain/Downstream__finetune_main.py",
+        "sha256": "c18364e4903007cde80e949519291b3ea5a9dc0b8ea51b5449f1b4fd2b5b4f53"
+      },
+      "Datasets/tuev_dataset.py": {
+        "path": "/root/autodl-tmp/outputs_mi3_sampled_folds_v1/codebrain_final_fold2/source_snapshot_codebrain/Datasets__tuev_dataset.py",
+        "sha256": "8a9ba74f0bae9a415a7f054b5b0095f845fe9b74e4c82690e3e3b15ebb9741b2"
+      },
+      "Datasets/tuab_dataset.py": {
+        "path": "/root/autodl-tmp/outputs_mi3_sampled_folds_v1/codebrain_final_fold2/source_snapshot_codebrain/Datasets__tuab_dataset.py",
+        "sha256": "065d5febeaf8641c3487efc57f107d5433a2a4958d49b35bd2a393505f0cb12b"
+      }
+    },
+    "adapter": {
+      "path": "/root/autodl-tmp/outputs_mi3_sampled_folds_v1/codebrain_final_fold2/source_snapshot_codebrain/mi3_foundation.py",
+      "sha256": "0ed3f0a5c1eee9df0a97d340aeb34c45bf4dd6beb203bbcc16ed5fbddce4f156"
+    }
+  },
+  "checkpoint": {
+    "model_identity": "CodeBrain pretrained faithful adaptation to MI-32",
+    "source": {
+      "repo": "/root/autodl-tmp/projects/CodeBrain",
+      "commit": "22d350caf68246d2fda4f630ef837420db3fb130",
+      "source_sha256": {
+        "Models/SSSM.py": "e2fe5f7364907129507f3a9e946df9f9e44e10c3511efdcf772fab46d6fa278f",
+        "Models/model_for_tuev.py": "74ff71c8711c6219ea1238de0fd602c5dcfc8b32e87f023b1f8e4306c582502d",
+        "Models/model_for_tuab.py": "c9efaceecef847b95576b9bc096a15fe724579ad93f5e32909fc9967df56f45d",
+        "Downstream/finetune_main.py": "c18364e4903007cde80e949519291b3ea5a9dc0b8ea51b5449f1b4fd2b5b4f53",
+        "Datasets/tuev_dataset.py": "8a9ba74f0bae9a415a7f054b5b0095f845fe9b74e4c82690e3e3b15ebb9741b2",
+        "Datasets/tuab_dataset.py": "065d5febeaf8641c3487efc57f107d5433a2a4958d49b35bd2a393505f0cb12b"
+      }
+    },
+    "checkpoint_path": "/root/autodl-tmp/projects/CodeBrain/Checkpoints/CodeBrain.pth",
+    "checkpoint_source": "https://huggingface.co/YjMajy/CodeBrain/resolve/bef08d2fdb1759685371cc635aad21ce59163689/CodeBrain.pth",
+    "checkpoint_revision": "bef08d2fdb1759685371cc635aad21ce59163689",
+    "checkpoint_bytes": 60901006,
+    "checkpoint_sha256": "d9714b8732c9883a04d022ee66254cd578ae1fa27f5458e6ab7f1aa96e9a7352",
+    "checkpoint_expected_sha256": "d9714b8732c9883a04d022ee66254cd578ae1fa27f5458e6ab7f1aa96e9a7352",
+    "checkpoint_identity_verified": true,
+    "checkpoint_tensor_count": 269,
+    "checkpoint_parameter_count": 15196408,
+    "exact_loaded_parameter_count": 15196408,
+    "backbone_coverage": 1.0,
+    "checkpoint_missing": [],
+    "checkpoint_unexpected": [],
+    "shape_mismatch": {},
+    "numerical_load_max_abs_error": 0.0,
+    "channel_adapter": null,
+    "source_channels": 32,
+    "received_channel_order": [
+      "Fp1",
+      "Fp2",
+      "AF3",
+      "AF4",
+      "F7",
+      "F3",
+      "Fz",
+      "F4",
+      "F8",
+      "FC5",
+      "FC3",
+      "FCz",
+      "FC4",
+      "FC6",
+      "T7",
+      "C3",
+      "Cz",
+      "C4",
+      "T8",
+      "CP5",
+      "CP3",
+      "CPz",
+      "CP4",
+      "CP6",
+      "P7",
+      "P3",
+      "Pz",
+      "P4",
+      "P8",
+      "O1",
+      "Oz",
+      "O2"
+    ],
+    "formal_mi32_channel_order": [
+      "Fp1",
+      "Fp2",
+      "AF3",
+      "AF4",
+      "F7",
+      "F3",
+      "Fz",
+      "F4",
+      "F8",
+      "FC5",
+      "FC3",
+      "FCz",
+      "FC4",
+      "FC6",
+      "T7",
+      "C3",
+      "Cz",
+      "C4",
+      "T8",
+      "CP5",
+      "CP3",
+      "CPz",
+      "CP4",
+      "CP6",
+      "P7",
+      "P3",
+      "Pz",
+      "P4",
+      "P8",
+      "O1",
+      "Oz",
+      "O2"
+    ],
+    "channel_order_rule": "preserve the released MI-32 topology-oriented order; no spatial adapter",
+    "input_scaling": "MI-32 volt-scale trials scaled x1e4 to match official downstream microvolts/100; 250-to-200 Hz sinc resampling",
+    "resampling": {
+      "input_hz": 250,
+      "output_hz": 200,
+      "input_samples": 750,
+      "output_samples": 600,
+      "method": "Hann-windowed sinc polyphase bandlimited interpolation",
+      "anti_aliasing": true,
+      "patches": 3,
+      "patch_samples": 200,
+      "padding_samples": 0
+    },
+    "proj_out": "Sequential() to match the official downstream wrapper convention",
+    "classifier_mode": "flatten all patches (official wrapper style)",
+    "classifier": "19200 -> 600 -> 200 -> 3 with ELU and Dropout(0.1)"
+  },
+  "structure_audit": {
+    "status": "PASS",
+    "full_forward_executed": false,
+    "input_shape": [
+      2,
+      32,
+      750
+    ],
+    "resampled_shape": [
+      2,
+      32,
+      600
+    ],
+    "patch_shape": [
+      2,
+      32,
+      3,
+      200
+    ],
+    "active_shapes": {},
+    "classifier_input": null,
+    "output_shape": null,
+    "checkpoint_sha256": "d9714b8732c9883a04d022ee66254cd578ae1fa27f5458e6ab7f1aa96e9a7352",
+    "checkpoint_coverage": 1.0,
+    "checkpoint_max_abs_error": 0.0,
+    "channel_adapter": null,
+    "classifier_mode": "flatten all patches (official wrapper style)"
+  },
+  "adapter_manifest": {
+    "adapter_kind": "model_input_adapter",
+    "adapter": "codebrain",
+    "model": "CodeBrain",
+    "official_reference": "Ma et al. 2024 (CodeBrain, jingyingma01/CodeBrain); \u5b98\u65b9: \u76f4\u63a532\u901a\u9053/200Hz/3x200 patch/flatten-all-patches MLP; MI-32 \u9002\u914d: V->\u00b5V/100 x1e4 + 250->200Hz sinc \u6297\u6df7\u53e0 + unflatten (B \u7c7b)",
+    "input_contract": {
+      "channels": 32,
+      "samples": 750,
+      "fs": 250,
+      "unit": "V"
+    },
+    "output_contract": {
+      "channels": 32,
+      "patches": 3,
+      "samples_per_patch": 200,
+      "fs": 200,
+      "unit": "uV/100",
+      "unit_scale_from_volts": 10000.0
+    },
+    "source_sha256": "4d6028151cda78cccc1306782cc19f20717d779fa5906a9b86e53589eba06ab7",
+    "stats": {
+      "source_split": "train",
+      "split_hash": "3031ef014e9c46d02cc4182e8547db05902687f710e4d7284d88ba9f3d5337ef",
+      "n_subjects": 141,
+      "n_trials": 61656,
+      "fit_timestamp": "2026-09-09T12:02:43Z",
+      "values": {}
+    },
+    "ablation_states": [
+      "naive",
+      "none",
+      "official"
+    ]
+  },
+  "dataset_manifest_sha256": "1017a3dd50d11ff9d92d987a40996fc2fd61ace99d465213bdb0316ff52aad06",
+  "data_artifact_sha256": {
+    "config.json": "3b94a0d39904bea1a14a636f225d258e4bbc896000d020dfbbc607b73ca16270",
+    "subjects.csv": "d66ce4bfc66b1061f69621035e1be3bf9cd12af536a5cdfa22a78885e7e08619",
+    "splits.csv": "75dd4df0e474044bdc6055230fae464b4c3f7166670ab5b5c585accf84fb5c10",
+    "trials.csv": "9741fc0ea78e87ff88d810880e7bfe8133b208ae4428ca340dbbbd6812eb81ec",
+    "provenance.csv": "d791a4d4497b99b5ae196d66a84f50e249a7fe8cd3af1bc2da562bfe5b28238e",
+    "quality_flags.csv": "1f669e66c3177c69660b4a943a0c3ae31edefc3c80d3e5a30b37db1f99e258ed",
+    "release_audit.json": "8a9a71cce6ae537ddd89bc8998347dc4b4182884d7746fb99f5fef57113c8df8",
+    "electrode_adjacency.npy": "c9adbf4313e1a48e799d05d4a635ed463f540ce965b2bd1411dd020cdffbfb03",
+    "SHA256SUMS": "1017a3dd50d11ff9d92d987a40996fc2fd61ace99d465213bdb0316ff52aad06"
+  },
+  "dataset_loader_contract": {
+    "storage_unit": "V",
+    "runtime_before_model_adapter": "V",
+    "model_specific_prescaling": false,
+    "test_split_instantiation": "after validation-selected checkpoint is loaded"
+  },
+  "structure_audit_used_dataset_samples": false
+}

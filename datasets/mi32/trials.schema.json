@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "MI32 trials.csv row",
+  "type": "object",
+  "description": "Column-level schema is finalized from the sealed trials.csv during release packaging.",
+  "required": ["trial_id", "subject_id", "subject_trial_id", "label"],
+  "properties": {
+    "trial_id": {"type": "integer", "minimum": 0},
+    "subject_id": {"type": "integer", "minimum": 0, "maximum": 229},
+    "subject_trial_id": {"type": "integer", "minimum": 0},
+    "label": {"type": "integer", "enum": [0, 1, 2]},
+    "source_dataset": {"type": "string"},
+    "source_subject": {"type": "string"}
+  }
+}

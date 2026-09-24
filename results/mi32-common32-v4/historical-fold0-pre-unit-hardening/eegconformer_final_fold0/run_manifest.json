@@ -1,0 +1,54 @@
+{
+  "model": "EEG-Conformer",
+  "implementation": "official Song et al. graph with Chans=32, Samples=750, Classes=3",
+  "official_repository_commit": "9ae149ba62487ceae723277d13adac27837113d2",
+  "official_paper_url": "https://arxiv.org/abs/2106.07336",
+  "official_repository_url": "https://github.com/eeyhsong/EEG-Conformer",
+  "data_version": "4.0-common32",
+  "data_artifact_sha256": {
+    "config.json": "3b94a0d39904bea1a14a636f225d258e4bbc896000d020dfbbc607b73ca16270",
+    "subjects.csv": "d66ce4bfc66b1061f69621035e1be3bf9cd12af536a5cdfa22a78885e7e08619",
+    "splits.csv": "75dd4df0e474044bdc6055230fae464b4c3f7166670ab5b5c585accf84fb5c10",
+    "trials.csv": "9741fc0ea78e87ff88d810880e7bfe8133b208ae4428ca340dbbbd6812eb81ec",
+    "provenance.csv": "d791a4d4497b99b5ae196d66a84f50e249a7fe8cd3af1bc2da562bfe5b28238e",
+    "quality_flags.csv": "1f669e66c3177c69660b4a943a0c3ae31edefc3c80d3e5a30b37db1f99e258ed",
+    "release_audit.json": "8a9a71cce6ae537ddd89bc8998347dc4b4182884d7746fb99f5fef57113c8df8",
+    "SHA256SUMS": "1017a3dd50d11ff9d92d987a40996fc2fd61ace99d465213bdb0316ff52aad06",
+    "electrode_adjacency.npy": "c9adbf4313e1a48e799d05d4a635ed463f540ce965b2bd1411dd020cdffbfb03"
+  },
+  "checkpoint_sha256": "51c622a28e005cb8dc6f9f872302ffe3ccf29bd177902808a3f15ee55d56a42a",
+  "complete_run_config": "/root/autodl-tmp/outputs_mi32_common32_v4/eegconformer_final_fold0/run_config.json",
+  "structure_audit": {
+    "status": "PASS",
+    "variant": "Song et al. EEG-Conformer (TNSRE 2023)",
+    "synthetic_input_shape": [
+      2,
+      32,
+      750
+    ],
+    "patch_shape": [
+      2,
+      44,
+      40
+    ],
+    "output_shape": [
+      2,
+      3
+    ],
+    "tokens": 44,
+    "embedding_size": 40,
+    "attention_heads": 10,
+    "encoder_depth": 6,
+    "attention_scaling": "sqrt(embedding_size)",
+    "official_paper_url": "https://arxiv.org/abs/2106.07336",
+    "official_repository_url": "https://github.com/eeyhsong/EEG-Conformer",
+    "active_classifier": "Flatten(1760)-256-32-3",
+    "inactive_clshead_calls": 0,
+    "trainable_parameters": 631662,
+    "initialization": "independent blocks with PyTorch module defaults (official repository behavior)"
+  },
+  "source_file": "/root/autodl-tmp/projects/mi3_eegnet.py",
+  "source_snapshot": "/root/autodl-tmp/outputs_mi32_common32_v4/eegconformer_final_fold0/source_snapshot/mi3_eegnet.py",
+  "source_sha256": "9f1137737bb595383f88c92bc2a875a5c5c85ea84d748c6c2733e20cccd13248",
+  "git_commit": null
+}

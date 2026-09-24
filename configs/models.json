@@ -1,0 +1,122 @@
+{
+  "schema_version": 1,
+  "models": {
+    "eegnet": {
+      "display_name": "EEGNet",
+      "track": "formal_reproduction",
+      "runner": "deep",
+      "runner_model": "EEGNet",
+      "repository": "https://github.com/vlawhern/arl-eegmodels",
+      "commit": "4a512e503198db2010848813ead9afbf8cd54c97",
+      "checkpoint": null,
+      "default_batch_size": 256,
+      "default_learning_rate": 0.001
+    },
+    "tsception": {
+      "display_name": "TSception",
+      "track": "formal_reproduction",
+      "runner": "deep",
+      "runner_model": "TSception",
+      "repository": "https://github.com/yi-ding-cs/TSception",
+      "commit": "9efd666b618d006e32e6da1d30dbc79b1d190604",
+      "checkpoint": null,
+      "default_batch_size": 128,
+      "default_learning_rate": 0.001
+    },
+    "rgnn": {
+      "display_name": "RGNN backbone (without NodeDAT/EmotionDL)",
+      "track": "formal_reproduction",
+      "runner": "deep",
+      "runner_model": "RGNN",
+      "repository": "https://github.com/zhongpeixiang/RGNN",
+      "commit": "685b1a2645185bd8129c04a789dbfde8ad896a59",
+      "checkpoint": null,
+      "default_batch_size": 256,
+      "default_learning_rate": 0.0003
+    },
+    "eegconformer": {
+      "display_name": "EEG-Conformer",
+      "track": "formal_reproduction",
+      "runner": "deep",
+      "runner_model": "EEG-Conformer",
+      "repository": "https://github.com/eeyhsong/EEG-Conformer",
+      "commit": "9ae149ba62487ceae723277d13adac27837113d2",
+      "checkpoint": null,
+      "default_batch_size": 128,
+      "default_learning_rate": 0.001
+    },
+    "labram": {
+      "display_name": "LaBraM",
+      "track": "formal_reproduction",
+      "runner": "foundation",
+      "runner_model": "LaBraM",
+      "repository": "https://github.com/935963004/LaBraM",
+      "commit": "c431221e6cfd23dbfa9950e0180682fb322b0548",
+      "repo_dir": "LaBraM",
+      "checkpoint": {
+        "path": "LaBraM/pytorch_model.bin",
+        "url": "https://huggingface.co/braindecode/labram-pretrained/resolve/0563b6c626e7b40d9a36653b763715db94d945d7/pytorch_model.bin",
+        "revision": "0563b6c626e7b40d9a36653b763715db94d945d7",
+        "bytes": 23351447,
+        "sha256": "86a40de11088b85291eb47b788b049d784e619a6b3f8e84accbf640b2c59eec3"
+      },
+      "author_checkpoint": {
+        "path": "LaBraM/labram-base.pth",
+        "source_repo_path": "LaBraM/checkpoints/labram-base.pth",
+        "bytes": 96612769,
+        "sha256": "7c50583826afac76c4ab18f43d958df40496c8229accc09ed6a227c9bb57c37c"
+      },
+      "default_batch_size": 32,
+      "default_learning_rate": 0.0001
+    },
+    "eegmamba": {
+      "display_name": "EEGMamba",
+      "track": "formal_reproduction",
+      "runner": "foundation",
+      "runner_model": "EEGMamba",
+      "repository": "https://github.com/wjq-learning/EEGMamba",
+      "commit": "dbc83fa072744201e8897aeb9f65007b952ad323",
+      "repo_dir": "EEGMamba",
+      "checkpoint": {
+        "path": "EEGMamba/pretrained_EEGMamba.pth",
+        "url": "https://huggingface.co/weighting666/EEGMamba/resolve/0b060d87acd6f23bf1d0b852bf1726064f335f97/pretrained_EEGMamba.pth",
+        "revision": "0b060d87acd6f23bf1d0b852bf1726064f335f97",
+        "bytes": 13313895,
+        "sha256": "b452bb29ecf1d6131ba82a50c6e13823ec1d660d9009d013e691d19b2916f4fe"
+      },
+      "default_batch_size": 16,
+      "default_learning_rate": 0.0001
+    },
+    "codebrain": {
+      "display_name": "CodeBrain",
+      "track": "formal_reproduction",
+      "runner": "foundation",
+      "runner_model": "CodeBrain",
+      "repository": "https://github.com/jingyingma01/CodeBrain",
+      "commit": "22d350caf68246d2fda4f630ef837420db3fb130",
+      "repo_dir": "CodeBrain",
+      "checkpoint": {
+        "path": "CodeBrain/CodeBrain.pth",
+        "url": "https://huggingface.co/YjMajy/CodeBrain/resolve/bef08d2fdb1759685371cc635aad21ce59163689/CodeBrain.pth",
+        "revision": "bef08d2fdb1759685371cc635aad21ce59163689",
+        "bytes": 60901006,
+        "sha256": "d9714b8732c9883a04d022ee66254cd578ae1fa27f5458e6ab7f1aa96e9a7352"
+      },
+      "default_batch_size": 16,
+      "default_learning_rate": 0.00003
+    },
+    "uni_ntfm": {
+      "display_name": "Uni-NTFM",
+      "track": "protocol_benchmark",
+      "runner": "uni_ntfm",
+      "runner_model": "Uni-NTFM",
+      "repository": "https://github.com/Zhisheng-researcher/Uni-NTFM",
+      "commit": "c0ce0152f94366e59b31b3fb2c108ce909bcd95c",
+      "repo_dir": "Uni-NTFM",
+      "checkpoint": null,
+      "limitation": "The public release has no official downstream checkpoint/head; results must not be labeled paper reproduction.",
+      "default_batch_size": 16,
+      "default_learning_rate": 0.0002
+    }
+  }
+}

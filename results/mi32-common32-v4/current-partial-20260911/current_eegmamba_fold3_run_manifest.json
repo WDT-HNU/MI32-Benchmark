@@ -1,0 +1,261 @@
+{
+  "model_identity": "EEGMamba pretrained faithful adaptation to MI-32",
+  "source_snapshot": {
+    "official_repository": "https://github.com/wjq-learning/EEGMamba",
+    "official_commit": "dbc83fa072744201e8897aeb9f65007b952ad323",
+    "official_sources": {
+      "models/eegmamba.py": {
+        "path": "/root/autodl-tmp/outputs_mi3_sampled_folds_v1/eegmamba_final_fold3/source_snapshot_eegmamba/models__eegmamba.py",
+        "sha256": "0c91c8bfcca1dcbae6565be0bc801014ae408b27ab38ddfd7fac7425f04bf509"
+      },
+      "models/model_for_bciciv2a.py": {
+        "path": "/root/autodl-tmp/outputs_mi3_sampled_folds_v1/eegmamba_final_fold3/source_snapshot_eegmamba/models__model_for_bciciv2a.py",
+        "sha256": "4bd5c95a6059b30f6e5efd8fee67ce9764c3ad50502b1bc5623c513b1338a97b"
+      },
+      "modules/config_mamba.py": {
+        "path": "/root/autodl-tmp/outputs_mi3_sampled_folds_v1/eegmamba_final_fold3/source_snapshot_eegmamba/modules__config_mamba.py",
+        "sha256": "14deb712edf00a2218af1f6aa72f3e187c4f83a36ef47a543850e91c18318bc8"
+      },
+      "modules/mixer_seq_simple.py": {
+        "path": "/root/autodl-tmp/outputs_mi3_sampled_folds_v1/eegmamba_final_fold3/source_snapshot_eegmamba/modules__mixer_seq_simple.py",
+        "sha256": "4871b070304f4235436d6bc12ef8f8d91fdc3bb88568dbf1ba8814d0e1825e26"
+      },
+      "preprocessing/preprocessing_for_finetuning/preprocessing_physio.py": {
+        "path": "/root/autodl-tmp/outputs_mi3_sampled_folds_v1/eegmamba_final_fold3/source_snapshot_eegmamba/preprocessing__preprocessing_for_finetuning__preprocessing_physio.py",
+        "sha256": "4bcfa76e5076d53f14bcf5e7ad728bf38a67f472c4a51157e799487882ea4bcb"
+      },
+      "datasets/physio_dataset.py": {
+        "path": "/root/autodl-tmp/outputs_mi3_sampled_folds_v1/eegmamba_final_fold3/source_snapshot_eegmamba/datasets__physio_dataset.py",
+        "sha256": "7af1ab084073de1f535d410e4c8cf37a8847d7604bfb67e6642531a9a749b69a"
+      },
+      "datasets/bciciv2a_dataset.py": {
+        "path": "/root/autodl-tmp/outputs_mi3_sampled_folds_v1/eegmamba_final_fold3/source_snapshot_eegmamba/datasets__bciciv2a_dataset.py",
+        "sha256": "729a9bf76527b0d31560acc62b88800b48c705806aabe0055ed337b8ccd85133"
+      }
+    },
+    "adapter": {
+      "path": "/root/autodl-tmp/outputs_mi3_sampled_folds_v1/eegmamba_final_fold3/source_snapshot_eegmamba/mi3_foundation.py",
+      "sha256": "0ed3f0a5c1eee9df0a97d340aeb34c45bf4dd6beb203bbcc16ed5fbddce4f156"
+    }
+  },
+  "checkpoint": {
+    "model_identity": "EEGMamba pretrained faithful adaptation to MI-32",
+    "source": {
+      "repo": "/root/autodl-tmp/projects/EEGMamba",
+      "commit": "dbc83fa072744201e8897aeb9f65007b952ad323",
+      "source_sha256": {
+        "models/eegmamba.py": "0c91c8bfcca1dcbae6565be0bc801014ae408b27ab38ddfd7fac7425f04bf509",
+        "models/model_for_bciciv2a.py": "4bd5c95a6059b30f6e5efd8fee67ce9764c3ad50502b1bc5623c513b1338a97b",
+        "modules/config_mamba.py": "14deb712edf00a2218af1f6aa72f3e187c4f83a36ef47a543850e91c18318bc8",
+        "modules/mixer_seq_simple.py": "4871b070304f4235436d6bc12ef8f8d91fdc3bb88568dbf1ba8814d0e1825e26",
+        "preprocessing/preprocessing_for_finetuning/preprocessing_physio.py": "4bcfa76e5076d53f14bcf5e7ad728bf38a67f472c4a51157e799487882ea4bcb",
+        "datasets/physio_dataset.py": "7af1ab084073de1f535d410e4c8cf37a8847d7604bfb67e6642531a9a749b69a",
+        "datasets/bciciv2a_dataset.py": "729a9bf76527b0d31560acc62b88800b48c705806aabe0055ed337b8ccd85133"
+      }
+    },
+    "checkpoint_path": "/root/autodl-tmp/projects/EEGMamba/pretrained_weights/pretrained_EEGMamba.pth",
+    "checkpoint_source": "https://huggingface.co/weighting666/EEGMamba/resolve/0b060d87acd6f23bf1d0b852bf1726064f335f97/pretrained_EEGMamba.pth",
+    "checkpoint_revision": "0b060d87acd6f23bf1d0b852bf1726064f335f97",
+    "checkpoint_bytes": 13313895,
+    "checkpoint_sha256": "b452bb29ecf1d6131ba82a50c6e13823ec1d660d9009d013e691d19b2916f4fe",
+    "checkpoint_expected_sha256": "b452bb29ecf1d6131ba82a50c6e13823ec1d660d9009d013e691d19b2916f4fe",
+    "checkpoint_identity_verified": true,
+    "checkpoint_tensor_count": 117,
+    "checkpoint_parameter_count": 3317443,
+    "exact_loaded_parameter_count_before_downstream_proj_replacement": 3317443,
+    "checkpoint_coverage_before_downstream_proj_replacement": 1.0,
+    "checkpoint_missing": [],
+    "checkpoint_unexpected": [],
+    "shape_mismatch": {},
+    "numerical_load_max_abs_error": 0.0,
+    "numerical_load_sample": {
+      "encoder.layers.0.mixer.A_log": 0.0,
+      "encoder.layers.1.mixer.dt_bias": 0.0,
+      "encoder.layers.10.norm.weight": 0.0,
+      "encoder.layers.2.mixer.conv1d.weight": 0.0,
+      "encoder.layers.3.mixer.out_proj.weight": 0.0,
+      "encoder.layers.5.mixer.D": 0.0,
+      "encoder.layers.6.mixer.in_proj.weight": 0.0,
+      "encoder.layers.8.mixer.A_log": 0.0,
+      "encoder.layers.9.mixer.dt_bias": 0.0,
+      "proj_out.0.weight": 0.0
+    },
+    "removed_pretraining_proj_out_parameters": 40200,
+    "pretrained_backbone_parameters_used_downstream": 3277243,
+    "new_classifier_parameters": 11641403,
+    "model_parameter_count": 14918646,
+    "channel_adapter": null,
+    "source_channels": 32,
+    "received_channel_order": [
+      "Fp1",
+      "Fp2",
+      "AF3",
+      "AF4",
+      "F7",
+      "F3",
+      "Fz",
+      "F4",
+      "F8",
+      "FC5",
+      "FC3",
+      "FCz",
+      "FC4",
+      "FC6",
+      "T7",
+      "C3",
+      "Cz",
+      "C4",
+      "T8",
+      "CP5",
+      "CP3",
+      "CPz",
+      "CP4",
+      "CP6",
+      "P7",
+      "P3",
+      "Pz",
+      "P4",
+      "P8",
+      "O1",
+      "Oz",
+      "O2"
+    ],
+    "formal_mi32_channel_order": [
+      "Fp1",
+      "Fp2",
+      "AF3",
+      "AF4",
+      "F7",
+      "F3",
+      "Fz",
+      "F4",
+      "F8",
+      "FC5",
+      "FC3",
+      "FCz",
+      "FC4",
+      "FC6",
+      "T7",
+      "C3",
+      "Cz",
+      "C4",
+      "T8",
+      "CP5",
+      "CP3",
+      "CPz",
+      "CP4",
+      "CP6",
+      "P7",
+      "P3",
+      "Pz",
+      "P4",
+      "P8",
+      "O1",
+      "Oz",
+      "O2"
+    ],
+    "channel_order_rule": "preserve the released MI-32 topology-oriented order; no alphabetic, SZBD-60, or invented reordering",
+    "input_scaling": "MI-32 volt-scale trials multiplied by 1e4 to reproduce the official EEGMamba downstream loader contract (microvolts divided by 100); no per-trial or per-channel z-score",
+    "resampling": {
+      "input_hz": 250,
+      "output_hz": 200,
+      "input_samples": 750,
+      "output_samples": 600,
+      "method": "Hann-windowed sinc polyphase bandlimited interpolation",
+      "anti_aliasing": true,
+      "patches": 3,
+      "patch_samples": 200,
+      "padding_samples": 0
+    },
+    "proj_out": "Identity after bit-exact checkpoint load, matching official downstream wrapper",
+    "classifier_mode": "all_patch_reps (official default)",
+    "classifier": "19200 -> 600 -> 200 -> 3 with ELU and Dropout(0.1)"
+  },
+  "structure_audit": {
+    "status": "PASS",
+    "full_forward_executed": false,
+    "input_shape": [
+      2,
+      32,
+      750
+    ],
+    "resampled_shape": [
+      2,
+      32,
+      600
+    ],
+    "patch_shape": [
+      2,
+      32,
+      3,
+      200
+    ],
+    "active_shapes": {},
+    "output_shape": null,
+    "mamba_layers": 12,
+    "mamba_type": "Mamba2",
+    "headdim": 50,
+    "d_state": 64,
+    "rms_norm": true,
+    "fused_add_norm": true,
+    "residual_in_fp32": true,
+    "checkpoint_sha256": "b452bb29ecf1d6131ba82a50c6e13823ec1d660d9009d013e691d19b2916f4fe",
+    "checkpoint_coverage": 1.0,
+    "checkpoint_max_abs_error": 0.0,
+    "channel_adapter": null,
+    "classifier_mode": "all_patch_reps (official default)"
+  },
+  "adapter_manifest": {
+    "adapter_kind": "model_input_adapter",
+    "adapter": "eegmamba",
+    "model": "EEGMamba",
+    "official_reference": "Wang et al. 2024 (EEGMamba); \u5b98\u65b9\u63d0\u4ea4: \u76f4\u63a5 [B,32,3,200]@200Hz, all_patch_reps \u5934; commit dbc83fa072744201e8897aeb9f65007b952ad323 \u5b98\u65b9\u4e0b\u6e38 loader: \u00b5V/100; MI-32 \u9002\u914d: V->\u00b5V/100 x1e4 + 250->200Hz sinc \u6297\u6df7\u53e0 + unflatten (B \u7c7b)",
+    "input_contract": {
+      "channels": 32,
+      "samples": 750,
+      "fs": 250,
+      "unit": "V"
+    },
+    "output_contract": {
+      "channels": 32,
+      "patches": 3,
+      "samples_per_patch": 200,
+      "fs": 200,
+      "unit": "uV/100",
+      "unit_scale_from_volts": 10000.0
+    },
+    "source_sha256": "68c53d850e0c1fc4c18093dca76d879262d1dc780ea5ec90e0eeb5b3139f61ae",
+    "stats": {
+      "source_split": "train",
+      "split_hash": "a011c851880869f834bab5ebdbc5a07c7d16e20a5b90cae9d56a1100485c5feb",
+      "n_subjects": 141,
+      "n_trials": 61100,
+      "fit_timestamp": "2026-09-10T08:09:44Z",
+      "values": {}
+    },
+    "ablation_states": [
+      "naive",
+      "none",
+      "official"
+    ]
+  },
+  "dataset_manifest_sha256": "1017a3dd50d11ff9d92d987a40996fc2fd61ace99d465213bdb0316ff52aad06",
+  "data_artifact_sha256": {
+    "config.json": "3b94a0d39904bea1a14a636f225d258e4bbc896000d020dfbbc607b73ca16270",
+    "subjects.csv": "d66ce4bfc66b1061f69621035e1be3bf9cd12af536a5cdfa22a78885e7e08619",
+    "splits.csv": "75dd4df0e474044bdc6055230fae464b4c3f7166670ab5b5c585accf84fb5c10",
+    "trials.csv": "9741fc0ea78e87ff88d810880e7bfe8133b208ae4428ca340dbbbd6812eb81ec",
+    "provenance.csv": "d791a4d4497b99b5ae196d66a84f50e249a7fe8cd3af1bc2da562bfe5b28238e",
+    "quality_flags.csv": "1f669e66c3177c69660b4a943a0c3ae31edefc3c80d3e5a30b37db1f99e258ed",
+    "release_audit.json": "8a9a71cce6ae537ddd89bc8998347dc4b4182884d7746fb99f5fef57113c8df8",
+    "electrode_adjacency.npy": "c9adbf4313e1a48e799d05d4a635ed463f540ce965b2bd1411dd020cdffbfb03",
+    "SHA256SUMS": "1017a3dd50d11ff9d92d987a40996fc2fd61ace99d465213bdb0316ff52aad06"
+  },
+  "dataset_loader_contract": {
+    "storage_unit": "V",
+    "runtime_before_model_adapter": "V",
+    "model_specific_prescaling": false,
+    "test_split_instantiation": "after validation-selected checkpoint is loaded"
+  },
+  "structure_audit_used_dataset_samples": false
+}

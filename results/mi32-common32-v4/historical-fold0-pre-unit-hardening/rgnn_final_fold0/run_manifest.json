@@ -1,0 +1,145 @@
+{
+  "model": "RGNN backbone (without target-domain NodeDAT/EmotionDL)",
+  "implementation": "signed learnable symmetric SGC backbone with MI-32 log-power features",
+  "official_repository_commit": "685b1a2645185bd8129c04a789dbfde8ad896a59",
+  "data_version": "4.0-common32",
+  "data_artifact_sha256": {
+    "config.json": "3b94a0d39904bea1a14a636f225d258e4bbc896000d020dfbbc607b73ca16270",
+    "subjects.csv": "d66ce4bfc66b1061f69621035e1be3bf9cd12af536a5cdfa22a78885e7e08619",
+    "splits.csv": "75dd4df0e474044bdc6055230fae464b4c3f7166670ab5b5c585accf84fb5c10",
+    "trials.csv": "9741fc0ea78e87ff88d810880e7bfe8133b208ae4428ca340dbbbd6812eb81ec",
+    "provenance.csv": "d791a4d4497b99b5ae196d66a84f50e249a7fe8cd3af1bc2da562bfe5b28238e",
+    "quality_flags.csv": "1f669e66c3177c69660b4a943a0c3ae31edefc3c80d3e5a30b37db1f99e258ed",
+    "release_audit.json": "8a9a71cce6ae537ddd89bc8998347dc4b4182884d7746fb99f5fef57113c8df8",
+    "SHA256SUMS": "1017a3dd50d11ff9d92d987a40996fc2fd61ace99d465213bdb0316ff52aad06",
+    "electrode_adjacency.npy": "c9adbf4313e1a48e799d05d4a635ed463f540ce965b2bd1411dd020cdffbfb03"
+  },
+  "checkpoint_sha256": "7841e594be353d0f92add0f717df85bb88cb636291bfd2008da9fd00d691ec9d",
+  "complete_run_config": "/root/autodl-tmp/outputs_mi32_common32_v4/rgnn_final_fold0/run_config.json",
+  "structure_audit": {
+    "status": "PASS",
+    "identity": "RGNN backbone (without target-domain NodeDAT/EmotionDL)",
+    "synthetic_input_shape": [
+      2,
+      32,
+      750
+    ],
+    "node_feature_shape": [
+      2,
+      32,
+      5
+    ],
+    "bands_hz": [
+      [
+        "delta",
+        1.0,
+        4.0
+      ],
+      [
+        "theta",
+        4.0,
+        8.0
+      ],
+      [
+        "alpha",
+        8.0,
+        13.0
+      ],
+      [
+        "beta",
+        13.0,
+        30.0
+      ],
+      [
+        "gamma",
+        30.0,
+        50.0
+      ]
+    ],
+    "adjacency_shape": [
+      32,
+      32
+    ],
+    "adjacency_parameterization": "learnable lower triangle reconstructed symmetrically",
+    "self_loop_initial_value": 1.0,
+    "distance_edges_gt_0_1_all_fraction": 0.181640625,
+    "distance_edges_gt_0_1_off_diagonal_fraction": 0.1552419364452362,
+    "paper_global_pairs": [
+      [
+        "Fp1",
+        "Fp2"
+      ],
+      [
+        "AF3",
+        "AF4"
+      ],
+      [
+        "F5",
+        "F6"
+      ],
+      [
+        "FC5",
+        "FC6"
+      ],
+      [
+        "C5",
+        "C6"
+      ],
+      [
+        "CP5",
+        "CP6"
+      ],
+      [
+        "P5",
+        "P6"
+      ],
+      [
+        "PO5",
+        "PO6"
+      ],
+      [
+        "O1",
+        "O2"
+      ]
+    ],
+    "global_pairs_applied": [
+      [
+        "Fp1",
+        "Fp2"
+      ],
+      [
+        "AF3",
+        "AF4"
+      ],
+      [
+        "FC5",
+        "FC6"
+      ],
+      [
+        "CP5",
+        "CP6"
+      ],
+      [
+        "O1",
+        "O2"
+      ]
+    ],
+    "negative_edge_count_undirected": 5,
+    "signed_degree": "sum(abs(A_ij))",
+    "propagation_order": 2,
+    "pooling": "sum",
+    "dropout": 0.5,
+    "classifier": "Linear(64, 3)",
+    "l1_alpha": 1e-05,
+    "l1_component": 0.0006846203468739986,
+    "output_shape": [
+      2,
+      3
+    ],
+    "trainable_parameters": 1107
+  },
+  "source_file": "/root/autodl-tmp/projects/mi3_eegnet.py",
+  "source_snapshot": "/root/autodl-tmp/outputs_mi32_common32_v4/rgnn_final_fold0/source_snapshot/mi3_eegnet.py",
+  "source_sha256": "9f1137737bb595383f88c92bc2a875a5c5c85ea84d748c6c2733e20cccd13248",
+  "git_commit": null
+}

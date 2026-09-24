@@ -1,0 +1,33 @@
+{
+  "adapter_kind": "model_input_adapter",
+  "adapter": "codebrain",
+  "model": "CodeBrain",
+  "official_reference": "Ma et al. 2024 (CodeBrain, jingyingma01/CodeBrain); 官方: 直接32通道/200Hz/3x200 patch/flatten-all-patches MLP; MI-32 适配: V->µV x1e6 + 250->200Hz sinc 抗混叠 + unflatten (B 类)",
+  "input_contract": {
+    "channels": 32,
+    "samples": 750,
+    "fs": 250,
+    "unit": "V"
+  },
+  "output_contract": {
+    "channels": 32,
+    "patches": 3,
+    "samples_per_patch": 200,
+    "fs": 200,
+    "unit": "µV (x1e6 from V)"
+  },
+  "source_sha256": "fe0f7a5a7d1f34d5a910d23396754bb1e949a8275fbc1644386cb9b6eed44164",
+  "stats": {
+    "source_split": "train",
+    "split_hash": "3dce346c8ab7f6db74de2fd51eabd9dcfb67fb072088b1c91663f0bbcd0d1f12",
+    "n_subjects": 140,
+    "n_trials": 59372,
+    "fit_timestamp": "2026-09-03T01:12:32Z",
+    "values": {}
+  },
+  "ablation_states": [
+    "naive",
+    "none",
+    "official"
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "status": "PASS",
+  "subjects": 230,
+  "trials": 97608,
+  "shape_per_trial": [32, 750],
+  "dtype": "float32",
+  "label_counts": {
+    "0": 24402,
+    "1": 24402,
+    "2": 48804
+  },
+  "binary_channel_order_exact_casefold_match": true,
+  "finite_values": true,
+  "errors": []
+}

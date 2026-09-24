@@ -1,0 +1,30 @@
+name: New model or adapter
+description: Propose a benchmark model without silently changing the existing protocol.
+title: "[Model]: "
+labels: [model]
+body:
+  - type: input
+    id: source
+    attributes:
+      label: Official paper/repository/checkpoint
+    validations:
+      required: true
+  - type: textarea
+    id: contract
+    attributes:
+      label: Input and downstream contract
+      description: State channels, samples, sampling rate, units, normalization, patching, pooling, and head.
+    validations:
+      required: true
+  - type: textarea
+    id: adaptations
+    attributes:
+      label: Required MI32 adaptations and evidence
+    validations:
+      required: true
+  - type: textarea
+    id: tests
+    attributes:
+      label: Proposed acceptance tests
+    validations:
+      required: true
