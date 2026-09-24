@@ -1,31 +1,33 @@
-# Data availability
+# Getting the MI32 data
 
-## Repository contents
+The signal files are about 8.7 GB, so they are not stored in Git. What *is* in the repository:
 
-The repository includes the complete data contract and non-signal release metadata:
+- the data shape, channel order, labels, and preprocessing recipe;
+- subject provenance and subject-level splits;
+- interpolation coverage and QC flags;
+- SHA-256 entries for all 230 subject files;
+- the loader and the 32-channel RGNN adjacency matrix.
 
-- version, shape, channel order, label ontology, and preprocessing contract;
-- subject provenance and subject-level split assignments;
-- interpolation coverage, quality-review flags, and independent release audit;
-- the SHA-256 manifest for all 230 subject NPZ files;
-- the 32-channel RGNN adjacency matrix and loader.
+## Three ways to put the data in place
 
-## Signal artifact management
+### 1. Download a published package
 
-The 230 signal archives occupy approximately 8.7 GB and are managed outside Git history. This
-keeps the repository lightweight while allowing each source dataset's access and distribution terms
-to remain attached to the signal artifact. Every authorized copy is verified against the published
-SHA-256 manifest.
+Point `MI32_DATA_URL` at the approved institutional, Zenodo, or Hugging Face artifact:
 
-## Supported access modes
+```bash
+python scripts/fetch_dataset.py --url "$MI32_DATA_URL" --out datasets/mi32/full
+```
 
-1. **Verified release archive** — set `MI32_DATA_URL` to an approved institutional, Zenodo, or
-   Hugging Face dataset artifact and run `scripts/fetch_dataset.py`.
-2. **Bring your own sealed copy** — place `MI32_COMMON32_V4` locally and run
-   `scripts/verify_dataset.py PATH --full`.
-3. **Rebuild from the curated precursor** — use `dataset_tools/build_mi3_32_interp.py` to reproduce
-   the common-32 transformation.
+### 2. Use a copy you already have
 
-These modes share the same downstream data contract, subject splits, manifests, and verification
-commands. The source review table records the access and distribution terms used when attaching a
-public signal endpoint.
+```bash
+python scripts/verify_dataset.py /path/to/MI32_COMMON32_V4 --full
+```
+
+### 3. Rebuild the common-32 version
+
+Start from the curated precursor and use `dataset_tools/build_mi3_32_interp.py`.
+
+Whichever route you take, finish with the full verifier. It checks the same data contract, split
+files, and hashes used by the runners. Source-specific access and redistribution notes are tracked
+in `datasets/mi32/source_redistribution_review.csv`.

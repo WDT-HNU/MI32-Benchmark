@@ -1,61 +1,54 @@
-# Reproducibility guide
+# Reproducing a run
 
-## Reproduction levels
+The short version: verify the data, fetch the exact upstream code and weights, pass the lightweight
+tests, pass one real CUDA batch, tune on validation, and only then open the test fold.
 
-The project distinguishes four evidence levels. Do not report a higher level than was executed.
+## What counts as a reproduction?
 
-1. **Static identity** — pinned repository commit, checkpoint size/hash, and source hashes.
-2. **CPU structure** — model graph, parameter counts, tensor contracts, and synthetic forward.
-   Dependency stubs are allowed only when the test explicitly says so.
-3. **CUDA preflight** — real dependencies, real checkpoint, real MI32 samples, one forward/backward
-   batch on CUDA, without opening the test split.
-4. **Formal run** — validation-only tuning, frozen hyperparameters, one final test evaluation, and
-   a sealed result/evidence package.
+There are four useful checkpoints along the way:
 
-A Mamba stub passing level 2 is not evidence for level 3 or 4.
+| Level | What has actually been checked |
+|---|---|
+| 1. Identity | repository commit, source hashes, checkpoint size and SHA-256 |
+| 2. CPU structure | model graph, parameter count, tensor shapes, synthetic forward pass |
+| 3. CUDA preflight | real dependency, real checkpoint, real MI32 batch, forward and backward on CUDA |
+| 4. Full run | validation-only selection, frozen settings, one test evaluation, packaged outputs |
 
-## 1. Clone and create the environment
+A stubbed Mamba layer can help with level 2. It says nothing about levels 3 or 4.
+
+## 1. Set up the environment
 
 ```bash
-git clone https://github.com/OWNER/MI32-Benchmark.git
+git clone https://github.com/WDT-HNU/MI32-Benchmark.git
 cd MI32-Benchmark
 conda env create -f requirements/environment.yml
 conda activate mi32-benchmark
 ```
 
-If Conda cannot resolve CUDA packages, create Python 3.12 manually, install the PyTorch 2.8.0
-CUDA 12.8 wheel, then install `requirements/core.txt` and `requirements/foundation.txt`.
+If Conda cannot resolve the CUDA packages, use Python 3.12, install the PyTorch 2.8.0 CUDA 12.8
+wheel first, and then install `requirements/core.txt` and `requirements/foundation.txt`.
 
-## 2. Fetch exact upstream repositories
+## 2. Fetch upstream code and checkpoints
 
 ```bash
 python scripts/fetch_upstreams.py
-```
-
-The script clones into ignored `third_party/` directories, checks out detached pinned commits,
-and fails if the working tree differs. It does not copy third-party source into this repository.
-
-## 3. Fetch exact checkpoints
-
-```bash
 python scripts/fetch_checkpoints.py
 ```
 
-Every download is checked for byte length and SHA-256 before atomic placement under
-`checkpoints/`. LaBraM's author checkpoint is copied from the pinned upstream checkout and is
-used to audit the converted Braindecode checkpoint.
+The first command clones the commits listed in `configs/models.json` into ignored `third_party/`
+directories. The second checks file size and SHA-256 before moving a checkpoint into place.
 
-## 4. Obtain and verify data
+## 3. Put the dataset in place
 
 ```bash
 python scripts/fetch_dataset.py --url "$MI32_DATA_URL" --out datasets/mi32/full
 python scripts/verify_dataset.py datasets/mi32/full --full
 ```
 
-If the combined archive is not publicly distributable, place an authorized sealed copy at that
-path. Never bypass the manifest check for a formal run.
+An authorized local copy works too. Put it at `datasets/mi32/full` or pass its path directly to the
+verifier. Do not skip the full hash check for a reported run.
 
-## 5. Run lightweight gates
+## 4. Run the small tests
 
 ```bash
 python scripts/benchmark.py doctor --data datasets/mi32/full
@@ -69,19 +62,21 @@ pytest -q \
   model_adapters/tests/test_adapters_contract.py
 ```
 
-## 6. Run full identity and CUDA gates
+These tests are quick enough to run before renting a GPU.
+
+## 5. Check one real CUDA batch
 
 ```bash
 bash scripts/run_full_gate.sh datasets/mi32/full
 ```
 
-This gate requires all upstream checkouts and checkpoints and records whether a real CUDA batch
-was executed. It fails closed on missing or changed identities.
+This step uses the real upstream packages, checkpoints, and MI32 samples. It also records whether
+CUDA was genuinely used. A missing or changed artifact stops the gate.
 
-## 7. Tune using validation only
+## 6. Tune without loading the test set
 
-For each formal model, compare only the predeclared learning rates and use validation macro-F1.
-Run without `--final-test`; the test dataset is not instantiated.
+The alpha protocol compares two learning rates per model and selects by validation macro-F1. Leave
+off `--final-test` while tuning.
 
 ```bash
 python scripts/benchmark.py run --model eegnet --data datasets/mi32/full \
@@ -90,9 +85,9 @@ python scripts/benchmark.py run --model eegnet --data datasets/mi32/full \
   --output outputs/eegnet_tune_lr3e4 --epochs 15 --lr 0.0003 --limit 64
 ```
 
-Freeze the chosen learning rate in a run note before proceeding.
+Write down the chosen learning rate before moving on.
 
-## 8. Run the formal test once
+## 7. Run the test once
 
 ```bash
 python scripts/benchmark.py run --model eegnet --data datasets/mi32/full \
@@ -100,22 +95,22 @@ python scripts/benchmark.py run --model eegnet --data datasets/mi32/full \
   --balanced-loss --final-test
 ```
 
-Repeat for each model/fold with the frozen configuration. Uni-NTFM requires the explicit
-`--allow-protocol-benchmark` flag and must remain outside the formal-reproduction leaderboard.
+Repeat with the frozen settings for the planned folds. Uni-NTFM also needs
+`--allow-protocol-benchmark`; its output stays in the separate protocol track.
 
-## 9. Collect and seal
+## 8. Collect the files
 
 ```bash
 python collect_remote_results.py --root outputs
 python scripts/package_release.py --input outputs --output release/mi32-run
 ```
 
-The release must contain results, histories, run configs, adapter manifests, source snapshots,
-environment audit, dataset manifest identity, and a new `SHA256SUMS`.
+The package includes results, histories, run configs, adapter manifests, source snapshots,
+environment information, dataset identity, and a fresh `SHA256SUMS`.
 
-## Determinism boundary
+## About exact numerical matches
 
-The runners seed Python, NumPy, and PyTorch. Exact floating-point equality across GPU models,
-drivers, CUDA kernels, and library builds is not promised. Reproduction means the same artifact
-identities, split, code path, hyperparameters, and statistically consistent metrics. Record GPU,
-driver, CUDA, PyTorch, and package versions in every formal release.
+The runners seed Python, NumPy, and PyTorch, but different GPUs, drivers, CUDA kernels, and library
+builds can still move the last digits. The reproducible unit here is the same data, split, source,
+checkpoint, adapter, and hyperparameters, with statistically consistent metrics—not bit-for-bit
+floating-point equality across machines.

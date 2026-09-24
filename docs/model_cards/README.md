@@ -1,19 +1,18 @@
 # Model cards
 
-These cards define what each benchmark name means in this repository. A model name without its
-upstream commit, adapter contract, checkpoint identity (when applicable), and result track is not
-a reproducible model identity.
+Click a model name to see the exact upstream commit, input conversion, classification head,
+checkpoint hash (where applicable), and the test that guards the implementation.
 
-| Card | Track |
+| Model | How it is reported here |
 |---|---|
 | [EEGNet](EEGNet.md) | formal reproduction |
 | [TSception](TSception.md) | formal reproduction |
-| [RGNN](RGNN.md) | formal backbone benchmark |
+| [RGNN](RGNN.md) | RGNN backbone benchmark |
 | [EEG-Conformer](EEG-Conformer.md) | formal reproduction |
-| [LaBraM](LaBraM.md) | formal checkpoint adaptation |
-| [EEGMamba](EEGMamba.md) | formal checkpoint adaptation |
-| [CodeBrain](CodeBrain.md) | formal checkpoint adaptation |
-| [Uni-NTFM](Uni-NTFM.md) | protocol benchmark only |
+| [LaBraM](LaBraM.md) | checkpoint adaptation |
+| [EEGMamba](EEGMamba.md) | checkpoint adaptation |
+| [CodeBrain](CodeBrain.md) | checkpoint adaptation |
+| [Uni-NTFM](Uni-NTFM.md) | separate protocol benchmark |
 
-All cards inherit the subject-level split, validation-only selection, and one-shot test rules in
-`docs/BENCHMARK_PROTOCOL.md`.
+All eight use the subject split and validation/test rules in
+[`docs/BENCHMARK_PROTOCOL.md`](../BENCHMARK_PROTOCOL.md).

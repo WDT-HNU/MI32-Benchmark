@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "mi32-benchmark"
 version = "0.1.0a0"
-description = "Auditable common-32 motor-imagery EEG benchmark"
+description = "Eight EEG models on a common 32-channel motor-imagery benchmark"
 readme = "README.md"
 requires-python = ">=3.12,<3.13"
 license = { text = "Apache-2.0" }

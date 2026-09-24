@@ -2,7 +2,6 @@
 
 ## Ownership and legal
 
-- [ ] Replace `OWNER` placeholders in README and CITATION.cff.
 - [ ] Confirm the project copyright holder and Apache-2.0 choice.
 - [ ] Complete every row of `datasets/mi32/source_redistribution_review.csv`.
 - [ ] Verify third-party licenses at the pinned commits.

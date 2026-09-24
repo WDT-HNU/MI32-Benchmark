@@ -1,15 +1,9 @@
 # Results
 
-## Current-contract evidence snapshot
+The current files are in `results/mi32-common32-v4/current-evidence-20260911/`. They use the model
+input definitions documented in the current model cards.
 
-`results/mi32-common32-v4/current-evidence-20260911/` contains runs matching the sealed
-foundation-model unit contracts. The recorded fold coverage is:
-
-- EEGNet, TSception, RGNN backbone, and EEG-Conformer: fold 0;
-- CodeBrain and EEGMamba: folds 0, 2, and 3;
-- LaBraM: folds 0 and 2.
-
-Available test rows:
+## Test rows on record
 
 | Model | Fold | Macro-F1 | Balanced accuracy | Accuracy |
 |---|---:|---:|---:|---:|
@@ -26,23 +20,18 @@ Available test rows:
 | LaBraM | 0 | 0.544850 | 0.547383 | 0.574403 |
 | LaBraM | 2 | 0.466047 | 0.468288 | 0.494127 |
 
-Each row is interpreted at its recorded fold scope. Cross-model aggregation uses matched folds and
-publishes its aggregation rule together with the resulting table.
+One caution matters here: the models do not yet have the same fold coverage. A ranking should use
+matched folds and state its aggregation rule. Fold 0 by itself is a pipeline result, not the final
+cross-subject estimate.
 
-## Historical audit package
+Each CSV has a paired run manifest with the dataset, source commit, checkpoint, adapter, split,
+seed, and selected epoch. New runs also save per-trial labels, predictions, and class probabilities
+so the metrics can be recomputed independently.
 
-`results/mi32-common32-v4/historical-fold0-pre-unit-hardening/` preserves the earlier seven-model
-fold-0 package as an immutable provenance record. The current-contract reporting table is the
-snapshot above.
+## Older runs
 
-## Uni-NTFM track
+`results/mi32-common32-v4/historical-fold0-pre-unit-hardening/` keeps the earlier seven-model
+fold-0 package. It is useful for tracing the work, but it is not part of the table above.
 
-Uni-NTFM is published as a separately labeled `protocol_benchmark` implementation. Its model card,
-adapter geometry, structure test, and explicit launch flag keep that track distinct from the seven
-formal-reproduction models.
-
-## Result artifacts
-
-Published evidence contains metric CSVs and run manifests recording dataset identity, model source,
-checkpoint identity, adapter contract, split, seed, and selected epoch. Current runners also emit
-per-trial labels, predictions, and class probabilities for independent metric recomputation.
+Uni-NTFM remains in a separate `protocol_benchmark` track because its public release does not
+include the downstream checkpoint/head needed for a paper-level reproduction.

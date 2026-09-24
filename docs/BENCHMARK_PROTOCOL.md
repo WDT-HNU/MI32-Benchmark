@@ -1,52 +1,50 @@
 # Benchmark protocol
 
-## Scientific target
+The task is cross-subject, three-class motor-imagery classification. All models use the same data
+roles and the same rule for opening the test set.
 
-The benchmark estimates cross-subject generalization for a harmonized three-class motor-imagery
-task while comparing distinct neural architectures under one leakage-resistant evaluation rule.
+## Train, validation, and test
 
-## Data roles
+For test fold `f`, subjects assigned to `f` form the test set. Validation uses fold 1 when `f=0`
+and fold 0 otherwise. The remaining subjects are used for training.
 
-For test fold `f`, test subjects are exactly the rows with `fold=f`. Validation subjects use fold
-1 when `f=0`, otherwise fold 0. All remaining subjects form training. Every transformation that
-learns statistics is fitted on training subjects only and stores a SHA-256 of the sorted training
-subject IDs.
+No subject appears in two roles. Anything that learns a statistic—including calibration inside an
+adapter—is fitted from the training subjects. The sorted training IDs are saved as a SHA-256 hash.
 
-## Hyperparameter policy
+## Hyperparameters
 
-The alpha protocol searches learning rate only:
+The alpha protocol searches only the learning rate:
 
-- supervised models: `1e-3` versus `3e-4`;
-- pretrained foundation models: `1e-4` versus `3e-5`;
-- Uni-NTFM protocol track: `2e-4` versus `5e-5`.
+- supervised models: `1e-3` or `3e-4`;
+- pretrained foundation models: `1e-4` or `3e-5`;
+- Uni-NTFM protocol track: `2e-4` or `5e-5`.
 
-Selection uses validation macro-F1. Dropout, architecture, channel mapping, label ontology, data
-filtering, and test-time processing are not adapted after viewing validation or test outcomes.
+Validation macro-F1 chooses between the two. Dropout, architecture, channel mapping, label rules,
+data filtering, and test-time processing stay fixed.
 
-## Test isolation
-
-Tuning commands omit `--final-test`, so the test dataset is not instantiated. After the selected
-configuration is frozen, the final command evaluates validation and test from the same best
-validation checkpoint. Test metrics cannot trigger another run or change.
+Tuning commands do not use `--final-test`, so the runner never instantiates the test dataset during
+selection. Once the learning rate is written down, the final command loads the best validation
+checkpoint and evaluates the test fold once.
 
 ## Metrics
 
-Primary metrics are macro-F1 and balanced accuracy. Accuracy is reported but is insufficient on
-the `1:1:2` label distribution. Reports also include per-class recall, a binary upper-vs-non-upper
-score, conditional left/right accuracy after upper-limb detection, subject-mean metrics when
-available, and the three-class confusion matrix.
+The two primary metrics are macro-F1 and balanced accuracy. Plain accuracy is included, but the
+`1:1:2` class distribution makes it a poor summary on its own. Reports also include:
 
-## Statistical reporting
+- recall for each of the three classes;
+- upper-limb versus non-upper-limb performance;
+- left/right accuracy conditional on detecting an upper-limb trial;
+- subject-mean metrics when available;
+- the three-class confusion matrix.
 
-Fold 0 alone is a pipeline/evidence milestone, not the final scientific estimate. A paper should
-report all planned folds, mean and dispersion, per-source/per-subject sensitivity, and confidence
-intervals or paired tests based on predeclared units of analysis. The heterogeneous source
-datasets should not be treated as IID trials.
+For a paper, run all planned folds and report mean, dispersion, source/subject sensitivity, and an
+uncertainty estimate or paired test based on a declared analysis unit. Trials from the eight source
+datasets are not IID samples.
 
-## Result classes
+## Result labels used in this repository
 
-- `formal_reproduction`: identity-sealed official or official-aligned model under MI32 protocol.
-- `protocol_benchmark`: an explicit custom downstream protocol on an official backbone when the
-  upstream release lacks the contract needed for paper reproduction.
-- `ablation`: none/naive/official input-adapter comparisons, never merged into the main table.
-- `invalidated`: historical result produced by a superseded structure or input contract.
+- `formal_reproduction`: official or source-aligned model with fixed code/checkpoint identity;
+- `protocol_benchmark`: declared downstream wrapper on a public backbone when no official task
+  head or checkpoint is available;
+- `ablation`: comparison of adapter choices, kept out of the main result table;
+- `invalidated`: an older run whose structure or input definition has been replaced.
