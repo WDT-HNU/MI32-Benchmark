@@ -1,16 +1,16 @@
 # 🧠 MI32 Benchmark
 
-Run eight EEG models on one common 32-channel motor-imagery benchmark.
+在同一套 32 通道运动想象数据上，公平比较 8 种 EEG 模型。
 
-## ✨ Why MI32?
+## ✨ 这个仓库有什么？
 
-- 🎛️ **One signal format** — Every trial is a 3-second, 32-channel tensor sampled at 250 Hz
-- 📦 **Eight source datasets** — 230 subjects and 97,608 trials in a shared three-class task
-- 🔌 **Eight model paths** — CNN, GNN, Transformer, state-space, and EEG foundation models
-- 🔒 **Subject-level evaluation** — Validation selects the learning rate; the test fold stays closed until the run is frozen
-- 🧾 **Traceable runs** — Results keep the data manifest, upstream commit, checkpoint hash, split, arguments, and source snapshot
+- 🎛️ **统一信号格式**：每个试次都是 3 秒、32 通道、250 Hz 的 EEG 张量
+- 📦 **8 个来源数据集**：共 230 名受试者、97,608 个试次，统一为三分类任务
+- 🔌 **8 条模型路线**：覆盖 CNN、GNN、Transformer、状态空间模型和 EEG 基础模型
+- 🔒 **受试者级评估**：只用验证集选择学习率；配置冻结后才运行测试集
+- 🧾 **完整运行记录**：保留数据清单、上游提交、权重哈希、划分、参数和源码快照
 
-## 🚀 Installation
+## 🚀 安装
 
 ```bash
 git clone https://github.com/WDT-HNU/MI32-Benchmark.git
@@ -25,16 +25,16 @@ pip install -r requirements/core.txt
 pip install -r requirements/foundation.txt
 ```
 
-Fetch the pinned upstream code and pretrained weights:
+拉取已经固定版本的上游代码和预训练权重：
 
 ```bash
 python scripts/fetch_upstreams.py
 python scripts/fetch_checkpoints.py
 ```
 
-## 🏁 Run a model
+## 🏁 跑一个模型
 
-Put the MI32 release under `datasets/mi32/full`, verify it, and run a preflight:
+把 MI32 数据放到 `datasets/mi32/full`，先检查数据，再运行一次预检：
 
 ```bash
 python scripts/verify_dataset.py datasets/mi32/full --full
@@ -47,7 +47,7 @@ python scripts/benchmark.py run \
   --preflight
 ```
 
-To inspect a full command without starting a GPU run:
+如果只想检查完整命令，不启动 GPU 训练：
 
 ```bash
 python scripts/benchmark.py run \
@@ -59,46 +59,44 @@ python scripts/benchmark.py run \
   --dry-run
 ```
 
-The runner writes metrics, training history, the selected epoch, adapter settings, environment
-information, and source identities to the output directory.
+运行器会把指标、训练历史、最佳轮次、适配器配置、运行环境和源码身份写入输出目录。
 
-## 📐 Data contract
+## 📐 数据约定
 
-Every model starts from the same trial representation:
+所有模型都从同一种试次表示开始：
 
-| Field | Value |
+| 项目 | 取值 |
 |---|---|
-| Shape | `[batch, 32, 750]` |
-| Sampling rate | 250 Hz |
-| Window | 3 seconds |
-| Dtype / unit | `float32` / Volt |
-| Labels | `left_upper`, `right_upper`, `non_upper` |
-| Class counts | 24,402 / 24,402 / 48,804 |
-| Channel provenance | `measured_mask` marks measured and interpolated electrodes |
+| 张量形状 | `[batch, 32, 750]` |
+| 采样率 | 250 Hz |
+| 时间窗 | 3 秒 |
+| 数据类型 / 单位 | `float32` / 伏特 |
+| 标签 | `left_upper`、`right_upper`、`non_upper` |
+| 类别数量 | 24,402 / 24,402 / 48,804 |
+| 通道来源 | `measured_mask` 标记实测电极和插值电极 |
 
-Missing target electrodes are estimated with Perrin spherical-spline interpolation on MNE's
-`standard_1005` montage. See the [dataset card](datasets/mi32/DATASET_CARD.md) for the channel order,
-source composition, QC, and split rules.
+缺少的目标电极使用 Perrin 球面样条法，在 MNE 的 `standard_1005` 电极模板上插值。通道顺序、
+各来源数据集的组成、质量检查和划分规则见[数据集卡片](datasets/mi32/DATASET_CARD.md)。
 
-## ⚙️ Run parameters
+## ⚙️ 运行参数
 
-| Parameter | Required | Description |
+| 参数 | 必填 | 说明 |
 |---|---|---|
-| `--model` | Yes | `eegnet`, `tsception`, `rgnn`, `eegconformer`, `labram`, `eegmamba`, `codebrain`, or `uni_ntfm` |
-| `--data` | Yes | Path to the verified MI32 release |
-| `--output` | Yes | Directory for metrics and run records |
-| `--fold` | No | Test fold, default `0` |
-| `--epochs` | No | Training epochs |
-| `--batch-size` | No | Override the model default |
-| `--lr` | No | Learning rate selected on validation |
-| `--balanced-loss` | No | Use class-balanced training loss |
-| `--preflight` | No | Run the short environment/model/data check |
-| `--final-test` | No | Evaluate the test fold after settings are frozen |
-| `--dry-run` | No | Print the resolved command without executing it |
+| `--model` | 是 | `eegnet`、`tsception`、`rgnn`、`eegconformer`、`labram`、`eegmamba`、`codebrain` 或 `uni_ntfm` |
+| `--data` | 是 | 已通过检查的 MI32 数据目录 |
+| `--output` | 是 | 指标和运行记录的输出目录 |
+| `--fold` | 否 | 测试折，默认 `0` |
+| `--epochs` | 否 | 训练轮数 |
+| `--batch-size` | 否 | 覆盖模型默认批量大小 |
+| `--lr` | 否 | 在验证集上选择的学习率 |
+| `--balanced-loss` | 否 | 使用类别平衡损失 |
+| `--preflight` | 否 | 运行简短的环境、模型和数据预检 |
+| `--final-test` | 否 | 配置冻结后评估测试折 |
+| `--dry-run` | 否 | 只打印解析后的命令，不实际执行 |
 
-## 📊 Source datasets
+## 📊 来源数据集
 
-| Dataset | Subjects | Measured target channels | Interpolated target channels |
+| 数据集 | 受试者数 | 实测目标通道 | 插值目标通道 |
 |---|---:|---:|---:|
 | BNCI2014_001 | 9 | 11 | 21 |
 | PhysionetMI | 109 | 32 | 0 |
@@ -109,30 +107,30 @@ source composition, QC, and split rules.
 | Zhou2016 | 4 | 14 | 18 |
 | Zhou2020 | 8 | 16 | 16 |
 
-The signal package is about 8.7 GB and stays outside Git history. Download, local-copy, and rebuild
-options are documented in [Getting the MI32 data](DATA_AVAILABILITY.md).
+信号文件约 8.7 GB，不放进 Git 历史。下载、复制已有数据和从头重建的方法见
+[获取 MI32 数据](DATA_AVAILABILITY.md)。
 
-## 🧩 Available models
+## 🧩 已接入模型
 
-| Model | Family | Definition used here |
+| 模型 | 类型 | 本仓库采用的定义 |
 |---|---|---|
-| EEGNet | compact CNN | EEGNet-8,2 with a three-class linear head |
-| TSception | multi-scale CNN | V2 temporal, asymmetric spatial, and fusion blocks |
-| RGNN | graph neural network | signed graph, second-order SGC, and sum pooling |
-| EEG-Conformer | CNN + Transformer | convolutional patch embedding and six-layer encoder |
-| LaBraM | EEG foundation model | official weights and non-CLS token mean pooling |
-| EEGMamba | state-space foundation model | official 12-layer Mamba2 backbone and all-patch head |
-| CodeBrain | EEG foundation model | official EEGSSM backbone and flatten-all-patches MLP |
-| Uni-NTFM | EEG foundation model | public backbone with a separate protocol-benchmark head |
+| EEGNet | 轻量级 CNN | EEGNet-8,2，分类头改为三分类线性层 |
+| TSception | 多尺度 CNN | V2 时间卷积、非对称空间卷积和融合模块 |
+| RGNN | 图神经网络 | 带符号图、二阶 SGC 和求和池化 |
+| EEG-Conformer | CNN + Transformer | 卷积式 patch embedding 和六层编码器 |
+| LaBraM | EEG 基础模型 | 官方权重，非 CLS token 均值池化 |
+| EEGMamba | 状态空间基础模型 | 官方 12 层 Mamba2 主干和全 patch 分类头 |
+| CodeBrain | EEG 基础模型 | 官方 EEGSSM 主干和展平全部 patch 的 MLP |
+| Uni-NTFM | EEG 基础模型 | 公开主干和独立的协议评测分类头 |
 
-Each [model card](docs/model_cards/README.md) records the upstream commit, input conversion,
-checkpoint hash where applicable, classification head, and structure test.
+每张[模型卡片](docs/model_cards/README.md)都记录上游提交、输入转换、权重哈希（如适用）、
+分类头和结构测试。
 
-## 📈 Results
+## 📈 当前结果
 
-The repository currently contains these test rows:
+仓库目前收录以下测试结果：
 
-| Model | Fold | Macro-F1 | Balanced accuracy | Accuracy |
+| 模型 | 折 | Macro-F1 | 平衡准确率 | 准确率 |
 |---|---:|---:|---:|---:|
 | EEG-Conformer | 0 | 0.579492 | 0.599415 | 0.588935 |
 | EEGNet | 0 | 0.555890 | 0.568942 | 0.570968 |
@@ -147,26 +145,25 @@ The repository currently contains these test rows:
 | LaBraM | 0 | 0.544850 | 0.547383 | 0.574403 |
 | LaBraM | 2 | 0.466047 | 0.468288 | 0.494127 |
 
-Matched-fold comparisons use rows that share the same fold. The CSV files and paired run manifests
-are under
-[`results/mi32-common32-v4/current-evidence-20260911`](results/mi32-common32-v4/current-evidence-20260911);
-see [Results](docs/RESULTS.md) for interpretation.
+只有使用同一测试折的结果才适合直接比较。CSV 和对应的运行清单保存在
+[`results/mi32-common32-v4/current-evidence-20260911`](results/mi32-common32-v4/current-evidence-20260911)，
+具体解释见[结果说明](docs/RESULTS.md)。
 
-## 📄 License
+## 📄 许可证
 
-Original code in this repository is Apache-2.0 licensed. Source EEG datasets, upstream model code,
-and pretrained weights keep their own terms. See [Third-party sources](THIRD_PARTY.md).
+本仓库原创代码采用 Apache-2.0 许可证。原始 EEG 数据、上游模型代码和预训练权重仍遵循
+各自的授权条款，详见[第三方来源](THIRD_PARTY.md)。
 
-## 📣 Citation
+## 📣 引用
 
-If you use MI32 Benchmark, cite this repository together with the original datasets and models used
-in your experiment. Machine-readable project metadata is available in [CITATION.cff](CITATION.cff).
+如果你的工作使用了 MI32 Benchmark，请同时引用本仓库以及实验中实际使用的原始数据集和模型。
+机器可读的项目信息见 [CITATION.cff](CITATION.cff)。
 
-## 📚 Further reading
+## 📚 继续阅读
 
-- [Reproducing a run](REPRODUCIBILITY.md) — environment, identity checks, CUDA gate, tuning, and packaging
-- [Benchmark protocol](docs/BENCHMARK_PROTOCOL.md) — splits, hyperparameters, metrics, and result labels
-- [Model cards](docs/model_cards/README.md) — exact model definitions and non-equivalent substitutions
-- [Running on AutoDL](docs/AUTODL.md) — directory layout, installation, validation, and shutdown
-- [Project status](PROJECT_STATUS.md) — data, model, and fold coverage already in the repository
-- [Contributing](CONTRIBUTING.md) — how to change a benchmark without silently changing its meaning
+- [复现一次实验](REPRODUCIBILITY.md)：环境、身份校验、CUDA 门禁、调参和结果打包
+- [评测协议](docs/BENCHMARK_PROTOCOL.md)：数据划分、超参数、指标和结果标签
+- [模型卡片](docs/model_cards/README.md)：准确的模型定义和不等价替代
+- [在 AutoDL 上运行](docs/AUTODL.md)：目录、安装、检查和关机流程
+- [项目状态](PROJECT_STATUS.md)：仓库现有的数据、模型和测试折覆盖情况
+- [参与贡献](CONTRIBUTING.md)：怎样修改 benchmark 而不悄悄改变它的含义
