@@ -30,7 +30,7 @@ jobs:
         run: python scripts/verify_dataset.py datasets/mi32/metadata
       - name: Run lightweight structure and leakage gates
         run: |
-          pytest -q \
+          python -m pytest -q \
             tests/test_eegnet_structure.py \
             tests/test_tsception_structure.py \
             tests/test_rgnn_structure.py \

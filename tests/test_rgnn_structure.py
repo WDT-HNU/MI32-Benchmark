@@ -28,8 +28,6 @@ def find_mi32_root():
         candidates.append(Path(os.environ["RGNN_TEST_DATA"]))
     candidates.extend([
         Path(__file__).resolve().parents[1] / "datasets" / "mi32" / "metadata",
-        Path("C:/Users/lenovo/Documents/Codex/results_mi32_final/dataset"),
-        Path("G:/MI-3-32通道插值"),
         Path("/root/autodl-tmp/datasets/MI32_COMMON32_V4"),
     ])
     for candidate in candidates:
