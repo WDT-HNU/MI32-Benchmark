@@ -1,4 +1,4 @@
-name: Dependency review
+name: 依赖审查
 
 on:
   pull_request:
@@ -8,6 +8,7 @@ permissions:
 
 jobs:
   dependency-review:
+    name: 审查依赖变更
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6

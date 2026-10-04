@@ -1,4 +1,4 @@
-name: CI
+name: 持续集成
 
 on:
   push:
@@ -10,6 +10,7 @@ permissions:
 
 jobs:
   cpu-structure-and-integrity:
+    name: CPU 结构与完整性检查
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
@@ -19,16 +20,16 @@ jobs:
           python-version: "3.12"
           cache: pip
           cache-dependency-path: requirements/*.txt
-      - name: Install CPU test environment
+      - name: 安装 CPU 测试环境
         run: |
           python -m pip install --upgrade pip
           python -m pip install torch==2.8.0 --index-url https://download.pytorch.org/whl/cpu
           python -m pip install -r requirements/core.txt -r requirements/dev.txt
-      - name: Verify repository artifacts
+      - name: 检查仓库文件
         run: python scripts/verify_repository.py
-      - name: Verify public metadata snapshot
+      - name: 检查公开元数据快照
         run: python scripts/verify_dataset.py datasets/mi32/metadata
-      - name: Run lightweight structure and leakage gates
+      - name: 运行轻量结构与数据泄露门禁
         run: |
           python -m pytest -q \
             tests/test_eegnet_structure.py \
@@ -38,5 +39,5 @@ jobs:
             tests/test_mi3rawtrials_semantics.py \
             tests/test_model_adapter_boundary.py \
             model_adapters/tests/test_adapters_contract.py
-      - name: Compile Python sources
+      - name: 编译检查 Python 源码
         run: python -m compileall -q .

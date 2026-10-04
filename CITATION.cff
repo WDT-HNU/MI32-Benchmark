@@ -1,5 +1,5 @@
 cff-version: 1.2.0
-message: "Please cite this repository together with the datasets and models you use."
+message: "请同时引用本仓库以及实际使用的数据集和模型。"
 title: "MI32 Benchmark"
 type: software
 version: 0.1.0-alpha
@@ -10,7 +10,7 @@ repository-code: "https://github.com/WDT-HNU/MI32-Benchmark"
 license: Apache-2.0
 keywords:
   - EEG
-  - motor imagery
-  - benchmark
-  - foundation model
-  - reproducibility
+  - 运动想象
+  - 基准评测
+  - 基础模型
+  - 可复现性

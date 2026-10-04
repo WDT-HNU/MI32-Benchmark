@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "mi32-benchmark"
 version = "0.1.0a0"
-description = "Eight EEG models on a common 32-channel motor-imagery benchmark"
+description = "在统一的 32 通道运动想象数据上评测 8 种 EEG 模型"
 readme = "README.md"
 requires-python = ">=3.12,<3.13"
 license = { text = "Apache-2.0" }
@@ -30,9 +30,9 @@ py-modules = []
 testpaths = ["tests", "model_adapters/tests"]
 addopts = "-ra"
 markers = [
-  "external: requires a pinned upstream repository or checkpoint",
-  "cuda: requires a real CUDA runtime",
-  "dataset: requires the complete sealed MI32 dataset",
+  "external: 需要固定版本的上游仓库或权重",
+  "cuda: 需要真实 CUDA 运行环境",
+  "dataset: 需要完整的封存 MI32 数据集",
 ]
 
 [tool.ruff]
