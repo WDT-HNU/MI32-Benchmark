@@ -1,50 +1,46 @@
-# Benchmark protocol
+# 评测协议
 
-The task is cross-subject, three-class motor-imagery classification. All models use the same data
-roles and the same rule for opening the test set.
+任务为跨受试者三分类运动想象。所有模型使用相同的数据角色和测试集开启规则。
 
-## Train, validation, and test
+## 训练集、验证集和测试集
 
-For test fold `f`, subjects assigned to `f` form the test set. Validation uses fold 1 when `f=0`
-and fold 0 otherwise. The remaining subjects are used for training.
+测试折为 `f` 时，分配到 `f` 的受试者组成测试集；当 `f=0` 时使用 fold 1 作为验证集，其他
+情况使用 fold 0；其余受试者用于训练。
 
-No subject appears in two roles. Anything that learns a statistic—including calibration inside an
-adapter—is fitted from the training subjects. The sorted training IDs are saved as a SHA-256 hash.
+同一受试者不会出现在两个角色中。任何需要学习统计量的步骤，包括适配器内部校准，都只能用
+训练受试者拟合。排序后的训练受试者 ID 保存为 SHA-256 哈希。
 
-## Hyperparameters
+## 超参数
 
-The alpha protocol searches only the learning rate:
+alpha 协议只搜索学习率：
 
-- supervised models: `1e-3` or `3e-4`;
-- pretrained foundation models: `1e-4` or `3e-5`;
-- Uni-NTFM protocol track: `2e-4` or `5e-5`.
+- 监督模型：`1e-3` 或 `3e-4`；
+- 预训练基础模型：`1e-4` 或 `3e-5`；
+- Uni-NTFM 协议评测：`2e-4` 或 `5e-5`。
 
-Validation macro-F1 chooses between the two. Dropout, architecture, channel mapping, label rules,
-data filtering, and test-time processing stay fixed.
+两者按验证集 macro-F1 选择。Dropout、模型结构、通道映射、标签规则、数据筛选和测试时处理
+保持固定。
 
-Tuning commands do not use `--final-test`, so the runner never instantiates the test dataset during
-selection. Once the learning rate is written down, the final command loads the best validation
-checkpoint and evaluates the test fold once.
+调参命令不使用 `--final-test`，因此选参期间运行器不会实例化测试数据集。记录选定学习率后，
+最终命令加载验证集最优权重，并只评估测试折一次。
 
-## Metrics
+## 指标
 
-The two primary metrics are macro-F1 and balanced accuracy. Plain accuracy is included, but the
-`1:1:2` class distribution makes it a poor summary on its own. Reports also include:
+主要指标为 macro-F1 和平衡准确率。报告也提供普通准确率，但在 `1:1:2` 类别分布下，它不适合
+单独概括性能。报告还包括：
 
-- recall for each of the three classes;
-- upper-limb versus non-upper-limb performance;
-- left/right accuracy conditional on detecting an upper-limb trial;
-- subject-mean metrics when available;
-- the three-class confusion matrix.
+- 三个类别各自的召回率；
+- 上肢与非上肢的二分类性能；
+- 已识别为上肢试次条件下的左/右准确率；
+- 可获得时的受试者均值指标；
+- 三分类混淆矩阵。
 
-For a paper, run all planned folds and report mean, dispersion, source/subject sensitivity, and an
-uncertainty estimate or paired test based on a declared analysis unit. Trials from the eight source
-datasets are not IID samples.
+用于论文时，应运行所有预先计划的折，并报告均值、离散程度、来源/受试者敏感性，以及基于
+预先声明分析单位的不确定性估计或配对检验。8 个来源数据集中的试次不是 IID 样本。
 
-## Result labels used in this repository
+## 仓库使用的结果标签
 
-- `formal_reproduction`: official or source-aligned model with fixed code/checkpoint identity;
-- `protocol_benchmark`: declared downstream wrapper on a public backbone when no official task
-  head or checkpoint is available;
-- `ablation`: comparison of adapter choices, kept out of the main result table;
-- `invalidated`: an older run whose structure or input definition has been replaced.
+- `formal_reproduction`：官方或与源码一致的模型，源码和权重身份固定；
+- `protocol_benchmark`：没有官方任务分类头或权重时，在公开主干上明确声明的下游封装；
+- `ablation`：适配器选择对比，不进入主结果表；
+- `invalidated`：模型结构或输入定义已被替换的旧运行。

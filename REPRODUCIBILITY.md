@@ -1,22 +1,22 @@
-# Reproducing a run
+# 复现一次运行
 
-The short version: verify the data, fetch the exact upstream code and weights, pass the lightweight
-tests, pass one real CUDA batch, tune on validation, and only then open the test fold.
+简要流程：核验数据，获取指定版本的上游代码和权重，通过轻量测试和一个真实 CUDA 批次，
+只在验证集上调参，最后才打开测试折。
 
-## What counts as a reproduction?
+## 什么程度算复现？
 
-There are four useful checkpoints along the way:
+整个流程分为四个可核验层级：
 
-| Level | What has actually been checked |
+| 层级 | 实际检查内容 |
 |---|---|
-| 1. Identity | repository commit, source hashes, checkpoint size and SHA-256 |
-| 2. CPU structure | model graph, parameter count, tensor shapes, synthetic forward pass |
-| 3. CUDA preflight | real dependency, real checkpoint, real MI32 batch, forward and backward on CUDA |
-| 4. Full run | validation-only selection, frozen settings, one test evaluation, packaged outputs |
+| 1. 身份 | 仓库提交、源码哈希、权重大小和 SHA-256 |
+| 2. CPU 结构 | 模型图、参数量、张量形状和合成数据前向传播 |
+| 3. CUDA 预检 | 真实依赖、真实权重、真实 MI32 批次，以及 CUDA 前向和反向传播 |
+| 4. 完整运行 | 仅验证集选参、冻结配置、一次测试评估和完整结果包 |
 
-A stubbed Mamba layer can help with level 2. It says nothing about levels 3 or 4.
+Mamba stub 可以用于第 2 层结构检查，但不能证明第 3 或第 4 层成立。
 
-## 1. Set up the environment
+## 1. 配置环境
 
 ```bash
 git clone https://github.com/WDT-HNU/MI32-Benchmark.git
@@ -25,34 +25,34 @@ conda env create -f requirements/environment.yml
 conda activate mi32-benchmark
 ```
 
-If Conda cannot resolve the CUDA packages, use Python 3.12, install the PyTorch 2.8.0 CUDA 12.8
-wheel first, and then install `requirements/core.txt` and `requirements/foundation.txt`.
+如果 Conda 无法解析 CUDA 包，请使用 Python 3.12，先安装 PyTorch 2.8.0 CUDA 12.8 wheel，
+再安装 `requirements/core.txt` 和 `requirements/foundation.txt`。
 
-## 2. Fetch upstream code and checkpoints
+## 2. 获取上游代码和权重
 
 ```bash
 python scripts/fetch_upstreams.py
 python scripts/fetch_checkpoints.py
 ```
 
-The first command clones the commits listed in `configs/models.json` into ignored `third_party/`
-directories. The second checks file size and SHA-256 before moving a checkpoint into place.
+第一条命令把 `configs/models.json` 中固定的提交克隆到 Git 忽略的 `third_party/` 目录；第二条
+命令先检查文件大小和 SHA-256，再把权重放到目标位置。
 
-## 3. Put the dataset in place
+## 3. 准备数据集
 
 ```bash
 python scripts/fetch_dataset.py --url "$MI32_DATA_URL" --out datasets/mi32/full
 python scripts/verify_dataset.py datasets/mi32/full --full
 ```
 
-An authorized local copy works too. Put it at `datasets/mi32/full` or pass its path directly to the
-verifier. Do not skip the full hash check for a reported run.
+也可以使用有权访问的本地副本。把它放在 `datasets/mi32/full`，或者直接把路径传给检查器。
+凡是需要报告的运行，都不能跳过完整哈希检查。
 
-## 4. Run the small tests
+## 4. 运行轻量测试
 
 ```bash
 python scripts/benchmark.py doctor --data datasets/mi32/full
-pytest -q \
+python -m pytest -q \
   tests/test_eegnet_structure.py \
   tests/test_tsception_structure.py \
   tests/test_rgnn_structure.py \
@@ -62,21 +62,21 @@ pytest -q \
   model_adapters/tests/test_adapters_contract.py
 ```
 
-These tests are quick enough to run before renting a GPU.
+这些测试耗时较短，应在租用 GPU 之前完成。
 
-## 5. Check one real CUDA batch
+## 5. 检查一个真实 CUDA 批次
 
 ```bash
 bash scripts/run_full_gate.sh datasets/mi32/full
 ```
 
-This step uses the real upstream packages, checkpoints, and MI32 samples. It also records whether
-CUDA was genuinely used. A missing or changed artifact stops the gate.
+这一步使用真实上游依赖、权重和 MI32 样本，并记录是否确实使用了 CUDA。任何文件缺失或
+身份变化都会使门禁停止。
 
-## 6. Tune without loading the test set
+## 6. 不加载测试集进行调参
 
-The alpha protocol compares two learning rates per model and selects by validation macro-F1. Leave
-off `--final-test` while tuning.
+alpha 协议为每个模型比较两个学习率，并按验证集 macro-F1 选择。调参时不要添加
+`--final-test`。
 
 ```bash
 python scripts/benchmark.py run --model eegnet --data datasets/mi32/full \
@@ -85,9 +85,9 @@ python scripts/benchmark.py run --model eegnet --data datasets/mi32/full \
   --output outputs/eegnet_tune_lr3e4 --epochs 15 --lr 0.0003 --limit 64
 ```
 
-Write down the chosen learning rate before moving on.
+进入下一步之前，先记录选定的学习率。
 
-## 7. Run the test once
+## 7. 测试集只运行一次
 
 ```bash
 python scripts/benchmark.py run --model eegnet --data datasets/mi32/full \
@@ -95,22 +95,21 @@ python scripts/benchmark.py run --model eegnet --data datasets/mi32/full \
   --balanced-loss --final-test
 ```
 
-Repeat with the frozen settings for the planned folds. Uni-NTFM also needs
-`--allow-protocol-benchmark`; its output stays in the separate protocol track.
+对计划中的各折重复运行冻结后的配置。Uni-NTFM 还需要 `--allow-protocol-benchmark`，其输出
+保存在单独的协议评测路线中。
 
-## 8. Collect the files
+## 8. 收集结果文件
 
 ```bash
 python collect_remote_results.py --root outputs
 python scripts/package_release.py --input outputs --output release/mi32-run
 ```
 
-The package includes results, histories, run configs, adapter manifests, source snapshots,
-environment information, dataset identity, and a fresh `SHA256SUMS`.
+结果包包括指标、训练历史、运行配置、适配器清单、源码快照、环境信息、数据集身份和新生成的
+`SHA256SUMS`。
 
-## About exact numerical matches
+## 关于数值完全一致
 
-The runners seed Python, NumPy, and PyTorch, but different GPUs, drivers, CUDA kernels, and library
-builds can still move the last digits. The reproducible unit here is the same data, split, source,
-checkpoint, adapter, and hyperparameters, with statistically consistent metrics—not bit-for-bit
-floating-point equality across machines.
+运行器会固定 Python、NumPy 和 PyTorch 的随机种子，但不同 GPU、驱动、CUDA 内核和依赖构建
+仍可能造成末位差异。这里的复现单位是相同的数据、划分、源码、权重、适配器和超参数，并得到
+统计上相符的指标；不要求不同机器上的浮点结果逐位一致。

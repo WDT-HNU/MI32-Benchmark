@@ -1,7 +1,7 @@
-# Historical evidence — not the current leaderboard
+# 历史证据——不属于当前结果表
 
-This package is preserved for provenance. It predates the final foundation-model input-unit
-hardening. In particular, its EEGMamba and CodeBrain results must not be reused as current scores.
+本结果包仅为来源追溯而保留，早于基础模型输入单位的最终加固。尤其是其中的 EEGMamba 和
+CodeBrain 结果，不能作为当前成绩复用。
 
-Use `../current-evidence-20260911/` for the current-contract evidence snapshot. The original files
-remain unchanged so their hashes and audit history can still be examined.
+当前契约证据快照请使用 `../current-evidence-20260911/`。原文件保持不变，便于继续检查其哈希
+和审计历史。

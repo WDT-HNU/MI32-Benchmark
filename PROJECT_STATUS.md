@@ -1,34 +1,32 @@
-# Project status
+# 项目状态
 
-This is the short version of what is already in the repository.
+这里只汇总仓库中已经存在的内容。
 
-## Data
+## 数据
 
-- MI32 common-32 v4 metadata, split assignments, channel masks, and SHA-256 manifest.
-- Dataset card, loader, 32-electrode RGNN adjacency matrix, and full-release verifier.
-- Fetch and rebuild entry points for the 8.7 GB signal package.
+- MI32 common-32 v4 元数据、划分结果、通道掩码和 SHA-256 清单。
+- 数据集卡片、加载器、32 电极 RGNN 邻接矩阵和完整版本检查器。
+- 约 8.7 GB 信号包的拉取与重建入口。
 
-## Models
+## 模型
 
-All eight selected models have a runner, an explicit input adapter, a model card, and a structure
-test: EEGNet, TSception, RGNN, EEG-Conformer, LaBraM, EEGMamba, CodeBrain, and Uni-NTFM. Upstream
-commits are fixed in `configs/models.json`; the three pretrained models also record checkpoint
-hashes.
+8 种模型均已提供运行器、明确的输入适配器、模型卡片和结构测试：EEGNet、TSception、RGNN、
+EEG-Conformer、LaBraM、EEGMamba、CodeBrain 和 Uni-NTFM。上游提交固定在
+`configs/models.json`；3 种预训练模型还记录了权重哈希。
 
-## Runs on record
+## 已收录的运行
 
-| Model | Folds in the current result directory |
+| 模型 | 当前结果目录包含的折 |
 |---|---|
 | EEGNet, TSception, RGNN, EEG-Conformer | 0 |
 | LaBraM | 0, 2 |
 | EEGMamba, CodeBrain | 0, 2, 3 |
-| Uni-NTFM | separate protocol-benchmark track |
+| Uni-NTFM | 单独的协议评测路线 |
 
-The matching CSV files and run manifests live in
-`results/mi32-common32-v4/current-evidence-20260911/`. Earlier fold-0 files remain under the
-historical directory so old runs can still be traced without entering the current comparison.
+对应的 CSV 和运行清单位于 `results/mi32-common32-v4/current-evidence-20260911/`。早期 fold-0
+文件保留在历史目录中，便于追溯，但不进入当前比较。
 
-## Repository layout
+## 仓库边界
 
-Git holds code, metadata, manifests, tests, and compact result files. EEG signals, upstream source
-trees, and pretrained weights are fetched separately and checked against the recorded identities.
+Git 保存代码、元数据、清单、测试和体积较小的结果文件。EEG 信号、上游源码树和预训练权重
+单独获取，并按仓库记录的身份信息进行核验。

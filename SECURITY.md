@@ -1,9 +1,8 @@
-# Security policy
+# 安全说明
 
-Do not report private dataset locations, credentials, signed URLs, SSH passwords, tokens, or
-participant-level sensitive information in public issues.
+请勿在公开 issue 中提交私有数据位置、凭据、签名 URL、SSH 密码、token 或受试者级敏感信息。
 
-Before publication, configure a private security contact in this file and enable GitHub secret
-scanning. Until then, report vulnerabilities privately to the repository owner.
+安全问题请通过仓库 Security 页面提供的私密漏洞报告渠道提交；如果该入口不可用，请私下联系
+仓库所有者，不要公开漏洞细节。
 
-Supported version: the latest tagged release only.
+支持范围：仅最新的带标签版本。

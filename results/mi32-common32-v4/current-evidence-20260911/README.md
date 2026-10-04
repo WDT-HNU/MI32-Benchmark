@@ -1,13 +1,12 @@
-# Current result evidence snapshot
+# 当前结果证据快照
 
-This directory contains the latest available MI32 runs that match the sealed model-input unit
-contracts as of 2026-09-11.
+本目录包含截至 2026-09-11 可获得的最新 MI32 运行，并符合封存的模型输入单位约定。
 
-- Classic models: fold 0.
-- CodeBrain: folds 0, 2, and 3.
-- EEGMamba: folds 0, 2, and 3.
-- LaBraM: folds 0 and 2.
-- Uni-NTFM: independently maintained in the protocol-benchmark track.
+- 经典模型：fold 0。
+- CodeBrain：folds 0、2、3。
+- EEGMamba：folds 0、2、3。
+- LaBraM：folds 0、2。
+- Uni-NTFM：单独维护在协议评测路线中。
 
-Every result CSV is paired with its run manifest. Metrics are reported at their recorded fold
-scope. See `docs/RESULTS.md` for the complete table and interpretation.
+每个结果 CSV 都有对应运行清单。指标只在实际记录的测试折范围内报告。完整表格和解释见
+`docs/RESULTS.md`。

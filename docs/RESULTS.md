@@ -1,11 +1,11 @@
-# Results
+# 结果
 
-The current files are in `results/mi32-common32-v4/current-evidence-20260911/`. They use the model
-input definitions documented in the current model cards.
+当前文件位于 `results/mi32-common32-v4/current-evidence-20260911/`，采用现有模型卡片中记录的
+输入定义。
 
-## Test rows on record
+## 已收录测试结果
 
-| Model | Fold | Macro-F1 | Balanced accuracy | Accuracy |
+| 模型 | 折 | Macro-F1 | 平衡准确率 | 准确率 |
 |---|---:|---:|---:|---:|
 | EEG-Conformer | 0 | 0.579492 | 0.599415 | 0.588935 |
 | EEGNet | 0 | 0.555890 | 0.568942 | 0.570968 |
@@ -20,18 +20,16 @@ input definitions documented in the current model cards.
 | LaBraM | 0 | 0.544850 | 0.547383 | 0.574403 |
 | LaBraM | 2 | 0.466047 | 0.468288 | 0.494127 |
 
-One caution matters here: the models do not yet have the same fold coverage. A ranking should use
-matched folds and state its aggregation rule. Fold 0 by itself is a pipeline result, not the final
-cross-subject estimate.
+需要注意：各模型当前覆盖的测试折并不相同。排名必须使用相同折，并说明聚合规则。单独的 fold 0
+只是一次 pipeline 结果，不是最终跨受试者估计。
 
-Each CSV has a paired run manifest with the dataset, source commit, checkpoint, adapter, split,
-seed, and selected epoch. New runs also save per-trial labels, predictions, and class probabilities
-so the metrics can be recomputed independently.
+每个 CSV 都配有运行清单，记录数据集、源码提交、权重、适配器、划分、随机种子和选定轮次。
+新运行还保存逐试次标签、预测和类别概率，以便独立重算指标。
 
-## Older runs
+## 旧运行
 
-`results/mi32-common32-v4/historical-fold0-pre-unit-hardening/` keeps the earlier seven-model
-fold-0 package. It is useful for tracing the work, but it is not part of the table above.
+`results/mi32-common32-v4/historical-fold0-pre-unit-hardening/` 保留早期 7 模型 fold-0 结果包，
+只用于追溯，不属于上表。
 
-Uni-NTFM remains in a separate `protocol_benchmark` track because its public release does not
-include the downstream checkpoint/head needed for a paper-level reproduction.
+Uni-NTFM 保留在单独的 `protocol_benchmark` 路线中，因为其公开版本不包含论文级复现所需的
+下游权重和分类头。

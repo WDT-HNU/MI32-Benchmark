@@ -1,17 +1,16 @@
-# Evidence matrix
+# 证据矩阵
 
-| Component | Identity sealed | CPU structure | Real CUDA preflight | Evidence in repo | Status |
+| 组件 | 身份封存 | CPU 结构 | 真实 CUDA 预检 | 仓库内证据 | 状态 |
 |---|---|---|---|---|---|
-| Dataset v4 | manifest + metadata | contract tests | real-sample gate | used by recorded folds | sealed artifact |
-| EEGNet | source snapshot | yes | recorded | fold 0 | evidence published |
-| TSception | commit + source snapshot | yes | recorded | fold 0 | evidence published |
-| RGNN backbone | commit + source snapshot | yes | recorded | fold 0 | evidence published |
-| EEG-Conformer | commit + source snapshot | yes | recorded | fold 0 | evidence published |
-| LaBraM | converted + author checkpoint hashes | yes | recorded | folds 0/2 | evidence published |
-| EEGMamba | commit + checkpoint + source hashes | yes; stub is structure-only | recorded with real Mamba2 | folds 0/2/3 | evidence published |
-| CodeBrain | commit + checkpoint + source hashes | yes | recorded | folds 0/2/3 | evidence published |
-| Uni-NTFM | commit | geometry test | supported | separate protocol track | implementation published |
+| Dataset v4 | 清单 + 元数据 | 契约测试 | 真实样本门禁 | 已记录折使用 | 已封存文件 |
+| EEGNet | 源码快照 | 是 | 已记录 | fold 0 | 证据已发布 |
+| TSception | 提交 + 源码快照 | 是 | 已记录 | fold 0 | 证据已发布 |
+| RGNN backbone | 提交 + 源码快照 | 是 | 已记录 | fold 0 | 证据已发布 |
+| EEG-Conformer | 提交 + 源码快照 | 是 | 已记录 | fold 0 | 证据已发布 |
+| LaBraM | 转换后权重 + 作者权重哈希 | 是 | 已记录 | folds 0/2 | 证据已发布 |
+| EEGMamba | 提交 + 权重 + 源码哈希 | 是；stub 仅检查结构 | 使用真实 Mamba2 记录 | folds 0/2/3 | 证据已发布 |
+| CodeBrain | 提交 + 权重 + 源码哈希 | 是 | 已记录 | folds 0/2/3 | 证据已发布 |
+| Uni-NTFM | 提交 | 几何测试 | 支持 | 单独协议路线 | 实现已发布 |
 
-Current result CSVs and paired run manifests are published under
-`results/mi32-common32-v4/current-evidence-20260911/`. The historical fold-0 directory provides an
-additional immutable audit trail for earlier executed sources.
+当前结果 CSV 和对应运行清单发布在 `results/mi32-common32-v4/current-evidence-20260911/`。
+历史 fold-0 目录为早期实际执行源码保留额外的不可变审计轨迹。

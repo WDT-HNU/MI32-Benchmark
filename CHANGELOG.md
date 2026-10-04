@@ -1,11 +1,10 @@
-# Changelog
+# 更新记录
 
 ## 0.1.0-alpha — 2026-09-24
 
-- Added the sealed MI32 common-32 v4 dataset contract and metadata.
-- Added audited runners and model-input adapters for eight selected models.
-- Added pinned upstream/checkpoint identities and bootstrap tooling.
-- Added CPU structure gates, full CUDA/data gates, and result manifests.
-- Published the verified seven-model fold-0 evidence package.
-- Kept Uni-NTFM in a separate protocol-benchmark track because its public
-  release does not provide an official downstream checkpoint/head contract.
+- 加入封存的 MI32 common-32 v4 数据约定和元数据。
+- 加入 8 种模型的审计后运行器和输入适配器。
+- 固定上游源码与权重身份，并加入拉取工具。
+- 加入 CPU 结构门禁、完整 CUDA/数据门禁和运行清单。
+- 发布通过核验的 7 模型 fold-0 证据包。
+- Uni-NTFM 单独归入协议评测，因为其公开版本没有提供官方下游权重和分类头约定。

@@ -1,15 +1,13 @@
 # Uni-NTFM
 
-- **Track:** protocol benchmark only.
-- **Upstream:** `Zhisheng-researcher/Uni-NTFM` at
+- **路线：** 仅协议评测。
+- **上游：** `Zhisheng-researcher/Uni-NTFM`，提交
   `c0ce0152f94366e59b31b3fb2c108ce909bcd95c`.
-- **Checkpoint:** none available in the audited public release.
-- **Adapter:** deterministic five-region representation produced from the sealed 32-channel input.
-- **Boundary:** the repository supplies an explicit supervised wrapper because the public upstream
-  does not define an official MI32 downstream checkpoint/head contract. A result is not a paper
-  reproduction and must not be mixed into the formal-reproduction leaderboard.
-- **Gate:** `pytest -q tests/test_uni_ntfm_structure.py`.
-- **Run:** `python scripts/benchmark.py run --model uni_ntfm --allow-protocol-benchmark --data DATA --output OUT --fold 0`.
+- **权重：** 已审计公开版本中没有可用权重。
+- **适配器：** 从封存的 32 通道输入确定性生成五脑区表示。
+- **边界：** 公开上游没有定义官方 MI32 下游权重或分类头约定，因此本仓库提供明确声明的监督
+  封装。该结果不是论文复现，不能混入正式复现排行榜。
+- **门禁：** `python -m pytest -q tests/test_uni_ntfm_structure.py`。
+- **运行：** `python scripts/benchmark.py run --model uni_ntfm --allow-protocol-benchmark --data DATA --output OUT --fold 0`。
 
-The upstream repository has no explicit license in the audited snapshot, so its source is fetched
-separately and is not redistributed here.
+已审计上游快照没有明确许可证，因此其源码单独拉取，不在本仓库再分发。
