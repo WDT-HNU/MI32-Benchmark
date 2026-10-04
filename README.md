@@ -1,16 +1,47 @@
-# 🧠 MI32 Benchmark
+# MI32 Benchmark
 
-在同一套 32 通道运动想象数据上，公平比较 8 种 EEG 模型。
+把 8 种 EEG 模型放到同一套 32 通道运动想象数据上，认真比一次。
 
-## ✨ 这个仓库有什么？
+这个仓库是我在做运动想象 EEG 对比实验时一点点整理出来的。最开始我只是想回答一个很直接的
+问题：如果数据、划分和评价方法都相同，EEGNet、图网络、Transformer、Mamba 和 EEG 基础模型
+到底会表现得怎么样？
 
-- 🎛️ **统一信号格式**：每个试次都是 3 秒、32 通道、250 Hz 的 EEG 张量
-- 📦 **8 个来源数据集**：共 230 名受试者、97,608 个试次，统一为三分类任务
-- 🔌 **8 条模型路线**：覆盖 CNN、GNN、Transformer、状态空间模型和 EEG 基础模型
-- 🔒 **受试者级评估**：只用验证集选择学习率；配置冻结后才运行测试集
-- 🧾 **完整运行记录**：保留数据清单、上游提交、权重哈希、划分、参数和源码快照
+真正动手以后，我发现麻烦往往不在 `model.fit()`。不同数据集的通道数、采样率和标签不一样；
+同一段信号用伏特还是微伏，足以让预训练模型得到完全不同的输入；有些代码看起来像论文里的模型，
+逐层对照后却会少一层卷积，或者换了一种池化。如果这些地方说不清，最后那张成绩表再漂亮也没有
+太大意义。
 
-## 🚀 安装
+所以我把数据整理、模型审计、训练协议和运行证据放进了同一个仓库。我希望别人拿到它时，不仅能
+看到一个分数，还能继续追问：这份数据从哪里来？模型到底改了什么？测试集有没有参与调参？这个
+结果对应的是哪份源码和哪一个权重？
+
+## 现在仓库里有什么
+
+- 一套统一的 MI32 common-32 v4 数据约定：230 名受试者，97,608 个试次；
+- 8 个来源数据集，每个试次都整理为 `[32, 750] @ 250 Hz`；
+- 8 种模型的运行器、输入适配器、模型卡片和结构测试；
+- 受试者级训练、验证、测试划分，验证集负责选参，测试集最后才打开；
+- 当前结果 CSV，以及与每次运行一一对应的源码、数据、权重和参数清单。
+
+信号文件大约 8.7 GB，不放进 Git 历史。仓库里保留的是代码、元数据、哈希、划分和结果证据。
+
+## 我比较较真的几件事
+
+**受试者不能泄露。** 同一个人不会同时出现在训练集、验证集和测试集。适配器里需要学习的均值、
+方差或校准量，也只能从训练受试者得到。
+
+**测试集不负责调参。** 每个模型只在验证集上比较学习率。学习率和训练设置写下来以后，才允许
+执行最终测试。
+
+**“模型名相同”不等于“模型相同”。** 每张模型卡片都记录上游提交、输入转换、分类头和权重
+哈希。找不到指定源码或权重时，程序会停下来，而不是临时换一个相似实现。
+
+**适配必须明说。** 32 通道、3 分类、重采样、单位转换、patch 划分和分类头都属于实验定义，
+不能藏在一句“按照官方模型实现”后面。
+
+## 先跑通一个 EEGNet
+
+环境以 Python 3.12、PyTorch 2.8.0 和 CUDA 12.8 为准：
 
 ```bash
 git clone https://github.com/WDT-HNU/MI32-Benchmark.git
@@ -25,21 +56,16 @@ pip install -r requirements/core.txt
 pip install -r requirements/foundation.txt
 ```
 
-拉取已经固定版本的上游代码和预训练权重：
-
-```bash
-python scripts/fetch_upstreams.py
-python scripts/fetch_checkpoints.py
-```
-
-## 🏁 跑一个模型
-
-把 MI32 数据放到 `datasets/mi32/full`，先检查数据，再运行一次预检：
+准备好 MI32 数据以后，先检查数据和运行环境：
 
 ```bash
 python scripts/verify_dataset.py datasets/mi32/full --full
 python scripts/benchmark.py doctor --data datasets/mi32/full
+```
 
+然后做一次短预检：
+
+```bash
 python scripts/benchmark.py run \
   --model eegnet \
   --data datasets/mi32/full \
@@ -47,7 +73,7 @@ python scripts/benchmark.py run \
   --preflight
 ```
 
-如果只想检查完整命令，不启动 GPU 训练：
+如果只是想确认完整命令，不准备立刻占用 GPU，可以加 `--dry-run`：
 
 ```bash
 python scripts/benchmark.py run \
@@ -59,11 +85,16 @@ python scripts/benchmark.py run \
   --dry-run
 ```
 
-运行器会把指标、训练历史、最佳轮次、适配器配置、运行环境和源码身份写入输出目录。
+上游源码和预训练权重由下面两个脚本按固定版本拉取：
 
-## 📐 数据约定
+```bash
+python scripts/fetch_upstreams.py
+python scripts/fetch_checkpoints.py
+```
 
-所有模型都从同一种试次表示开始：
+## 数据到底是什么样
+
+所有模型拿到的原始试次都遵守同一个约定：
 
 | 项目 | 取值 |
 |---|---|
@@ -73,30 +104,12 @@ python scripts/benchmark.py run \
 | 数据类型 / 单位 | `float32` / 伏特 |
 | 标签 | `left_upper`、`right_upper`、`non_upper` |
 | 类别数量 | 24,402 / 24,402 / 48,804 |
-| 通道来源 | `measured_mask` 标记实测电极和插值电极 |
+| 通道来源 | `measured_mask` 区分实测电极和插值电极 |
 
-缺少的目标电极使用 Perrin 球面样条法，在 MNE 的 `standard_1005` 电极模板上插值。通道顺序、
-各来源数据集的组成、质量检查和划分规则见[数据集卡片](datasets/mi32/DATASET_CARD.md)。
+缺失电极不是补零，而是使用 Perrin 球面样条法，在 MNE 的 `standard_1005` 模板坐标上插值。
+实测通道保持原值，插值通道也会正常送入模型。
 
-## ⚙️ 运行参数
-
-| 参数 | 必填 | 说明 |
-|---|---|---|
-| `--model` | 是 | `eegnet`、`tsception`、`rgnn`、`eegconformer`、`labram`、`eegmamba`、`codebrain` 或 `uni_ntfm` |
-| `--data` | 是 | 已通过检查的 MI32 数据目录 |
-| `--output` | 是 | 指标和运行记录的输出目录 |
-| `--fold` | 否 | 测试折，默认 `0` |
-| `--epochs` | 否 | 训练轮数 |
-| `--batch-size` | 否 | 覆盖模型默认批量大小 |
-| `--lr` | 否 | 在验证集上选择的学习率 |
-| `--balanced-loss` | 否 | 使用类别平衡损失 |
-| `--preflight` | 否 | 运行简短的环境、模型和数据预检 |
-| `--final-test` | 否 | 配置冻结后评估测试折 |
-| `--dry-run` | 否 | 只打印解析后的命令，不实际执行 |
-
-## 📊 来源数据集
-
-| 数据集 | 受试者数 | 实测目标通道 | 插值目标通道 |
+| 来源数据集 | 受试者数 | 32 个目标通道中实测 | 需要插值 |
 |---|---:|---:|---:|
 | BNCI2014_001 | 9 | 11 | 21 |
 | PhysionetMI | 109 | 32 | 0 |
@@ -107,30 +120,35 @@ python scripts/benchmark.py run \
 | Zhou2016 | 4 | 14 | 18 |
 | Zhou2020 | 8 | 16 | 16 |
 
-信号文件约 8.7 GB，不放进 Git 历史。下载、复制已有数据和从头重建的方法见
-[获取 MI32 数据](DATA_AVAILABILITY.md)。
+更细的数据来源、标签映射、质量检查和划分方法写在[数据集卡片](datasets/mi32/DATASET_CARD.md)里。
+数据包的获取和本地重建方式见[获取 MI32 数据](DATA_AVAILABILITY.md)。
 
-## 🧩 已接入模型
+## 这 8 个模型分别代表什么
 
-| 模型 | 类型 | 本仓库采用的定义 |
+我没有只挑同一类网络。这里既有体量很小的 CNN，也有显式使用电极拓扑的图网络，还有
+Transformer、状态空间模型和预训练基础模型。
+
+| 模型 | 在这次比较中的位置 | 本仓库采用的定义 |
 |---|---|---|
-| EEGNet | 轻量级 CNN | EEGNet-8,2，分类头改为三分类线性层 |
-| TSception | 多尺度 CNN | V2 时间卷积、非对称空间卷积和融合模块 |
-| RGNN | 图神经网络 | 带符号图、二阶 SGC 和求和池化 |
-| EEG-Conformer | CNN + Transformer | 卷积式 patch embedding 和六层编码器 |
-| LaBraM | EEG 基础模型 | 官方权重，非 CLS token 均值池化 |
-| EEGMamba | 状态空间基础模型 | 官方 12 层 Mamba2 主干和全 patch 分类头 |
-| CodeBrain | EEG 基础模型 | 官方 EEGSSM 主干和展平全部 patch 的 MLP |
-| Uni-NTFM | EEG 基础模型 | 公开主干和独立的协议评测分类头 |
+| EEGNet | 轻量级 CNN 基线 | EEGNet-8,2，三分类线性头 |
+| TSception | 多尺度时空 CNN | V2 时间、非对称空间和融合模块 |
+| RGNN | 图神经网络 | 带符号图、二阶 SGC、求和池化 |
+| EEG-Conformer | CNN + Transformer | 卷积 patch embedding、六层编码器 |
+| LaBraM | EEG 基础模型 | 官方权重、非 CLS token 均值池化 |
+| EEGMamba | 状态空间基础模型 | 官方 12 层 Mamba2、全 patch 分类头 |
+| CodeBrain | EEG 基础模型 | 官方 EEGSSM、展平全部 patch 的 MLP |
+| Uni-NTFM | 独立协议评测 | 公开主干、本仓库明确声明的监督分类头 |
 
-每张[模型卡片](docs/model_cards/README.md)都记录上游提交、输入转换、权重哈希（如适用）、
-分类头和结构测试。
+这里最容易被忽略的是最后一列。比如 EEGMamba 不能偷偷把 32 通道插值到 60 通道，LaBraM
+不能把 mean pooling 换成 CLS pooling，CodeBrain 也不能把全部 patch 的分类头简化为一个
+`Linear(200,3)`。这些边界都写在[模型卡片](docs/model_cards/README.md)里，并由结构测试守住。
 
-## 📈 当前结果
+## 当前跑出来的结果
 
-仓库目前收录以下测试结果：
+先别急着从这张表里选“第一名”。目前不同模型覆盖的测试折并不完全相同，只有相同测试折上的
+结果才适合直接比较。
 
-| 模型 | 折 | Macro-F1 | 平衡准确率 | 准确率 |
+| 模型 | 测试折 | Macro-F1 | 平衡准确率 | 准确率 |
 |---|---:|---:|---:|---:|
 | EEG-Conformer | 0 | 0.579492 | 0.599415 | 0.588935 |
 | EEGNet | 0 | 0.555890 | 0.568942 | 0.570968 |
@@ -145,25 +163,36 @@ python scripts/benchmark.py run \
 | LaBraM | 0 | 0.544850 | 0.547383 | 0.574403 |
 | LaBraM | 2 | 0.466047 | 0.468288 | 0.494127 |
 
-只有使用同一测试折的结果才适合直接比较。CSV 和对应的运行清单保存在
-[`results/mi32-common32-v4/current-evidence-20260911`](results/mi32-common32-v4/current-evidence-20260911)，
-具体解释见[结果说明](docs/RESULTS.md)。
+这张表现在能证明的是：当前几条 pipeline 已经按照各自记录的输入和模型定义完成运行，并且同折
+结果可以复核。它还不是一个已经完成所有折的最终排行榜。
 
-## 📄 许可证
+CSV 和对应的运行清单位于
+[`results/mi32-common32-v4/current-evidence-20260911`](results/mi32-common32-v4/current-evidence-20260911)。
+每份清单都会记录数据身份、源码提交、权重、划分、随机种子和选定轮次。详细解释见
+[结果说明](docs/RESULTS.md)。
 
-本仓库原创代码采用 Apache-2.0 许可证。原始 EEG 数据、上游模型代码和预训练权重仍遵循
-各自的授权条款，详见[第三方来源](THIRD_PARTY.md)。
+## 仓库怎么找东西
 
-## 📣 引用
+```text
+MI32-Benchmark/
+├── datasets/          数据约定、元数据、划分和加载器
+├── dataset_tools/     32 通道数据构建与检查
+├── model_adapters/    8 种模型各自的输入适配
+├── docs/model_cards/  每个模型的实现边界和审计记录
+├── scripts/           拉取、检查、训练和打包入口
+├── tests/             结构、数据语义和泄露回归测试
+└── results/           结果 CSV 与对应运行证据
+```
 
-如果你的工作使用了 MI32 Benchmark，请同时引用本仓库以及实验中实际使用的原始数据集和模型。
-机器可读的项目信息见 [CITATION.cff](CITATION.cff)。
+如果准备完整复现实验，建议按[复现说明](REPRODUCIBILITY.md)从头走一遍；在 AutoDL 上运行时，
+目录和关机注意事项见 [AutoDL 说明](docs/AUTODL.md)。正式的划分、调参和指标定义放在
+[评测协议](docs/BENCHMARK_PROTOCOL.md)里。
 
-## 📚 继续阅读
+## 最后说明
 
-- [复现一次实验](REPRODUCIBILITY.md)：环境、身份校验、CUDA 门禁、调参和结果打包
-- [评测协议](docs/BENCHMARK_PROTOCOL.md)：数据划分、超参数、指标和结果标签
-- [模型卡片](docs/model_cards/README.md)：准确的模型定义和不等价替代
-- [在 AutoDL 上运行](docs/AUTODL.md)：目录、安装、检查和关机流程
-- [项目状态](PROJECT_STATUS.md)：仓库现有的数据、模型和测试折覆盖情况
-- [参与贡献](CONTRIBUTING.md)：怎样修改 benchmark 而不悄悄改变它的含义
+本仓库原创代码采用 Apache-2.0 许可证。原始 EEG 数据、上游模型代码和预训练权重各自遵循原
+授权条款，详见[第三方来源](THIRD_PARTY.md)。如果使用本仓库，请同时引用实际用到的数据集和
+模型；机器可读的引用信息在 [CITATION.cff](CITATION.cff)。
+
+如果你发现模型结构对照、单位换算、数据划分或结果记录有问题，欢迎直接指出。对这个仓库来说，
+找出一个会让结果失效的细节，比把表格里的数字再抬高一点更有价值。
