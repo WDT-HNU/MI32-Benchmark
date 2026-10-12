@@ -20,7 +20,7 @@ MI32 common-32 v4
 三类计数为 24,402 / 24,402 / 48,804。
 
 完整数据来源、通道插值、标签映射和划分见
-[MI32 数据集卡片](../../datasets/mi32/DATASET_CARD.md)。
+[MI32 数据集卡片](../../benchmark/datasets/mi32/DATASET_CARD.md)。
 
 ## 方法与证据
 
@@ -33,14 +33,16 @@ MI32 common-32 v4
 | 结构审计证据矩阵 | [audits/EVIDENCE_MATRIX.md](audits/EVIDENCE_MATRIX.md) |
 | AutoDL 运行说明 | [AUTODL.md](AUTODL.md) |
 
-模型输入转换集中在 [`model_adapters/`](../../model_adapters/)，实际训练程序集中在
-[`runners/`](../../runners/)，统一调度入口是 [`scripts/benchmark.py`](../../scripts/benchmark.py)。
+模型输入转换集中在 [`model_adapters/`](../../benchmark/model_adapters/)，实际训练程序集中在
+[`runners/`](../../benchmark/runners/)，统一调度入口是
+[`scripts/benchmark.py`](../../benchmark/scripts/benchmark.py)。
 
 ## 运行入口
 
 准备数据后，先检查仓库和数据身份：
 
 ```bash
+cd benchmark
 python scripts/verify_repository.py
 python scripts/verify_dataset.py datasets/mi32/full --full
 python scripts/benchmark.py doctor --data datasets/mi32/full
@@ -49,6 +51,7 @@ python scripts/benchmark.py doctor --data datasets/mi32/full
 以 EEGNet 短预检为例：
 
 ```bash
+cd benchmark
 python scripts/benchmark.py run \
   --model eegnet \
   --data datasets/mi32/full \

@@ -26,7 +26,7 @@ MI32 Benchmark
 
 | 想先看什么 | 入口 |
 |---|---|
-| 两套数据的区别 | [数据索引](datasets/README.md) |
+| 两套数据的区别 | [数据索引](benchmark/datasets/README.md) |
 | 8 种深度模型 | [深度学习分支](docs/deep_learning/README.md) |
 | 11 种黎曼方法 | [黎曼几何分支](docs/riemannian/README.md) |
 | 仓库所有文档 | [文档导航](docs/README.md) |
@@ -58,6 +58,7 @@ Uni-NTFM。仓库中包含运行器、输入适配器、模型卡片、结构测
 快速检查：
 
 ```bash
+cd benchmark
 python scripts/verify_repository.py
 python scripts/verify_dataset.py datasets/mi32/metadata
 make cpu-test
@@ -66,6 +67,7 @@ make cpu-test
 运行示例：
 
 ```bash
+cd benchmark
 python scripts/benchmark.py run \
   --model eegnet \
   --data datasets/mi32/full \
@@ -87,27 +89,20 @@ Manifold-SimCLR 和 MEKT-R。方法摘要分别记录 covariance 构造、SPD �
             └── evaluation + coverage reporting
 ```
 
-Binary MI 的冻结数据说明见[数据契约](datasets/binary_mi/DATASET_CARD.md)，完整方法树见
+Binary MI 的冻结数据说明见[数据契约](benchmark/datasets/binary_mi/DATASET_CARD.md)，完整方法树见
 [黎曼几何方法汇总](docs/riemannian/METHODS.md)。
 
 ## 根目录现在怎样分工
 
 ```text
 MI32-Benchmark/
-├── configs/          benchmark 与模型固定配置
-├── datasets/         两套数据契约、元数据和数据集卡片
-├── dataset_tools/    MI32 32 通道数据构建与检查
+├── benchmark/        可运行工作区：数据、模型、脚本、测试和结果
 ├── docs/             深度学习、黎曼几何和项目维护文档
-├── model_adapters/   深度学习模型专用输入适配
-├── runners/          深度学习训练与评测程序
-├── scripts/          下载、检查、调度、汇总和发布工具
-├── tests/            结构、数据语义和泄露回归测试
-├── results/          已收录结果与对应运行证据
-└── requirements/     分层环境依赖
+└── .github/          GitHub 持续集成和协作规范
 ```
 
-根目录只保留 README、许可证、引用、贡献规范和构建配置。具体工作内容向下进入对应分支，避免把
-训练脚本、项目说明和结果文件平铺在同一级。
+首次进入只需要在“运行内容”和“说明文档”之间选择。进入 [`benchmark/`](benchmark/README.md)
+以后，再按数据、模型、实验和结果展开；GitHub 协作文件统一收在 `.github/`。
 
 ## 复现与引用
 

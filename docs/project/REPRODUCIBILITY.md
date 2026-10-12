@@ -20,7 +20,7 @@ Mamba stub 可以用于第 2 层结构检查，但不能证明第 3 或第 4 层
 
 ```bash
 git clone https://github.com/WDT-HNU/MI32-Benchmark.git
-cd MI32-Benchmark
+cd MI32-Benchmark/benchmark
 conda env create -f requirements/environment.yml
 conda activate mi32-benchmark
 ```

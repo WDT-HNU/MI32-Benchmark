@@ -15,6 +15,7 @@ issue，说明科学依据、受影响的文件，以及哪些已有结果会因
 提交前运行轻量测试：
 
 ```bash
+cd benchmark
 python -m pytest -q tests/test_eegnet_structure.py tests/test_tsception_structure.py \
   tests/test_rgnn_structure.py tests/test_eegconformer_structure.py \
   tests/test_model_adapter_boundary.py model_adapters/tests/test_adapters_contract.py

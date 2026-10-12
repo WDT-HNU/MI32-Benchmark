@@ -11,7 +11,8 @@ import re
 from pathlib import Path
 
 
-ROOT = Path(__file__).resolve().parents[1]
+BENCHMARK_ROOT = Path(__file__).resolve().parents[1]
+REPOSITORY_ROOT = BENCHMARK_ROOT.parent
 SKIP_PARTS = {".git", ".venv", "third_party", "checkpoints", "outputs", "full", "__pycache__"}
 SECRET_PATTERNS = {
     "GitHub token": re.compile(r"\b(?:ghp_|github_pat_)[A-Za-z0-9_]{20,}"),
@@ -31,8 +32,8 @@ def digest(path: Path) -> str:
 
 def tracked_candidates() -> list[Path]:
     return [
-        path for path in ROOT.rglob("*")
-        if path.is_file() and not any(part in SKIP_PARTS for part in path.relative_to(ROOT).parts)
+        path for path in REPOSITORY_ROOT.rglob("*")
+        if path.is_file() and not any(part in SKIP_PARTS for part in path.relative_to(REPOSITORY_ROOT).parts)
     ]
 
 
@@ -45,7 +46,7 @@ def main() -> None:
     files = tracked_candidates()
 
     for path in files:
-        relative = path.relative_to(ROOT)
+        relative = path.relative_to(REPOSITORY_ROOT)
         if path.stat().st_size > 50 * 1024 * 1024:
             errors.append(f"large file over 50 MiB: {relative}")
         if path.stat().st_size > 5 * 1024 * 1024:
@@ -63,12 +64,12 @@ def main() -> None:
             ):
                 errors.append(f"release placeholder in {relative}")
 
-    data_manifest = ROOT / "datasets" / "mi32" / "metadata" / "SHA256SUMS"
+    data_manifest = BENCHMARK_ROOT / "datasets" / "mi32" / "metadata" / "SHA256SUMS"
     if digest(data_manifest) != "1017a3dd50d11ff9d92d987a40996fc2fd61ace99d465213bdb0316ff52aad06":
         errors.append("dataset metadata manifest identity changed")
 
     result_manifest = (
-        ROOT / "results" / "mi32-common32-v4" /
+        BENCHMARK_ROOT / "results" / "mi32-common32-v4" /
         "historical-fold0-pre-unit-hardening" / "final_csv" / "SHA256SUMS"
     )
     for line in result_manifest.read_text(encoding="utf-8").splitlines():
@@ -77,7 +78,7 @@ def main() -> None:
         if not target.is_file() or digest(target) != expected:
             errors.append(f"result package mismatch: {relative}")
 
-    current_results = ROOT / "results" / "mi32-common32-v4" / "current-evidence-20260911"
+    current_results = BENCHMARK_ROOT / "results" / "mi32-common32-v4" / "current-evidence-20260911"
     for result_csv in sorted(current_results.glob("*_results.csv")):
         manifest = result_csv.with_name(result_csv.name.replace("_results.csv", "_run_manifest.json"))
         if not manifest.is_file():

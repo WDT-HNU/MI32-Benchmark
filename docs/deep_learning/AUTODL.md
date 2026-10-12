@@ -8,9 +8,9 @@ RTX 4090 级别实例。
 ```text
 /root/autodl-tmp/MI32-Benchmark/
 /root/autodl-tmp/datasets/MI32_COMMON32_V4/
-/root/autodl-tmp/MI32-Benchmark/third_party/
-/root/autodl-tmp/MI32-Benchmark/checkpoints/
-/root/autodl-tmp/MI32-Benchmark/outputs/
+/root/autodl-tmp/MI32-Benchmark/benchmark/third_party/
+/root/autodl-tmp/MI32-Benchmark/benchmark/checkpoints/
+/root/autodl-tmp/MI32-Benchmark/benchmark/outputs/
 ```
 
 ## 安装
@@ -18,7 +18,7 @@ RTX 4090 级别实例。
 ```bash
 cd /root/autodl-tmp
 git clone https://github.com/WDT-HNU/MI32-Benchmark.git
-cd MI32-Benchmark
+cd MI32-Benchmark/benchmark
 python -m venv .venv
 source .venv/bin/activate
 pip install --upgrade pip

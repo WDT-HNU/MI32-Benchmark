@@ -4,7 +4,7 @@
 
 ```text
 Binary MI 冻结数据
-└── datasets/binary_mi/DATASET_CARD.md
+└── benchmark/datasets/binary_mi/DATASET_CARD.md
     └── 方法输入、信息边界与任务状态
         └── docs/riemannian/METHODS.md
 ```

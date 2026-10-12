@@ -25,7 +25,7 @@ augmented covariance 不能互相冒充。允许使用无标签目标域统计�
 source-only；需要目标域带标签校准的方法，则必须预先冻结 calibration/evaluation 分区。
 
 Binary MI 的共享输入为 `(B, 32, 750)`、250 Hz、3 秒、V、8–30 Hz，标签为 `0=Left`、
-`1=Right`。完整数据说明见[Binary MI 数据契约](../../datasets/binary_mi/DATASET_CARD.md)。
+`1=Right`。完整数据说明见[Binary MI 数据契约](../../benchmark/datasets/binary_mi/DATASET_CARD.md)。
 
 ## 方法树
 

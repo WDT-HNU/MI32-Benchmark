@@ -133,4 +133,4 @@ loader 中使用的逐试次 metadata CSV。
 已有 fold 中抽取，不重新切分，不改变成员关系，也不读取模型性能。36-fold 是代表性协议，不被
 解释为完整 84-fold 评测的等价替代。
 
-对应方法和信息使用边界见[黎曼几何方法汇总](../../docs/riemannian/METHODS.md)。
+对应方法和信息使用边界见[黎曼几何方法汇总](../../../docs/riemannian/METHODS.md)。

@@ -21,7 +21,7 @@ docs/
 | 两条工作线怎样组成整体 | [项目首页](../README.md) |
 | MI32 深度学习分支做了什么 | [深度学习分支](deep_learning/README.md) |
 | 黎曼几何分支有哪些方法 | [黎曼几何分支](riemannian/README.md) |
-| 两套数据有什么区别 | [数据索引](../datasets/README.md) |
+| 两套数据有什么区别 | [数据索引](../benchmark/datasets/README.md) |
 | 如何取得和检查 MI32 数据 | [数据获取](project/DATA_AVAILABILITY.md) |
 | 如何从头复现实验 | [复现说明](project/REPRODUCIBILITY.md) |
 | 仓库目前收录了什么 | [项目状态](project/PROJECT_STATUS.md) |
