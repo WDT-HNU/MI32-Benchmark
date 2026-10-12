@@ -1,22 +1,30 @@
-# 黎曼几何分支
+# 黎曼几何方法
 
-这一分支整理左手/右手二分类 MI 的数据契约和 11 种黎曼几何方法。阅读顺序只有两步：
+这里保存 11 种黎曼几何方法的输入表示、信息条件、任务适用范围和 coverage。它不是一个只针对
+Binary MI 的独立分支；现有方法状态同时覆盖 MI 二分类、MI 三分类和 P300。
 
 ```text
-Binary MI 冻结数据
-└── benchmark/datasets/binary_mi/DATASET_CARD.md
-    └── 方法输入、信息边界与任务状态
-        └── docs/riemannian/METHODS.md
+每个任务的冻结数据与 split
+└── method-specific adapter
+    └── official input contract
+        └── frozen method core
+            └── evaluation + coverage reporting
 ```
 
-当前归档内容包括：
+## 跨任务状态
 
-- 18 个 component datasets、389 名受试者、59,216 个试次的二分类数据口径；
-- 完整 84-fold 与代表性 36-fold 受试者独立评测口径；
-- MDRM、TSLDA、KernelSVM、FGMDRM、RA、SPDNet、MFACC、RPA、TSA、Manifold-SimCLR、
-  MEKT-R 的输入、训练信息和状态整理；
-- Binary MI、05 三分类 MI、P300 三类任务之间不能机械共用表示的边界；
-- source-only、无标签目标域适配、带标签目标域校准和自监督四类信息使用方式。
+| 任务 | 协议 | 当前覆盖 |
+|---|---|---|
+| MI 二分类 | Binary MI representative 36 folds | 多数方法 formal；TSLDA partial；Manifold-SimCLR 为非正式重建 |
+| MI 三分类 | 05 representative 16 folds | 多数方法 16/16；MFACC 13/16；MEKT-R 保持 binary-only |
+| P300 | reduced frozen LOGO 85 folds | 多数方法 85/85；TSLDA 保留 zero-feature failures |
 
-这条分支与[深度学习分支](../deep_learning/README.md)共用“先冻结数据与划分，再做方法专用适配”的
-原则，但二者不是同一套标签或结果表。
+当前归档的方法包括 MDRM、TSLDA、KernelSVM、FGMDRM、RA、SPDNet、MFACC、RPA、TSA、
+Manifold-SimCLR 和 MEKT-R。完整定义见[方法汇总](METHODS.md)。
+
+Binary MI 的 18-source 数据契约见
+[数据卡片](../../benchmark/datasets/binary_mi/DATASET_CARD.md)。它和深度模型使用的 MI2 派生视图
+属于同一个二分类任务，但冻结 release 不同；两边结果不能省略数据身份后直接排名。
+
+返回[项目总览](../../README.md)，或查看同样覆盖三个任务的
+[深度学习方法](../deep_learning/README.md)。

@@ -1,0 +1,15 @@
+task,model,method_family,scope,accuracy,balanced_accuracy,macro_f1,pr_auc,roc_auc,status
+MI2,EEGNet,task_specific_deep,fold0,0.7106,0.7106,0.7105,,,reported
+MI2,TSception,task_specific_deep,fold0,0.6972,0.6972,0.6947,,,reported
+MI2,RGNN,task_specific_deep,fold0,0.5677,0.5677,0.5624,,,backbone
+MI2,EEG-Conformer,task_specific_deep,fold0,0.7317,0.7317,0.7308,,,reported
+MI2,LaBraM,eeg_foundation_sequence,fold0,0.5951,0.5951,0.5946,,,reported
+MI2,EEGMamba,eeg_foundation_sequence,fold0,0.6840,0.6840,0.6840,,,reported
+MI2,CodeBrain,eeg_foundation_sequence,fold0,0.6721,0.6721,0.6716,,,reported
+P300,EEGNet,task_specific_deep,102_sampled_logo,,,0.6256,0.3290,0.8186,reported
+P300,TSception,task_specific_deep,102_sampled_logo,,,0.6476,0.4300,0.8395,reported
+P300,RGNN,task_specific_deep,102_sampled_logo,,,0.4545,0.1229,0.5811,surrogate
+P300,EEG-Conformer,task_specific_deep,102_sampled_logo,,,0.5446,0.2391,0.7462,reported
+P300,LaBraM,eeg_foundation_sequence,102_sampled_logo,,,0.6728,0.4059,0.7930,reported
+P300,EEGMamba,eeg_foundation_sequence,102_sampled_logo,,,0.6916,0.4972,0.8595,reported
+P300,CodeBrain,eeg_foundation_sequence,102_sampled_logo,,,0.6940,0.4972,0.8584,reported

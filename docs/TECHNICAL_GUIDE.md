@@ -1,183 +1,179 @@
-# 项目导读
+# MI32 Benchmark 技术导读
 
-MI32 Benchmark 整理运动想象 EEG 的数据契约、模型适配、评测协议和结果证据。项目关心的不只是
-模型能否运行，还关心不同方法是否在可比较的条件下运行，以及一个结果能否追溯到明确的数据、
-源码、权重和划分。
+MI32 Benchmark 围绕三个 EEG 分类任务组织：运动想象三分类、运动想象左手/右手二分类和 P300
+二分类。每个任务都使用三类方法进行评测：任务专用深度模型、EEG 基础与长序列模型，以及黎曼
+几何方法。
 
-这份导读用于理解整个项目。具体命令、模型参数和结果数值仍以对应分支的专门文档为准。
+这份导读先说明任务，再说明方法。仓库中的 `deep_learning/` 和 `riemannian/` 是保存方法材料的
+文件夹，不是两套彼此独立的数据分支。
 
-## 项目解决的问题
-
-公开 EEG 数据集通常存在以下差异：
-
-- 采样率和试次时长不同；
-- 电极数量、名称和排列顺序不同；
-- 标签定义和类别数量不同；
-- 物理单位、预处理方式和事件时间窗不同；
-- 受试者划分和评测方式不同。
-
-如果这些差异没有先固定，模型分数会同时受到数据处理和模型结构影响，比较结果很难解释。因此，
-本项目采用固定顺序：
+## 项目的完整逻辑
 
 ```text
-数据契约
-→ 受试者划分
-→ 方法专用输入适配
-→ 模型或方法核心
-→ 验证与测试
-→ 结果和运行证据
+EEG Benchmark
+├── 任务一 MI 三分类
+│   ├── 任务专用深度模型
+│   ├── EEG 基础与长序列模型
+│   └── 黎曼几何方法
+├── 任务二 MI 左右手二分类
+│   ├── 任务专用深度模型
+│   ├── EEG 基础与长序列模型
+│   └── 黎曼几何方法
+└── 任务三 P300
+    ├── 任务专用深度模型
+    ├── EEG 基础与长序列模型
+    └── 黎曼几何方法
 ```
 
-每一步都有明确职责。数据层负责统一公共输入；adapter 只完成目标方法确实需要的转换；模型核心
-不因测试结果临时改写；最终结果与实际执行代码、数据身份和参数一起保存。
+这种组织方式回答两个不同问题：任务轴说明“要识别什么”，方法轴说明“用什么方式识别”。把方法
+轴误写成两个数据分支，会让人误以为深度模型没有运行 MI2 和 P300，也会掩盖同一任务内不同方法
+协议是否真正可比的问题。
 
-## 当前包含两条评测线
+## 三个任务
 
-| 项目 | 深度学习分支 | 黎曼几何分支的 Binary MI |
+### MI 三分类
+
+MI3 使用 `left_upper`、`right_upper` 和 `non_upper` 三个标签。MI32 common-32 v4 汇集 8 个
+来源、230 名受试者和 97,608 个 trial，三类数量为 24,402、24,402 和 48,804。信号统一为
+32 通道、250 Hz、3 秒、单位 V。
+
+缺失目标电极依据模板几何采用 Perrin 球面样条插值，`measured_mask` 保留实测与插值身份。受试者
+划分冻结后，模型不得重新拆分数据。
+
+### MI 左手右手二分类
+
+深度模型使用的 MI2 是从 MI3 冻结 release 中只保留 `left_upper` 与 `right_upper` 得到的派生
+视图，共 230 名受试者和 48,804 个 trial。派生过程不重复滤波、重采样、重参考或插值，因此它
+继承 MI3 的信号几何和受试者身份。
+
+黎曼方法交付材料中的 Binary MI 使用更大的 18-source 冻结 release：389 名受试者、59,216 个
+trial、84 个完整受试者独立 folds，以及 36 个代表 folds。二者属于同一任务定义，但不是同一
+冻结数据版本。结果可以放在同一任务章节里说明，不能省略 release 和 split 后直接排名。
+
+### P300
+
+P300 是 Target/NonTarget 的 time-locked ERP 任务。深度模型数据汇集 15 个来源和 158,667 个
+trial，统一为 16 通道、200 Hz、刺激后 0–600 ms，共 121 个真实采样点。当前深度模型协议从
+完整 873 个 LOGO folds 中按预先固定的抽样规则选择 102 folds，7 个模型共完成 714 次运行。
+
+黎曼方法使用 reduced frozen LOGO 协议，当前方法状态表以 85 folds 为分母。P300 不能把 MI 的
+plain spatial covariance 机械套用；TSA、MEKT-R 等方法需要 ERP-aware 表示。
+
+## 三类方法
+
+### 任务专用深度模型
+
+这一组包括 EEGNet、TSception、RGNN 和 EEG-Conformer。它们分别代表轻量卷积、多尺度时空卷积、
+图神经网络和卷积 Transformer。RGNN 当前按 backbone 或 surrogate 报告，因为现有特征流程不等同
+于完整官方 DE+LDS、NodeDAT 和 EmotionDL 流程。
+
+### EEG 基础与长序列模型
+
+这一组包括 LaBraM、EEGMamba、CodeBrain 和 Uni-NTFM。LaBraM、EEGMamba 与 CodeBrain 已在现有
+任务协议中留下结果；Uni-NTFM 保留结构与协议路线，但没有把缺少可接受下游权重和分类头契约的
+运行写成正式结果。
+
+这类模型对单位、采样率、patch 排列、pooling 和下游 head 很敏感。模型名称相同并不自动代表
+输入契约相同，因此每次运行都要保存 adapter manifest、源码身份和权重身份。
+
+### 黎曼几何方法
+
+当前整理 MDRM、TSLDA、KernelSVM、FGMDRM、RA、SPDNet、MFACC、RPA、TSA、
+Manifold-SimCLR 和 MEKT-R。它们使用 covariance、SPD 流形、切空间、对齐或迁移学习，但允许访问
+的目标域信息不同：
+
+| 信息条件 | 含义 | 代表方法 |
 |---|---|---|
-| 任务 | 左上肢、右上肢、非上肢三分类 | 左手、右手二分类 |
-| 来源数据集 | 8 | 18 |
-| 受试者 | 230 | 389 |
-| 试次 | 97,608 | 59,216 |
-| 公共输入 | `[32,750] @ 250 Hz` | `[32,750] @ 250 Hz`、8–30 Hz |
-| 方法范围 | 8 种深度模型 | 11 种黎曼几何方法 |
-| 主要评测边界 | 验证集选参，测试集最终评估 | 冻结 fold，并明确目标域信息使用方式 |
+| `SOURCE_ONLY` | 只使用训练数据和训练标签拟合 | MDRM、TSLDA、KernelSVM、FGMDRM、SPDNet、MFACC |
+| `TRANSDUCTIVE_UNLABELED_TARGET` | 可用无标签目标域统计，不可用目标标签 | RA、MEKT-R |
+| `TARGET_CALIBRATION_LABELED` | 只用预先冻结的目标校准标签 | RPA、TSA |
 
-两条评测线恰好采用相同的张量形状，但它们不是同一个数据集。样本来源、标签空间和评测协议均不
-相同，因此不能合并训练统计，也不能把两边的分数放在同一张排名表中。
+允许访问无标签目标数据不等于标签泄露，但必须在结果中明确披露信息条件。
 
-## 数据是怎样统一的
+## 当前实验矩阵
 
-### MI32 三分类数据
+| 任务 | 任务专用深度模型 | EEG 基础与长序列模型 | 黎曼几何方法 |
+|---|---|---|---|
+| MI3 | EEGNet、TSception、RGNN、EEG-Conformer 已有当前结果 | LaBraM、EEGMamba、CodeBrain 已有当前结果；Uni-NTFM 为协议路线 | 05 三分类代表协议；多数方法 16/16，MFACC 13/16，MEKT-R 为 binary-only |
+| MI2 | 4 个模型均完成 fold 0 | LaBraM、EEGMamba、CodeBrain 完成 fold 0 | 代表 36 folds；按方法保存 formal、partial 或 blocked 状态 |
+| P300 | 4 个模型均完成 102 sampled LOGO folds | LaBraM、EEGMamba、CodeBrain 完成同一 102 folds | reduced 85-fold protocol；保留 TSLDA 等真实失败 |
 
-深度学习分支将试次统一为 32 通道、250 Hz、3 秒、单位 V。缺失电极使用 Perrin 球面样条法，
-依据 MNE `standard_1005` 模板坐标插值；原本存在的通道保持原值。`measured_mask` 记录每个通道
-是实测还是插值，避免在后续分析中丢失这一信息。
+所以，深度学习方法并不是只跑三分类。MI2 和 P300 都有深度模型结果；以前的文档只是没有把这些
+已经完成的工作纳入总树。
 
-三类标签及试次数为：
+## 数据和方法之间怎样连接
 
-| 标签 | 试次数 |
-|---|---:|
-| `left_upper` | 24,402 |
-| `right_upper` | 24,402 |
-| `non_upper` | 48,804 |
+公开 EEG 数据在采样率、通道、单位、事件码、窗口和受试者层级上并不一致。本项目先冻结公共数据，
+再让方法 adapter 完成必要转换：
 
-数据集卡片记录来源、标签映射、通道覆盖和质量检查；公开仓库保留元数据、划分和哈希，不把约
-8.7 GB 的信号文件写入 Git 历史。
+```text
+原始数据与来源证据
+→ 任务级统一数据
+→ 冻结受试者或 LOGO split
+→ 方法专用 adapter
+→ 模型或方法核心
+→ prediction
+→ 独立重算 metrics
+→ manifest 与 coverage
+```
 
-### Binary MI 数据
+adapter 不负责根据测试分数寻找更有利的预处理。需要拟合的均值、方差、参考点或校准量，只能使用
+相应协议允许的数据。
 
-黎曼分支的二分类数据只保留 Left 和 Right 运动想象，标签固定为 `0=Left`、`1=Right`。冻结输入
-为 32 通道、250 Hz、3 秒、8–30 Hz、单位 V。完整协议包含 84 个受试者独立 fold；为控制多方法
-实验成本，代表协议从每个来源数据集选择两个已有 fold，共 36 folds，不重新划分受试者。
+## 怎样避免信息泄露
 
-这里的公共数据层只负责 EEG 信号契约。centred SCM、OAS covariance 或 P300 的 ERP-aware
-augmented covariance 属于方法输入，不在数据层提前统一成同一种表示。
+深度模型中，同一受试者不会同时进入训练、验证和测试；学习率等超参数只依据验证集选择；测试集
+在配置冻结后用于最终评估；标准化和校准统计只从训练部分得到。
 
-## 方法为什么需要单独适配
+黎曼方法除 source-only 外，还存在无标签目标域适配和带标签目标域校准。判断是否泄露不能只看
+“是否读取目标数据”，而要核对原方法的信息契约、目标标签是否进入拟合，以及 calibration 与
+evaluation 是否预先分开。
 
-不同模型对输入的定义不同。例如，LaBraM、EEGMamba 和 CodeBrain 对单位、采样率、patch 组织
-和分类头的要求并不相同；RGNN 需要频带特征和电极图；EEGNet 直接处理时空张量。统一数据以后，
-仍然需要为每种方法保留一个明确的 adapter。
+## 结果应该怎样读
 
-adapter 的边界是：
+一个数字至少要同时带着五项信息：任务、冻结数据 release、split、方法实现身份和 coverage。
 
-1. 不改变冻结标签和受试者划分；
-2. 需要拟合的统计量只能使用协议允许的数据；
-3. 不根据测试分数决定预处理；
-4. 输出必须满足目标实现的输入契约；
-5. 所有必要适配都写入模型卡片或运行清单。
+当前深度结果的范围是：
 
-深度学习分支目前包含 EEGNet、TSception、RGNN、EEG-Conformer、LaBraM、EEGMamba、
-CodeBrain 和 Uni-NTFM。模型卡片分别记录上游来源、当前结构、权重身份、输入转换和已知边界。
+- MI2：7 个模型的 fold 0；
+- MI3：模型覆盖不齐，EEGNet、TSception、RGNN、EEG-Conformer 为 fold 0，LaBraM 为 folds 0/2，EEGMamba 与 CodeBrain 为 folds 0/2/3；
+- P300：7 个模型的 102 sampled LOGO folds。
 
-黎曼分支包含 MDRM、TSLDA、KernelSVM、FGMDRM、RA、SPDNet、MFACC、RPA、TSA、
-Manifold-SimCLR 和 MEKT-R。除了输入表示，还需要说明方法允许访问哪一类目标域信息。
+当前黎曼结果按任务分别报告 36、16 和 85 folds 的状态与 coverage。`PARTIAL` 表示真实方法或数值
+失败被保留，不是删除失败 fold 后只报告成功部分。
 
-## 评测怎样避免信息泄露
-
-### 深度学习分支
-
-- 同一受试者不会同时出现在训练、验证和测试集合；
-- 学习率等超参数只依据验证集选择；
-- 测试集在配置冻结后才用于最终评估；
-- 标准化、校准等需要拟合的统计量只来自训练受试者；
-- 结果保存验证集和测试集指标，并记录选中的 epoch。
-
-### 黎曼几何分支
-
-黎曼方法的信息使用方式分为三类：
-
-| 类型 | 含义 | 代表方法 |
-|---|---|---|
-| `SOURCE_ONLY` | 只使用 source/train 数据和标签拟合 | MDRM、TSLDA、KernelSVM、FGMDRM、SPDNet、MFACC |
-| `TRANSDUCTIVE_UNLABELED_TARGET` | 可以使用无标签目标域统计，不可使用目标标签 | RA、MEKT-R |
-| `TARGET_CALIBRATION_LABELED` | 只使用预先冻结的目标域校准标签 | RPA、TSA |
-
-允许使用无标签目标域数据并不等于标签泄露；关键在于这是否属于原方法定义，以及目标标签是否进入
-了拟合过程。不同信息条件下的结果必须单独说明，不能只比较一个最终分数。
-
-## 结果应当怎样阅读
-
-一个结果至少需要同时回答以下问题：
-
-1. 使用的是哪一套数据契约和哪个 split？
-2. 模型源码、预训练权重和 adapter 分别是什么版本？
-3. 超参数由哪个集合选择，测试集何时被使用？
-4. 当前数字覆盖多少 fold，是否存在方法或数值失败？
-
-深度学习分支当前各模型覆盖的 fold 数量不同，因此现有结果适合做同折核对，不构成最终完整排名。
-早期实现生成的结果保存在 historical 目录，只用于追溯，不与当前证据混用。
-
-黎曼分支使用 `FORMAL`、`PARTIAL`、`BINARY_ONLY` 和 `IMPLEMENTATION_BLOCKED` 区分不同状态。
-`PARTIAL` 会保留真实的特征选择或数值失败；它不是把失败 fold 删除后只报告成功部分。
+三个任务不能平均成一个总分。MI3、MI2 和 P300 的类别、试次单位、折协议与主指标不同；同一任务
+内若数据 release 或 split 不同，也不能把分数当作严格配对结果。
 
 ## 仓库中的证据
 
-一次可审计的深度学习运行通常包括：
+一次可审计运行通常包括结果 CSV、逐试次预测、run manifest、数据清单 SHA-256、训练与测试身份、
+随机种子、训练参数、源码提交和权重哈希。模型名称本身不能替代这些内容。
 
-- 结果 CSV；
-- run manifest；
-- 数据清单 SHA-256；
-- 训练、验证和测试受试者；
-- 随机种子和训练参数；
-- 上游源码提交和权重哈希；
-- 实际执行源码快照或对应提交。
-
-模型名称本身不能替代这些信息。若实现、输入契约或权重发生实质变化，旧结果不会自动代表新实现。
-
-当前仓库中，深度学习分支保存可运行入口、结构测试和现有结果证据；黎曼分支保存已经交付的数据
-契约、方法说明、任务状态、coverage 和原工作区产物路径。
-
-## 怎样阅读仓库
+仓库按用途存放文件：
 
 ```text
-项目首页 README.md
+MI32-Benchmark/
 ├── benchmark/
-│   ├── datasets/          数据契约与元数据
+│   ├── datasets/          任务数据契约与元数据
 │   ├── model_adapters/    深度模型输入适配
 │   ├── runners/           训练和评测程序
-│   ├── configs/           固定配置
-│   ├── scripts/           检查与运行入口
-│   ├── tests/             结构和泄露门禁
+│   ├── tests/             结构、数据语义和泄露门禁
 │   └── results/           结果与运行证据
 └── docs/
-    ├── deep_learning/     深度学习方法、协议和结果
-    ├── riemannian/        黎曼方法与信息边界
-    └── project/           数据获取、复现和发布说明
+    ├── deep_learning/     深度模型和基础模型
+    ├── riemannian/        黎曼方法
+    └── project/           获取、复现与发布说明
 ```
 
 推荐阅读顺序：
 
-1. [数据索引](../benchmark/datasets/README.md)：先确认两套数据的区别；
-2. [深度学习分支](deep_learning/README.md)或[黎曼几何分支](riemannian/README.md)：选择任务；
-3. 对应的数据集卡片、模型卡片或方法汇总；
-4. 评测协议和结果说明；
-5. [复现说明](project/REPRODUCIBILITY.md)：开始运行。
+1. [数据索引](../benchmark/datasets/README.md)，先确认任务和冻结数据版本；
+2. [深度学习方法](deep_learning/README.md)或[黎曼几何方法](riemannian/README.md)，核对方法输入；
+3. 结果说明与 method status，确认 coverage；
+4. [复现说明](project/REPRODUCIBILITY.md)，开始环境检查和运行。
 
 ## 最短复现路径
-
-克隆仓库后，所有运行命令从 `benchmark/` 目录执行：
 
 ```bash
 git clone https://github.com/WDT-HNU/MI32-Benchmark.git
@@ -188,21 +184,5 @@ python scripts/verify_dataset.py datasets/mi32/metadata
 make cpu-test
 ```
 
-取得有权使用的信号包、固定版本的上游源码和权重后，再运行环境检查与短预检。完整 CUDA 门禁和
-训练命令见[复现说明](project/REPRODUCIBILITY.md)与
-[AutoDL 说明](deep_learning/AUTODL.md)。
-
-## 常用术语
-
-| 术语 | 本项目中的含义 |
-|---|---|
-| trial | 一次已经切分好的 EEG 试次 |
-| fold | 一组冻结的训练/测试受试者划分 |
-| adapter | 将公共数据转换为某一方法输入的确定性或可拟合步骤 |
-| frozen | 数据、划分或方法定义已经固定，不随测试表现改变 |
-| manifest | 记录一次运行所用数据、源码、权重、参数和输出身份的文件 |
-| formal result | 按相应冻结协议完成且保留必要证据的结果 |
-| coverage | 成功产生有效结果的 fold 数量及其总数 |
-
-项目的基本判断标准很简单：数据处理有明确依据，方法实现有可核对来源，测试集不参与选择，结果
-能够回到实际执行内容。满足这些条件，分数才有解释价值。
+正式运行前还需要取得有权使用的信号包、固定版本的上游源码和权重。每次新增结果都应先固定任务、
+release、split 和 adapter，再运行模型；不能用测试集反过来决定这些设置。

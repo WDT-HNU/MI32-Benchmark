@@ -1,71 +1,45 @@
-# 深度学习分支
+# 深度学习方法
 
-这一分支在 MI32 common-32 v4 三分类数据上整理 8 种 EEG 模型的输入适配、训练、结构审计和
-现有运行结果。
+这里保存两类深度方法的结构、输入适配、训练协议和结果：
 
-```text
-MI32 common-32 v4
-└── 230 subjects / 97,608 trials / 3 classes
-    └── subject-level train / validation / test
-        ├── 传统与任务模型：EEGNet、TSception、RGNN、EEG-Conformer
-        ├── 预训练模型：LaBraM、EEGMamba、CodeBrain
-        └── 独立协议模型：Uni-NTFM
-            └── CSV + run manifest + structure tests
-```
+- 任务专用深度模型：EEGNet、TSception、RGNN、EEG-Conformer；
+- EEG 基础与长序列模型：LaBraM、EEGMamba、CodeBrain、Uni-NTFM。
 
-## 数据输入
+这些方法不是 MI3 专属。现有工作已经覆盖 MI 三分类、MI 左右手二分类和 P300 三个任务。
 
-所有运行器从 `[B, 32, 750] @ 250 Hz`、单位 V 的试次开始，标签为 `left_upper`、
-`right_upper`、`non_upper`。当前数据统计为 8 个来源数据集、230 名受试者、97,608 个试次，
-三类计数为 24,402 / 24,402 / 48,804。
+## 跨任务状态
 
-完整数据来源、通道插值、标签映射和划分见
-[MI32 数据集卡片](../../benchmark/datasets/mi32/DATASET_CARD.md)。
+| 任务 | 已运行模型 | 当前证据范围 |
+|---|---|---|
+| MI3 | EEGNet、TSception、RGNN、EEG-Conformer、LaBraM、EEGMamba、CodeBrain | fold 覆盖不齐；详见结果表 |
+| MI2 | 同上 7 个模型 | fold 0；测试集 45 人、9,462 trials |
+| P300 | 同上 7 个模型 | 102 sampled LOGO folds，共 714 runs |
+| Uni-NTFM | 结构与协议路线 | 不把缺少可接受下游权重和分类头契约的运行写成正式结果 |
 
-## 方法与证据
+## 三个任务的输入
+
+| 任务 | 公共输入 | 标签 | 评测边界 |
+|---|---|---|---|
+| MI3 | `[B,32,750] @ 250 Hz`、V | left_upper / right_upper / non_upper | 受试者独立 fold；validation 选参 |
+| MI2 | 同一 MI release 的 left/right 派生视图 | Left / Right | 当前正式证据为 fold 0 |
+| P300 | `[B,16,121] @ 200 Hz`、V | NonTarget / Target | 102 个冻结 sampled LOGO folds；固定 8 epochs |
+
+模型 adapter 只把冻结数据转换成目标模型需要的单位、采样率、patch、图特征或标准化形式，不得
+改变标签、样本归属和 split。所有需要学习的统计只从当前训练部分得到。
+
+## 文档与代码
 
 | 内容 | 位置 |
 |---|---|
-| 8 种模型的统一说明 | [MODELS.md](MODELS.md) |
+| 模型结构与分类路径 | [MODELS.md](MODELS.md) |
 | 每个模型的实现身份与边界 | [model_cards/](model_cards/README.md) |
 | 受试者划分、选参与指标 | [BENCHMARK_PROTOCOL.md](BENCHMARK_PROTOCOL.md) |
-| 当前收录结果 | [RESULTS.md](RESULTS.md) |
+| 三个任务的现有结果 | [RESULTS.md](RESULTS.md) |
 | 结构审计证据矩阵 | [audits/EVIDENCE_MATRIX.md](audits/EVIDENCE_MATRIX.md) |
 | AutoDL 运行说明 | [AUTODL.md](AUTODL.md) |
 
-模型输入转换集中在 [`model_adapters/`](../../benchmark/model_adapters/)，实际训练程序集中在
-[`runners/`](../../benchmark/runners/)，统一调度入口是
-[`scripts/benchmark.py`](../../benchmark/scripts/benchmark.py)。
+当前公开 `benchmark/` 工作区重点保留 MI3 的可运行适配器、运行器、结构测试和逐运行证据；MI2 与
+P300 的跨任务结果摘要来自已完成的独立运行包，并在结果文档中按原协议标明范围。
 
-## 运行入口
-
-准备数据后，先检查仓库和数据身份：
-
-```bash
-cd benchmark
-python scripts/verify_repository.py
-python scripts/verify_dataset.py datasets/mi32/full --full
-python scripts/benchmark.py doctor --data datasets/mi32/full
-```
-
-以 EEGNet 短预检为例：
-
-```bash
-cd benchmark
-python scripts/benchmark.py run \
-  --model eegnet \
-  --data datasets/mi32/full \
-  --output outputs/eegnet_preflight \
-  --preflight
-```
-
-测试集不参与选参；学习率等超参数只由验证集确定。上游源码、权重、数据清单、划分、随机种子和
-实际执行源码均写入运行清单。
-
-## 当前结果边界
-
-仓库已收录 EEGNet、TSception、RGNN、EEG-Conformer 的 fold 0，LaBraM 的 fold 0/2，以及
-EEGMamba、CodeBrain 的 fold 0/2/3 结果。各模型覆盖 fold 不完全相同，因此当前表只支持同折
-比较，不作为最终模型排名。具体数值和清单位置见[结果说明](RESULTS.md)。
-
-返回[项目总览](../../README.md)或查看并列的[黎曼几何分支](../riemannian/README.md)。
+返回[项目总览](../../README.md)，或查看同样覆盖三个任务的
+[黎曼几何方法](../riemannian/README.md)。
