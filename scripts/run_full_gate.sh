@@ -37,7 +37,7 @@ CODEBRAIN_TEST_CHECKPOINT="$CHECKPOINTS/CodeBrain/CodeBrain.pth" \
   "$PYTHON" -m pytest -q tests/test_codebrain_structure.py
 
 UNINTFM_TEST_REPO="$THIRD_PARTY/Uni-NTFM" \
-UNINTFM_TEST_ADAPTER="$ROOT/uni_mi3_supervised.py" \
+UNINTFM_TEST_ADAPTER="$ROOT/runners/uni_mi3_supervised.py" \
   "$PYTHON" tests/test_uni_ntfm_structure.py
 
 mkdir -p "$OUTPUTS"

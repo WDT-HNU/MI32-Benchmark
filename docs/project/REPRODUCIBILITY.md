@@ -101,7 +101,7 @@ python scripts/benchmark.py run --model eegnet --data datasets/mi32/full \
 ## 8. 收集结果文件
 
 ```bash
-python collect_remote_results.py --root outputs
+python scripts/collect_remote_results.py --root outputs
 python scripts/package_release.py --input outputs --output release/mi32-run
 ```
 

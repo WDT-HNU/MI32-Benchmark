@@ -120,11 +120,11 @@ def command_for(args: argparse.Namespace) -> list[str]:
         common.append("--preflight")
 
     if entry["runner"] == "deep":
-        return [sys.executable, str(ROOT / "mi3_eegnet.py"), "--model", entry["runner_model"], *common]
+        return [sys.executable, "-m", "runners.mi3_eegnet", "--model", entry["runner_model"], *common]
     if entry["runner"] == "foundation":
         checkpoint = args.checkpoints / entry["checkpoint"]["path"]
         command = [
-            sys.executable, str(ROOT / "mi3_foundation.py"),
+            sys.executable, "-m", "runners.mi3_foundation",
             "--model", entry["runner_model"],
             "--weights", str(checkpoint.resolve()),
             *common,
@@ -138,7 +138,7 @@ def command_for(args: argparse.Namespace) -> list[str]:
                 "Uni-NTFM is a protocol benchmark, not paper reproduction; add --allow-protocol-benchmark"
             )
         return [
-            sys.executable, str(ROOT / "uni_mi3_supervised.py"),
+            sys.executable, "-m", "runners.uni_mi3_supervised",
             "--repo", str((args.third_party / entry["repo_dir"]).resolve()),
             "--allow-custom-adapter",
             *common,

@@ -14,7 +14,7 @@ REPO = Path(os.environ.get(
 ))
 ADAPTER = Path(os.environ.get(
     "UNINTFM_TEST_ADAPTER",
-    str(Path(__file__).resolve().parents[1] / "uni_mi3_supervised.py"),
+    str(Path(__file__).resolve().parents[1] / "runners" / "uni_mi3_supervised.py"),
 ))
 EXPECTED_COMMIT = "c0ce0152f94366e59b31b3fb2c108ce909bcd95c"
 EXPECTED_SOURCE_SHA256 = {

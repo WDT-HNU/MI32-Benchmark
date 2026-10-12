@@ -8,5 +8,5 @@
 - **范围边界：** 不包含 NodeDAT 和 EmotionDL 的目标域流程，因此结果必须命名为
   `RGNN backbone`，不能称为完整域适配系统。
 - **门禁：** `python -m pytest -q tests/test_rgnn_structure.py` 和
-  `python audit_rgnn_training_features.py --help`.
+  `python -m scripts.audit_rgnn_training_features --help`.
 - **运行：** `python scripts/benchmark.py run --model rgnn --data DATA --output OUT --fold 0`。

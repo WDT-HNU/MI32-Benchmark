@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "mi32-benchmark"
 version = "0.1.0a0"
-description = "在统一的 32 通道运动想象数据上评测 8 种 EEG 模型"
+description = "统一 32 通道运动想象数据上的深度学习与黎曼几何评测"
 readme = "README.md"
 requires-python = ">=3.12,<3.13"
 license = { text = "Apache-2.0" }

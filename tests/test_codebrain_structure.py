@@ -56,13 +56,13 @@ _install_optional_audio_stub_for_architecture_audit()
 
 
 try:
-    import mi3_deep_models  # noqa: F401
+    from runners import mi3_deep_models  # noqa: F401
 except ModuleNotFoundError:
-    import remote_mi3_deep_models as mi3_deep_models
-    sys.modules["mi3_deep_models"] = mi3_deep_models
+    from runners import remote_mi3_deep_models as mi3_deep_models
+    sys.modules["runners.mi3_deep_models"] = mi3_deep_models
 
 from model_adapters.codebrain import CodeBrainAdapter
-from mi3_foundation import (
+from runners.mi3_foundation import (
     CODEBRAIN_OFFICIAL_COMMIT,
     CODEBRAIN_REPOSITORY,
     CODEBRAIN_SOURCE_FILES,

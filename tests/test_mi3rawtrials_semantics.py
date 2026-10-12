@@ -5,7 +5,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from mi3_eegnet import MI3RawTrials
+from runners.mi3_eegnet import MI3RawTrials
 
 
 class MI3RawTrialsSemanticsTest(unittest.TestCase):

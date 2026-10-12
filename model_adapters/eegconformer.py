@@ -3,7 +3,7 @@
 官方输入条件: Song et al. 2022 EEG Conformer 官方实现接收 [B,C,T] 原始信号,
 官方预处理为训练集全局标准化 (非逐 trial)。
 MI-32 适配 (B 类): 训练集全局 mean/std 标准化 (V 直接, 无单位换算);
-数值协议: 关闭 AMP/TF32 (在训练入口, 见 mi3_eegnet.py main)。
+数值协议: 关闭 AMP/TF32 (在训练入口, 见 runners/mi3_eegnet.py main)。
 消融:
   - none:    无适配 (V 直接输入);
   - naive:   逐 trial z-score (泄漏变体);

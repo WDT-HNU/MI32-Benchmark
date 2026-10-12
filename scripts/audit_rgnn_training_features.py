@@ -7,7 +7,7 @@ from model_adapters.rgnn import RGNNAdapter
 import pandas as pd
 import torch
 
-from mi3_eegnet import RGNN, RGNN_BANDS
+from runners.mi3_eegnet import RGNN, RGNN_BANDS
 
 
 class RunningStats:

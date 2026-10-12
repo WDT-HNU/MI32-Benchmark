@@ -7,8 +7,8 @@ from pathlib import Path
 import torch
 import torch.nn as nn
 
-import mi3_eegnet
-from mi3_eegnet import (
+from runners import mi3_eegnet
+from runners.mi3_eegnet import (
     EEGConformer,
     EEGConformerFeedForward,
     EEGConformerMultiHeadAttention,

@@ -56,7 +56,7 @@ class MI32DataContractTest(unittest.TestCase):
         self.assertIn("hands/both_hands/both_hand events excluded", self.config["label_boundary_event_policy"])
 
     def test_npz_and_loader_preserve_interpolated_channels(self):
-        from mi3_eegnet import MI3RawTrials
+        from runners.mi3_eegnet import MI3RawTrials
 
         first_subject = int(self.subjects.iloc[0]["subject_id"])
         subject_name = self.subjects.loc[self.subjects["subject_id"] == first_subject, "subject_name"].iloc[0]

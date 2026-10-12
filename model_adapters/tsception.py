@@ -22,7 +22,7 @@ from .base import ModelAdapter, AdapterStats, IdentityAdapter, utcnow_iso
 
 
 def generate_TS_channel_order(original_order: Sequence[str]) -> List[str]:
-    """复刻官方 TSception-v2 generate_TS_channel_order 算法 (与 mi3_eegnet.py 一致)。"""
+    """复刻官方 TSception-v2 generate_TS_channel_order 算法 (与 runners/mi3_eegnet.py 一致)。"""
     chan_name, chan_num, chan_final = [], [], []
     for channel in original_order:
         digit_count = sum(c.isdigit() for c in channel)

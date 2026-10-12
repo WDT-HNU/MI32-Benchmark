@@ -4,7 +4,7 @@ from pathlib import Path
 
 import torch
 
-from mi3_eegnet import EEGNet, sha256_file, snapshot_executed_source, validate_eegnet_structure
+from runners.mi3_eegnet import EEGNet, sha256_file, snapshot_executed_source, validate_eegnet_structure
 
 
 class EEGNetStructureTest(unittest.TestCase):

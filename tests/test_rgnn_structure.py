@@ -9,10 +9,10 @@ import numpy as np
 import torch
 import torch.nn as nn
 
-import mi3_eegnet
+from runners import mi3_eegnet
 from model_adapters.rgnn import RGNNAdapter, RGNN_GLOBAL_PAIRS as ADAPTER_GLOBAL_PAIRS
-from make_rgnn_adjacency import inverse_square_adjacency
-from mi3_eegnet import (
+from scripts.make_rgnn_adjacency import inverse_square_adjacency
+from runners.mi3_eegnet import (
     RGNN,
     RGNN_BANDS,
     rgnn_objective,

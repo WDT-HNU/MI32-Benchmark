@@ -4,7 +4,7 @@ import unittest
 import torch
 import torch.nn as nn
 
-from mi3_eegnet import (
+from runners.mi3_eegnet import (
     TSception,
     generate_TS_channel_order,
     validate_tsception_structure,

@@ -1,4 +1,4 @@
-"""确定性抗混叠 sinc 重采样 (从 mi3_foundation.py 抽取, 保持逐位一致)。
+"""确定性抗混叠 sinc 重采样 (从 runners/mi3_foundation.py 抽取, 保持逐位一致)。
 
 Hann-windowed sinc polyphase low-pass kernel, 与 torchaudio 标准构造一致,
 专门固定下来以保证封印路径不随 torchaudio 版本漂移。

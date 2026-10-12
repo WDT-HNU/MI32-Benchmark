@@ -3,7 +3,7 @@
 官方输入条件: Lawhern et al. 2018 的 EEGNet-8,2 期望 µV 量级输入。
 MI-32 数据契约: [B,32,750]@250Hz, 单位 V。
 本项目适配 (B 类, 任务必要):
-  1. 单位换算 V -> mV (x1000, 与当前 mi3_eegnet.py 的 EEGNetScaledTrials 一致);
+  1. 单位换算 V -> mV (x1000, 与当前 runners/mi3_eegnet.py 的 EEGNetScaledTrials 一致);
   2. 训练集全局 affine 标定 (mean/std 只从训练受试者拟合, 与 EEGNetCalibratedTrials 一致)。
 消融:
   - none:    无适配 (V 直接输入) -> 数值量级错误, 模型无法正常训练;
@@ -26,7 +26,7 @@ class EEGNetAdapter(ModelAdapter):
     model_name = "EEGNet-8,2"
     official_reference = (
         "Lawhern et al. 2018 (EEGNet: compact CNN for EEG-BCI); "
-        "MI-32 适配: V->mV x1000 + 训练集全局 affine 标定 (B 类, 依据 mi3_eegnet.py EEGNetCalibratedTrials)"
+        "MI-32 适配: V->mV x1000 + 训练集全局 affine 标定 (B 类, 依据 runners/mi3_eegnet.py EEGNetCalibratedTrials)"
     )
     input_contract = {"channels": 32, "samples": 750, "fs": 250, "unit": "V"}
     output_contract = {

@@ -17,7 +17,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-from mi3_deep_models import (
+from .mi3_deep_models import (
     MI3RawTrials,
     SubjectBatchSampler,
     evaluate,

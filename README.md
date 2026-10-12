@@ -1,63 +1,69 @@
 # MI32 Benchmark
 
-统一 32 通道运动想象数据上的 8 种 EEG 模型评测与复现记录。
+统一 32 通道运动想象 EEG 的数据、深度学习模型与黎曼几何方法整理。
 
-当前仓库整理了已经完成的 MI32 数据统一、模型实现核对、训练与评估协议，以及现有运行结果。
-这里不对记录以外的内容作推断，所有说明都以仓库中现有的代码、元数据、测试或运行清单为依据。
+当前仓库汇总了两条已经完成并交付的工作线：一条是 MI32 三分类数据上的 8 种深度模型评测，
+另一条是二分类 MI、05 三分类 MI 和 P300 上的黎曼几何方法整理。两条工作线共享“冻结数据与
+划分、再做方法专用适配”的原则，但使用不同的标签、受试者集合和评测协议。
 
-这项工作对我们也是一个学习过程。涉及数据处理和模型适配时，尽量先回到原论文、官方仓库和公开
-权重中核对，再采用相应领域已有的方法。因为 MI32 任务而必须修改的部分，会单独记录输入转换、
-分类头和运行边界，不把必要适配写成“原样复现”。
+## 从这棵树开始
 
-## 当前已整理的内容
-
-- 一套统一的 MI32 common-32 v4 数据约定：230 名受试者，97,608 个试次；
-- 8 个来源数据集，每个试次都整理为 `[32, 750] @ 250 Hz`；
-- 8 种模型的运行器、输入适配器、模型卡片和结构测试；
-- 受试者级训练、验证、测试划分，验证集负责选参，测试集最后才打开；
-- 当前结果 CSV，以及与每次运行一一对应的源码、数据、权重和参数清单。
-
-信号文件大约 8.7 GB，不放进 Git 历史。仓库里保留的是代码、元数据、哈希、划分和结果证据。
-
-## 目前采用的工作原则
-
-**受试者不能泄露。** 同一个人不会同时出现在训练集、验证集和测试集。适配器里需要学习的均值、
-方差或校准量，也只能从训练受试者得到。
-
-**测试集不负责调参。** 每个模型只在验证集上比较学习率。学习率和训练设置写下来以后，才允许
-执行最终测试。
-
-**模型名称不能代替实现证据。** 每张模型卡片都记录上游提交、输入转换、分类头和权重哈希。
-找不到指定源码或权重时，程序会停下来，不临时换用相似实现。
-
-**适配过程需要记录。** 32 通道、3 分类、重采样、单位转换、patch 划分和分类头都属于实验
-定义，需要在模型卡片和运行清单中留下记录。
-
-## 运行示例：EEGNet
-
-环境以 Python 3.12、PyTorch 2.8.0 和 CUDA 12.8 为准：
-
-```bash
-git clone https://github.com/WDT-HNU/MI32-Benchmark.git
-cd MI32-Benchmark
-
-python -m venv .venv
-source .venv/bin/activate
-pip install --upgrade pip
-pip install --index-url https://download.pytorch.org/whl/cu128 \
-  torch==2.8.0 torchaudio==2.8.0
-pip install -r requirements/core.txt
-pip install -r requirements/foundation.txt
+```text
+MI32 Benchmark
+├── 1. 数据
+│   ├── MI32 三分类：8 个来源 / 230 人 / 97,608 trials
+│   └── Binary MI：18 个来源 / 389 人 / 59,216 trials
+├── 2. 方法
+│   ├── 深度学习：8 种模型
+│   └── 黎曼几何：11 种方法
+├── 3. 实验规则
+│   ├── 深度学习：train / validation / test 受试者独立
+│   └── 黎曼几何：source-only / target adaptation / target calibration
+└── 4. 结果与证据
+    ├── 深度学习：CSV、run manifest、模型卡片、结构测试
+    └── 黎曼几何：任务状态、fold coverage、方法与输入契约摘要
 ```
 
-准备好 MI32 数据以后，先检查数据和运行环境：
+| 想先看什么 | 入口 |
+|---|---|
+| 两套数据的区别 | [数据索引](datasets/README.md) |
+| 8 种深度模型 | [深度学习分支](docs/deep_learning/README.md) |
+| 11 种黎曼方法 | [黎曼几何分支](docs/riemannian/README.md) |
+| 仓库所有文档 | [文档导航](docs/README.md) |
+| 当前收录范围 | [项目状态](docs/project/PROJECT_STATUS.md) |
+
+## 两条工作线不能混在一起
+
+| 项目 | 深度学习分支 | 黎曼几何分支的 Binary MI |
+|---|---|---|
+| 输入形状 | `[32,750] @ 250 Hz` | `[32,750] @ 250 Hz` |
+| 任务 | 三分类 | 左手/右手二分类 |
+| 数据规模 | 8 datasets / 230 subjects / 97,608 trials | 18 datasets / 389 subjects / 59,216 trials |
+| 标签 | `left_upper` / `right_upper` / `non_upper` | `Left` / `Right` |
+| 主要方法 | CNN、GNN、Transformer、SSM、基础模型 | SPD/AIRM、切空间、对齐与迁移 |
+| 评测核心 | 验证集选参，测试集最终评估 | 冻结 fold，并披露目标域信息使用方式 |
+
+相同的 32 通道形状只说明模型接口接近，不代表样本、标签和结果可以合并。所有结果都必须回到自己
+所属的数据契约和 split 解释。
+
+## 深度学习分支
+
+当前整理了 EEGNet、TSception、RGNN、EEG-Conformer、LaBraM、EEGMamba、CodeBrain 和
+Uni-NTFM。仓库中包含运行器、输入适配器、模型卡片、结构测试以及现有结果 CSV 与运行清单。
+
+缺失电极采用 Perrin 球面样条法插值，实测与插值通道由 `measured_mask` 区分。测试集不参与
+学习率等超参数选择；需要学习的均值、方差或校准量只从训练受试者得到。完整说明见
+[深度学习分支](docs/deep_learning/README.md)。
+
+快速检查：
 
 ```bash
-python scripts/verify_dataset.py datasets/mi32/full --full
-python scripts/benchmark.py doctor --data datasets/mi32/full
+python scripts/verify_repository.py
+python scripts/verify_dataset.py datasets/mi32/metadata
+make cpu-test
 ```
 
-然后做一次短预检：
+运行示例：
 
 ```bash
 python scripts/benchmark.py run \
@@ -67,125 +73,47 @@ python scripts/benchmark.py run \
   --preflight
 ```
 
-如果只是想确认完整命令，不准备立刻占用 GPU，可以加 `--dry-run`：
+## 黎曼几何分支
 
-```bash
-python scripts/benchmark.py run \
-  --model eegmamba \
-  --data datasets/mi32/full \
-  --output outputs/eegmamba_fold0 \
-  --fold 0 \
-  --final-test \
-  --dry-run
+当前整理了 MDRM、TSLDA、KernelSVM、FGMDRM、RA、SPDNet、MFACC、RPA、TSA、
+Manifold-SimCLR 和 MEKT-R。方法摘要分别记录 covariance 构造、SPD 数值边界、分类器、目标域
+信息使用方式、适用任务和有效 fold 数。
+
+```text
+冻结 trial
+└── method-specific adapter
+    └── official input contract
+        └── frozen method core
+            └── evaluation + coverage reporting
 ```
 
-上游源码和预训练权重由下面两个脚本按固定版本拉取：
+Binary MI 的冻结数据说明见[数据契约](datasets/binary_mi/DATASET_CARD.md)，完整方法树见
+[黎曼几何方法汇总](docs/riemannian/METHODS.md)。
 
-```bash
-python scripts/fetch_upstreams.py
-python scripts/fetch_checkpoints.py
-```
-
-## 数据约定
-
-所有模型拿到的原始试次都遵守同一个约定：
-
-| 项目 | 取值 |
-|---|---|
-| 张量形状 | `[batch, 32, 750]` |
-| 采样率 | 250 Hz |
-| 时间窗 | 3 秒 |
-| 数据类型 / 单位 | `float32` / 伏特 |
-| 标签 | `left_upper`、`right_upper`、`non_upper` |
-| 类别数量 | 24,402 / 24,402 / 48,804 |
-| 通道来源 | `measured_mask` 区分实测电极和插值电极 |
-
-缺失电极不是补零，而是使用 Perrin 球面样条法，在 MNE 的 `standard_1005` 模板坐标上插值。
-实测通道保持原值，插值通道也会正常送入模型。
-
-| 来源数据集 | 受试者数 | 32 个目标通道中实测 | 需要插值 |
-|---|---:|---:|---:|
-| BNCI2014_001 | 9 | 11 | 21 |
-| PhysionetMI | 109 | 32 | 0 |
-| Schirrmeister2017 | 14 | 32 | 0 |
-| Stieger2021 | 62 | 32 | 0 |
-| Wairagkar2018 | 14 | 19 | 13 |
-| Weibo2014 | 10 | 32 | 0 |
-| Zhou2016 | 4 | 14 | 18 |
-| Zhou2020 | 8 | 16 | 16 |
-
-更细的数据来源、标签映射、质量检查和划分方法写在[数据集卡片](datasets/mi32/DATASET_CARD.md)里。
-数据包的获取和本地重建方式见[获取 MI32 数据](DATA_AVAILABILITY.md)。
-
-## 模型
-
-当前纳入的 8 种模型覆盖轻量级 CNN、图神经网络、Transformer、状态空间模型和预训练 EEG
-基础模型。
-
-| 模型 | 在这次比较中的位置 | 本仓库采用的定义 |
-|---|---|---|
-| EEGNet | 轻量级 CNN 基线 | EEGNet-8,2，三分类线性头 |
-| TSception | 多尺度时空 CNN | V2 时间、非对称空间和融合模块 |
-| RGNN | 图神经网络 | 带符号图、二阶 SGC、求和池化 |
-| EEG-Conformer | CNN + Transformer | 卷积 patch embedding、六层编码器 |
-| LaBraM | EEG 基础模型 | 官方权重、非 CLS token 均值池化 |
-| EEGMamba | 状态空间基础模型 | 官方 12 层 Mamba2、全 patch 分类头 |
-| CodeBrain | EEG 基础模型 | 官方 EEGSSM、展平全部 patch 的 MLP |
-| Uni-NTFM | 独立协议评测 | 公开主干、本仓库明确声明的监督分类头 |
-
-最后一列属于模型定义的一部分。例如，当前 EEGMamba 正式配置不采用 32→60 通道插值；LaBraM
-使用 non-CLS token mean pooling；CodeBrain 使用展平全部 patch 的 MLP，而不是
-`Linear(200,3)`。这些边界均记录在[模型卡片](docs/model_cards/README.md)中，并配有结构测试。
-
-## 当前结果
-
-目前不同模型覆盖的测试折并不完全相同，因此下表只适合进行同折比较，不作为最终模型排名。
-
-| 模型 | 测试折 | Macro-F1 | 平衡准确率 | 准确率 |
-|---|---:|---:|---:|---:|
-| EEG-Conformer | 0 | 0.579492 | 0.599415 | 0.588935 |
-| EEGNet | 0 | 0.555890 | 0.568942 | 0.570968 |
-| TSception | 0 | 0.510936 | 0.541781 | 0.516698 |
-| RGNN backbone | 0 | 0.408277 | 0.418587 | 0.421105 |
-| CodeBrain | 0 | 0.543431 | 0.550130 | 0.564627 |
-| CodeBrain | 2 | 0.513453 | 0.518010 | 0.537174 |
-| CodeBrain | 3 | 0.544182 | 0.538975 | 0.592015 |
-| EEGMamba | 0 | 0.516615 | 0.516276 | 0.549144 |
-| EEGMamba | 2 | 0.516945 | 0.519419 | 0.542929 |
-| EEGMamba | 3 | 0.526835 | 0.519032 | 0.580357 |
-| LaBraM | 0 | 0.544850 | 0.547383 | 0.574403 |
-| LaBraM | 2 | 0.466047 | 0.468288 | 0.494127 |
-
-当前表格记录的是已经按照对应输入和模型定义完成的运行。各模型尚未覆盖相同数量的测试折，因此
-这里不据此给出完整排序。
-
-CSV 和对应的运行清单位于
-[`results/mi32-common32-v4/current-evidence-20260911`](results/mi32-common32-v4/current-evidence-20260911)。
-每份清单都会记录数据身份、源码提交、权重、划分、随机种子和选定轮次。详细解释见
-[结果说明](docs/RESULTS.md)。
-
-## 目录
+## 根目录现在怎样分工
 
 ```text
 MI32-Benchmark/
-├── datasets/          数据约定、元数据、划分和加载器
-├── dataset_tools/     32 通道数据构建与检查
-├── model_adapters/    8 种模型各自的输入适配
-├── docs/model_cards/  每个模型的实现边界和审计记录
-├── scripts/           拉取、检查、训练和打包入口
-├── tests/             结构、数据语义和泄露回归测试
-└── results/           结果 CSV 与对应运行证据
+├── configs/          benchmark 与模型固定配置
+├── datasets/         两套数据契约、元数据和数据集卡片
+├── dataset_tools/    MI32 32 通道数据构建与检查
+├── docs/             深度学习、黎曼几何和项目维护文档
+├── model_adapters/   深度学习模型专用输入适配
+├── runners/          深度学习训练与评测程序
+├── scripts/          下载、检查、调度、汇总和发布工具
+├── tests/            结构、数据语义和泄露回归测试
+├── results/          已收录结果与对应运行证据
+└── requirements/     分层环境依赖
 ```
 
-如果准备完整复现实验，建议按[复现说明](REPRODUCIBILITY.md)从头走一遍；在 AutoDL 上运行时，
-目录和关机注意事项见 [AutoDL 说明](docs/AUTODL.md)。正式的划分、调参和指标定义放在
-[评测协议](docs/BENCHMARK_PROTOCOL.md)里。
+根目录只保留 README、许可证、引用、贡献规范和构建配置。具体工作内容向下进入对应分支，避免把
+训练脚本、项目说明和结果文件平铺在同一级。
 
-## 最后说明
+## 复现与引用
 
-本仓库原创代码采用 Apache-2.0 许可证。原始 EEG 数据、上游模型代码和预训练权重各自遵循原
-授权条款，详见[第三方来源](THIRD_PARTY.md)。如果使用本仓库，请同时引用实际用到的数据集和
-模型；机器可读的引用信息在 [CITATION.cff](CITATION.cff)。
+MI32 深度学习分支的环境、数据获取和完整运行步骤见[复现说明](docs/project/REPRODUCIBILITY.md)；
+AutoDL 路径和关机注意事项见[运行说明](docs/deep_learning/AUTODL.md)。EEG 信号、上游源码和预训练
+权重不写入 Git 历史，按清单单独获取并核验身份。
 
-仓库中的表述以当前代码和证据为准。如果发现模型结构、单位换算、数据划分或结果记录存在问题，
-欢迎指出，我们会继续核对和修正。
+原创代码采用 Apache-2.0 许可证。数据、上游模型和权重遵循各自授权，详见
+[第三方来源](docs/project/THIRD_PARTY.md)。机器可读引用信息见 [CITATION.cff](CITATION.cff)。

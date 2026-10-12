@@ -13,5 +13,5 @@
 | [CodeBrain](CodeBrain.md) | 权重适配 |
 | [Uni-NTFM](Uni-NTFM.md) | 单独的协议评测 |
 
-8 种模型均使用 [`docs/BENCHMARK_PROTOCOL.md`](../BENCHMARK_PROTOCOL.md) 中的受试者划分和
+8 种模型均使用 [`docs/deep_learning/BENCHMARK_PROTOCOL.md`](../BENCHMARK_PROTOCOL.md) 中的受试者划分和
 验证/测试规则。

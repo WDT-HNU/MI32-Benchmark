@@ -121,13 +121,13 @@ def _install_mamba_architecture_stub():
 
 
 try:
-    import mi3_deep_models  # noqa: F401
+    from runners import mi3_deep_models  # noqa: F401
 except ModuleNotFoundError:
-    import remote_mi3_deep_models as mi3_deep_models
-    sys.modules["mi3_deep_models"] = mi3_deep_models
+    from runners import remote_mi3_deep_models as mi3_deep_models
+    sys.modules["runners.mi3_deep_models"] = mi3_deep_models
 
 from model_adapters.eegmamba import EEGMambaAdapter
-from mi3_foundation import (
+from runners.mi3_foundation import (
     EEGMAMBA_CHECKPOINT_BYTES,
     EEGMAMBA_CHECKPOINT_SHA256,
     EEGMAMBA_MI32_CHANNEL_ORDER,

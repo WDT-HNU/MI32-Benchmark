@@ -35,7 +35,7 @@ try {
     & $Python -m pytest -q tests/test_codebrain_structure.py
 
     $env:UNINTFM_TEST_REPO = Join-Path $ThirdParty "Uni-NTFM"
-    $env:UNINTFM_TEST_ADAPTER = Join-Path $Root "uni_mi3_supervised.py"
+    $env:UNINTFM_TEST_ADAPTER = Join-Path $Root "runners\uni_mi3_supervised.py"
     & $Python tests/test_uni_ntfm_structure.py
 
     New-Item -ItemType Directory -Path $Outputs -Force | Out-Null

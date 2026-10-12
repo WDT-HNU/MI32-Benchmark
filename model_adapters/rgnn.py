@@ -3,7 +3,7 @@
 官方: Zhong et al. 2019 RGNN 使用预计算 DE+LDS 节点特征 + 距离/全局邻接。
 本项目 (明示差异): 归纳式 backbone-only (无 NodeDAT/EmotionDL);
 节点特征 = 每通道五频带 log-power surrogate (delta/theta/alpha/beta/gamma,
-与 mi3_eegnet.py RGNN_BANDS 一致); 邻接 = 距离初始化 + 论文全局对。
+与 runners/mi3_eegnet.py RGNN_BANDS 一致); 邻接 = 距离初始化 + 论文全局对。
 适配职责 (C 类明示 + B 类):
   1. [B,32,750] -> [B,32,5] 五频带 log-power (本项目 surrogate, 论文措辞必须注明);
   2. 邻接矩阵生成 (距离邻接 + 全局对, 供模型构造)。
