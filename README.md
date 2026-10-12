@@ -26,6 +26,7 @@ MI32 Benchmark
 
 | 想先看什么 | 入口 |
 |---|---|
+| 第一次了解整个项目 | [项目导读](docs/TECHNICAL_GUIDE.md) |
 | 两套数据的区别 | [数据索引](benchmark/datasets/README.md) |
 | 8 种深度模型 | [深度学习分支](docs/deep_learning/README.md) |
 | 11 种黎曼方法 | [黎曼几何分支](docs/riemannian/README.md) |
