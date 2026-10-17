@@ -1,25 +1,23 @@
-# Binary Left-vs-Right MI 数据契约
+# Binary left-versus-right MI data contract
 
-本页整理 MI 左手/右手二分类任务中，黎曼方法所使用的 18-source 冻结数据口径。它保留来源数据集
-和受试者身份，将可比较的左手、右手运动想象试次统一到同一输入表示。这里描述冻结后的 benchmark，
-不重新定义原始公开数据，也不与深度模型使用的 MI2 派生 release 混写。
+This card records the frozen 18-source release used by the Riemannian Binary MI archive and reflected in the traditional-method snapshot. It preserves source-dataset and subject identity while harmonizing comparable left- and right-hand motor-imagery trials. It does not redefine the original public datasets and is distinct from the MI2 view used by deep models.
 
-## 一眼看懂处理逻辑
+## Processing tree
 
 ```text
-18 个公开 MI 数据集
-└── 只保留 Left / Right 运动想象试次
-    └── 标签统一：0 = Left，1 = Right
-        └── 时间统一：3 s × 250 Hz = 750 samples
-            └── 通道统一：固定顺序的 32 通道表示
-                └── 信号统一：8–30 Hz、单位 V
-                    ├── 完整协议：84 个受试者独立 fold
-                    └── 代表协议：18 数据集 × 2 个既有 fold = 36 folds
+18 public MI datasets
+└── retain Left / Right motor-imagery trials
+    └── labels: 0 = Left, 1 = Right
+        └── time: 3 s × 250 Hz = 750 samples
+            └── channels: ordered 32-channel representation
+                └── signal: 8–30 Hz, volts
+                    ├── full protocol: 84 subject-independent folds
+                    └── representative protocol: 18 datasets × 2 existing folds = 36 folds
 ```
 
-## 冻结统计
+## Frozen statistics
 
-| 项目 | 冻结值 |
+| Item | Value |
 |---|---:|
 | component datasets | 18 |
 | subjects | 389 |
@@ -55,45 +53,36 @@
 | Zhou2020 | 8 | 6,666 | 5 |
 | **Total** | **389** | **59,216** | **84** |
 
-## 统一规则
+## Harmonization rules
 
-### 任务和标签
+### Task and labels
 
-只保留 Left-hand 与 Right-hand MI。原任务中其余类别不进入该二分类 benchmark；所有方法共享
-`0 = Left`、`1 = Right`，标签映射不随方法、fold 或测试表现改变。
+Only left- and right-hand imagery trials are retained. Other classes from an original task do not enter this binary benchmark. Every method shares `0 = Left` and `1 = Right`; mapping cannot change by method, fold, or observed performance.
 
-### 时间和采样率
+### Time and sampling
 
-每个试次固定为 3 秒，即 250 Hz 下的 750 个采样点。较长 epoch 只从各来源共有的有效时间段
-截取；不以补零把短 epoch 凑到 3 秒，以免零段改变协方差的秩和能量分布。不同原始采样率在上游
-构建阶段使用带抗混叠处理的重采样。
+Each trial is fixed to three seconds, or 750 samples at 250 Hz. Longer epochs are cropped to the common valid interval. Short epochs are not padded with zeros, because padding would change covariance rank and energy. Source rates are resampled with anti-aliasing during upstream construction.
 
-交付摘要记录的是最终 `250 Hz / 750 samples` 契约，没有重新声明未由原始构建脚本核验的
-cue-relative 起止秒数或具体重采样库参数。
+The delivered summary seals the final `250 Hz / 750 samples` contract. It does not invent cue-relative endpoints or library parameters absent from the raw construction record.
 
-### 通道和信号
+### Channels and signal
 
-所有试次采用固定顺序的 32 通道表示。正式契约不使用早期探索过的 156 通道补零方案。冻结信号
-限定在 8–30 Hz，采用 Butterworth 带通和零相位处理，单位为 V。
+All trials use one ordered 32-channel representation. The formal contract does not use the early exploratory 156-channel zero-filled layout. Signals are band-limited to 8–30 Hz with zero-phase Butterworth filtering and stored in volts.
 
-### 数据层与方法适配层
+### Shared data versus method adapter
 
 ```text
-冻结试次 [32,750]、V、8–30 Hz
-└── 方法专用 adapter
+frozen epoch [32,750], V, 8–30 Hz
+└── method-specific adapter
     ├── centred SCM
     ├── OAS covariance
-    └── ERP-aware augmented covariance（P300）
-        └── 冻结方法核心
+    └── ERP-aware augmented covariance for P300
+        └── frozen method core
 ```
 
-共享数据层不替任何方法决定 covariance。多数 SPD/AIRM 方法使用时间中心化 SCM；只有严格 SPD
-输入未通过数值门禁时，才进行确定性的最小 PSD→SPD 修复。OAS 或 ERP-specific covariance
-属于对应方法的输入契约，不作为全 benchmark 统一替代。
+The shared layer does not choose covariance for every method. Most SPD/AIRM methods use a time-centred SCM. A deterministic minimal PSD→SPD repair is applied only when a strict-SPD numerical gate fails. OAS and ERP-specific covariance remain method contracts rather than global replacements.
 
-## 文件组织口径
-
-交付材料记录的数据包结构为：
+## Recorded file layout
 
 ```text
 ../pooled_mi_riemann_32interp/
@@ -103,35 +92,31 @@ cue-relative 起止秒数或具体重采样库参数。
     └── subject_###.npz
 ```
 
-| Artifact | 记录内容 |
+| Artifact | Record |
 |---|---|
-| `config.json` | 全局数据契约，包括 `n_channels=32`、`n_samples=750` |
-| `subjects.csv` | 受试者标识、来源数据集和试次文件相对路径 |
-| `data/subject_###.npz` | `X` 试次张量与 `y` 二分类标签 |
-| `evaluation/within_dataset_splits.json` | 84 个冻结 train/test 受试者划分 |
-| `evaluation/representative_2fold_subset.json` | 36 个代表 fold 及计数审计 |
+| `config.json` | global contract, including `n_channels=32` and `n_samples=750` |
+| `subjects.csv` | subject identifier, source dataset, and relative trial-file path |
+| `data/subject_###.npz` | `X` trial tensor and binary `y` labels |
+| `evaluation/within_dataset_splits.json` | 84 frozen train/test subject splits |
+| `evaluation/representative_2fold_subset.json` | 36 representative folds and count audit |
 
-每个试次的数据集和受试者归属由 subject file 与 `subjects.csv` 关联；运行时不额外假定一个未在
-loader 中使用的逐试次 metadata CSV。
+Dataset and subject ownership are linked through the subject file and `subjects.csv`; the loader does not assume an unused per-trial metadata CSV.
 
-## 评测划分
+## Evaluation splits
 
-### 完整 84-fold 协议
+### Full 84-fold protocol
 
-完整协议为 within-dataset、cross-subject evaluation。训练与测试受试者不重叠：
+Evaluation is within-dataset and cross-subject:
 
-- Beetl2021-A：3 名受试者，3 个 LOSO folds；
-- Beetl2021-B：2 名受试者，2 个 LOSO folds；
-- Zhou2016：4 名受试者，4 个 LOSO folds；
-- 其余数据集：受试者级 5-fold GroupKFold。
+- Beetl2021-A: 3 subjects, 3 LOSO folds;
+- Beetl2021-B: 2 subjects, 2 LOSO folds;
+- Zhou2016: 4 subjects, 4 LOSO folds;
+- all remaining datasets: subject-level five-fold GroupKFold.
 
-冻结结构覆盖 389 名受试者，每名受试者在所属数据集中恰好一次成为测试对象；记录中无空 fold、
-无训练/测试受试者重叠，也无单类别 train/test fold。
+The frozen structure covers 389 subjects. Every subject is a test subject exactly once within its dataset. Records contain no empty fold, train/test subject overlap, or single-class train/test fold.
 
-### 代表 36-fold 协议
+### Representative 36-fold protocol
 
-计算成本受限时使用 `18 datasets × 2 already-existing folds`。seed 固定为 `2026`，只从 84 个
-已有 fold 中抽取，不重新切分，不改变成员关系，也不读取模型性能。36-fold 是代表性协议，不被
-解释为完整 84-fold 评测的等价替代。
+When compute is constrained, use `18 datasets × 2 already-existing folds`. Seed `2026` selects from the 84 frozen folds without resplitting, changing membership, or reading performance. The 36-fold set is representative; it is not an equivalent substitute for the full 84-fold evaluation.
 
-对应方法和信息使用边界见[黎曼几何方法汇总](../../../docs/riemannian/METHODS.md)。
+See the [Riemannian methods](../../../docs/riemannian/METHODS.md) for method-specific inputs and information regimes.

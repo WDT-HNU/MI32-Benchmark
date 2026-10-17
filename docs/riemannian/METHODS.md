@@ -1,182 +1,161 @@
-# 黎曼几何方法汇总
+# Riemannian method summary
 
-本页按已交付的方法摘要整理。状态字段沿用该摘要的任务和 coverage 口径；方法之间的比较必须同时
-保留任务、冻结 split、information regime、有效 fold 数和 fidelity status。
+This page organizes the delivered method summary. Every comparison must retain task, frozen split, information regime, valid-fold count, and fidelity status.
 
-## 总体方法逻辑
+## Common method logic
 
-EEG 试次 `X ∈ R^(p×T)` 可以转换为空间协方差矩阵。严格正定的协方差属于 SPD 流形，直接采用
-逐元素均值、欧氏距离或线性插值会忽略其几何结构。AIRM 距离、Karcher 均值和 tangent-space
-mapping 分别提供流形上的距离、参考点和局部线性化表示。
+An EEG trial `X ∈ R^(p×T)` can be converted into a spatial covariance matrix. Strictly positive-definite covariance matrices lie on the SPD manifold; element-wise means, Euclidean distances, and linear interpolation ignore that geometry. AIRM distance, the Karcher mean, and tangent-space mapping provide a manifold distance, reference point, and local linear representation respectively.
 
-本分支采用的共同边界是：
+The shared boundary is:
 
 ```text
-冻结数据与 split
-└── 数据集/方法专用 adapter
-    └── 官方方法输入契约
-        └── 冻结方法核心
-            └── 评测
-                └── 同时报告任务、信息边界、coverage 和状态
+frozen data and split
+└── dataset- and method-specific adapter
+    └── official method input contract
+        └── frozen method core
+            └── evaluation
+                └── task, information regime, coverage, and status
 ```
 
-adapter 必须跟随方法：plain centred SCM、official OAS covariance、P300 的 ERP prototype/
-augmented covariance 不能互相冒充。允许使用无标签目标域统计的方法，也不能被强行改写成
-source-only；需要目标域带标签校准的方法，则必须预先冻结 calibration/evaluation 分区。
+The adapter follows the method. Plain centred SCM, official OAS covariance, and P300 ERP prototype/augmented covariance are not interchangeable. A method defined with unlabelled target statistics must not be silently rewritten as source-only; a method requiring labelled target calibration must use a pre-frozen calibration/evaluation partition.
 
-Binary MI 的共享输入为 `(B, 32, 750)`、250 Hz、3 秒、V、8–30 Hz，标签为 `0=Left`、
-`1=Right`。完整数据说明见[Binary MI 数据契约](../../benchmark/datasets/binary_mi/DATASET_CARD.md)。
+The shared Binary MI input is `(B,32,750)`, 250 Hz, 3 s, volts, 8–30 Hz, with `0=Left` and `1=Right`. See the [Binary MI contract](../../benchmark/datasets/binary_mi/DATASET_CARD.md).
 
-## 方法树
+## Method tree
 
 ```text
-黎曼几何方法
-├── 直接分类
-│   ├── MDRM：类黎曼均值 + AIRM 最近均值
-│   ├── TSLDA：切空间 + 变量选择 + LDA
-│   ├── KernelSVM：切空间黎曼核 + 线性 SVM
-│   ├── FGMDRM：Fisher geodesic filter + MDM
-│   ├── SPDNet：SPD 专用神经网络层
-│   └── MFACC：OAS + ADCSP + means field classifier
-├── 跨域对齐/迁移
-│   ├── RA：无标签目标域黎曼对齐
-│   ├── RPA：带标签目标域校准的 Procrustes 分析
-│   ├── TSA：带标签目标域切空间对齐
-│   └── MEKT-R：无标签目标域分布对齐与伪标签迭代
-└── 自监督表示
-    └── Manifold-SimCLR：SPD/log-domain 对比学习
+Riemannian methods
+├── direct classification
+│   ├── MDRM: class Riemannian means + nearest AIRM mean
+│   ├── TSLDA: tangent space + variable selection + LDA
+│   ├── KernelSVM: tangent-space Riemannian kernel + linear SVM
+│   ├── FGMDRM: Fisher geodesic filter + MDM
+│   ├── SPDNet: SPD-specific neural layers
+│   └── MFACC: OAS + ADCSP + means-field classifier
+├── cross-domain alignment and transfer
+│   ├── RA: unlabelled-target Riemannian alignment
+│   ├── RPA: labelled-target-calibration Procrustes analysis
+│   ├── TSA: labelled-target tangent-space alignment
+│   └── MEKT-R: unlabelled-target distribution alignment and pseudo-label iteration
+└── self-supervised representation
+    └── Manifold-SimCLR: SPD/log-domain contrastive learning
 ```
 
-## 方法卡片
+## Method cards
 
 ### MDRM
 
-- 依据：Barachant et al., 2012。
-- 表示：centred SCM；只有未通过 SPD 数值门禁时才做 scale-relative 最小谱修复。
-- 流程：covariance → 各类 Karcher mean → AIRM distance → 最近均值。
-- 信息：`SOURCE_ONLY`；类均值只由训练数据估计。
-- 状态：Binary 36/36、05 16/16、P300 85/85 均为 formal。
+- Basis: Barachant et al., 2012.
+- Representation: centred SCM; scale-relative minimal spectral repair only after an SPD numerical gate fails.
+- Flow: covariance → class Karcher means → AIRM distance → nearest mean.
+- Information: `SOURCE_ONLY`; class means are estimated from training data only.
+- Status: Binary 36/36, MI3 16/16, and P300 85/85 formal.
 
 ### TSLDA
 
-- 依据：Barachant et al., 2012。
-- 流程：训练集黎曼均值 → log map → `sqrt(2)` 对称上三角向量化 → SVD/PCA → ANOVA →
-  weighted FDR (`q=0.05`) → LDA。
-- 信息：`SOURCE_ONLY`，参考点、降维、特征选择和 LDA 均 train-only。
-- 边界：weighted-FDR 选中零变量是真实方法失败，不增加 fallback 或伪造预测。
-- 状态：Binary 32/36 valid；05 16/16；P300 35/85 valid。
+- Basis: Barachant et al., 2012.
+- Flow: training Riemannian mean → log map → `sqrt(2)` symmetric upper-triangle vectorization → SVD/PCA → ANOVA → weighted FDR (`q=0.05`) → LDA.
+- Information: `SOURCE_ONLY`; reference, reduction, selection, and LDA are train-only.
+- Boundary: selecting zero variables under weighted FDR is a real method failure. No fallback or fabricated prediction is added.
+- Status: Binary 32/36 valid; MI3 16/16; P300 35/85 valid.
 
 ### KernelSVM
 
-- 依据：Barachant et al., 2013。
-- 流程：centred SCM → 训练集 AIRM mean → tangent map → `sqrt(2)` 向量化 → linear SVC。
-- 固定约定：`SVC(kernel="linear", C=10)`，不做性能驱动的网格搜索。
-- 信息：`SOURCE_ONLY`；05 已检查原生多分类兼容性，AUC 使用连续 decision score。
-- 状态：Binary 36/36、05 16/16、P300 85/85 formal。
+- Basis: Barachant et al., 2013.
+- Flow: centred SCM → training AIRM mean → tangent map → `sqrt(2)` vectorization → linear SVC.
+- Fixed convention: `SVC(kernel="linear", C=10)` with no performance-driven grid search.
+- Information: `SOURCE_ONLY`; native multiclass compatibility is checked for MI3 and AUC uses continuous decision scores.
+- Status: Binary 36/36, MI3 16/16, and P300 85/85 formal.
 
 ### FGMDRM / FgMDM
 
-- 依据：Barachant et al., 2010；2019 SSDT-FGMDRM work。
-- 流程：AIRM mean → tangent map → Fisher/FGDA filtering → inverse tangent map → MDM。
-- 信息：`SOURCE_ONLY`；Fisher 投影只在训练向量和标签上拟合。
-- 状态：Binary 36/36、05 16/16、P300 85/85 formal。
+- Basis: Barachant et al., 2010, and the 2019 SSDT-FGMDRM work.
+- Flow: AIRM mean → tangent map → Fisher/FGDA filtering → inverse tangent map → MDM.
+- Information: `SOURCE_ONLY`; the Fisher projection is fitted on training vectors and labels only.
+- Status: Binary 36/36, MI3 16/16, and P300 85/85 formal.
 
 ### RA
 
-- 依据：Zanini et al., 2018。
-- 流程：source/target 分别估计黎曼 reference 并重心化，再由 source classifier 预测。
-- 信息：`TRANSDUCTIVE_UNLABELED_TARGET`；目标域协方差可参与 reference，目标标签只在预测后算指标。
-- 边界：论文定义的 target self-inclusion 必须披露，但不等同于标签泄露。
-- 状态：Binary 36/36、05 16/16、P300 85/85 formal。
+- Basis: Zanini et al., 2018.
+- Flow: estimate source and target Riemannian references separately, recenter both domains, then predict with a source classifier.
+- Information: `TRANSDUCTIVE_UNLABELED_TARGET`; target covariance may estimate the reference, while target labels are used only after prediction for metrics.
+- Boundary: target self-inclusion defined by the paper must be disclosed, but it is not label leakage.
+- Status: Binary 36/36, MI3 16/16, and P300 85/85 formal.
 
 ### SPDNet
 
-- 依据：Huang & Van Gool, 2017。
-- 结构：`BiMap → ReEig → BiMap → ReEig → BiMap → LogEig → vectorization → softmax`，
-  验证结构为 `32→16→8→4`。
-- 优化：BiMap 权重采用 Stiefel/Riemannian gradient 与 QR retraction；ReEig/LogEig 使用
-  author-style spectral backward。
-- 信息：`SOURCE_ONLY`。
-- 状态：Binary 36/36、05 16/16、P300 85/85 formal；BiMap 参数更新已审计。
+- Basis: Huang and Van Gool, 2017.
+- Structure: `BiMap → ReEig → BiMap → ReEig → BiMap → LogEig → vectorization → softmax`, verified as `32→16→8→4`.
+- Optimization: Stiefel/Riemannian gradients and QR retraction for BiMap weights; author-style spectral backward for ReEig/LogEig.
+- Information: `SOURCE_ONLY`.
+- Status: Binary 36/36, MI3 16/16, and P300 85/85 formal; BiMap parameter updates were audited.
 
 ### MFACC
 
-- 表示：raw frozen epoch 经 official OAS covariance route。
-- 流程：`Covariances(estimator="oas") → ADCSP → MFACC(method_label="lda")`。
-- 信息：`SOURCE_ONLY`；不以共享 SCM cache 或人为 SPD repair 替代官方 OAS 路径。
-- 状态：Binary 36/36、P300 85/85 formal；05 为 13/16 valid，3 个数值失败单独保留。
+- Representation: raw frozen epoch through the official OAS covariance route.
+- Flow: `Covariances(estimator="oas") → ADCSP → MFACC(method_label="lda")`.
+- Information: `SOURCE_ONLY`; a shared SCM cache or manual SPD repair does not replace official OAS.
+- Status: Binary 36/36 and P300 85/85 formal; MI3 13/16 valid with three numerical failures retained.
 
 ### RPA
 
-- 依据：Rodrigues et al., 2019。
-- 流程：recentring → stretching → class-wise rotation → source-trained classifier。
-- 信息：`TARGET_CALIBRATION_LABELED`；只允许预冻结的目标域 calibration labels，evaluation labels
-  仅用于最终指标。
-- 状态：Binary 36/36、05 16/16、P300 85/85 formal。
+- Basis: Rodrigues et al., 2019.
+- Flow: recentering → stretching → class-wise rotation → source-trained classifier.
+- Information: `TARGET_CALIBRATION_LABELED`; only the pre-frozen target calibration labels are allowed. Evaluation labels are used only for final metrics.
+- Status: Binary 36/36, MI3 16/16, and P300 85/85 formal.
 
 ### TSA
 
-- 依据：Bleuzé, Mattout & Congedo, 2022。
-- 流程：source/target tangent representation → centering/rescaling → class anchors →
-  SVD/Procrustes rotation → source SVC。
-- 信息：`TARGET_CALIBRATION_LABELED`；evaluation labels 不进入 alignment。
-- 边界：P300 使用 ERP-aware representation，而不是 MI plain SCM。
-- 状态：Binary 36/36、05 16/16、P300 85/85 formal。
+- Basis: Bleuzé, Mattout, and Congedo, 2022.
+- Flow: source/target tangent representations → centering and rescaling → class anchors → SVD/Procrustes rotation → source SVC.
+- Information: `TARGET_CALIBRATION_LABELED`; evaluation labels do not enter alignment.
+- Boundary: P300 uses an ERP-aware representation rather than MI plain SCM.
+- Status: Binary 36/36, MI3 16/16, and P300 85/85 formal.
 
 ### Manifold-SimCLR
 
-- 方向：SPD/log-domain augmentation → encoder/projection → contrastive loss → downstream probe/
-  fine-tuning。
-- 信息：`SELF_SUPERVISED_SOURCE_ONLY`，前提是存在完整可执行的原方法定义。
-- 边界：现有摘要将 Binary 36-fold 结果标为 reconstructed exploratory；MXOptimizer、exact backbone
-  和 joint fine-tuning schedule 尚不能由作者材料唯一确定，因此不写成 paper-faithful formal result。
-- 状态：Binary `PARTIAL_RECONSTRUCTION`；05 与 P300 `IMPLEMENTATION_BLOCKED`。
+- Direction: SPD/log-domain augmentation → encoder/projection → contrastive loss → downstream probe or fine-tuning.
+- Information: `SELF_SUPERVISED_SOURCE_ONLY`, conditional on a complete executable original-method definition.
+- Boundary: the delivered Binary 36-fold result is reconstructed exploratory. MXOptimizer, the exact backbone, and the joint fine-tuning schedule cannot be uniquely determined from the available author material, so it is not labelled paper-faithful.
+- Status: Binary `PARTIAL_RECONSTRUCTION`; MI3 and P300 `IMPLEMENTATION_BLOCKED`.
 
 ### MEKT-R
 
-- 依据：Zhang & Wu, 2020。
-- 流程：subject alignment → official MTS source concatenation → joint-probability-MMD/generalized
-  eigenproblem → 5 次伪标签迭代 → official shrinkage LDA。
-- 固定约定：`p=10`、`T=5`、`alpha=0.01`、`beta=0.1`、`rho=20`、target KNN `k=10`、
-  heat-kernel `sigma=1`。
-- 信息：`TRANSDUCTIVE_UNLABELED_TARGET`；真实目标标签不进入适配、伪标签或 stopping rule。
-- 边界：P300 使用 ERP/RSVP-aware route；05 的官方 endpoint 为 binary-only，不自行增加 OvR/OvO。
-- 状态：Binary 36/36、P300 85/85 formal；05 `BINARY_ONLY`。
+- Basis: Zhang and Wu, 2020.
+- Flow: subject alignment → official MTS source concatenation → joint-probability-MMD/generalized eigenproblem → five pseudo-label iterations → official shrinkage LDA.
+- Fixed values: `p=10`, `T=5`, `alpha=0.01`, `beta=0.1`, `rho=20`, target KNN `k=10`, and heat-kernel `sigma=1`.
+- Information: `TRANSDUCTIVE_UNLABELED_TARGET`; true target labels do not enter adaptation, pseudo-labels, or the stopping rule.
+- Boundary: P300 uses the ERP/RSVP-aware route. The official MI3 endpoint is binary-only; no unreported OvR/OvO extension is added.
+- Status: Binary 36/36 and P300 85/85 formal; MI3 `BINARY_ONLY`.
 
-## 信息使用边界
+## Information regimes
 
-| Information regime | 方法 | 允许拟合的信息 | 防泄露边界 |
+| Regime | Methods | Permitted fitted information | Leakage boundary |
 |---|---|---|---|
-| `SOURCE_ONLY` | MDRM、TSLDA、KernelSVM、FGMDRM、SPDNet、MFACC | source/train EEG、covariance、labels | reference、selector、classifier 均 train-only |
-| `TRANSDUCTIVE_UNLABELED_TARGET` | RA、MEKT-R | source labels；target EEG/covariance/statistics | target labels 仅在预测后用于指标 |
-| `TARGET_CALIBRATION_LABELED` | RPA、TSA | source data；冻结 calibration subset labels | evaluation labels 不进入对齐或训练 |
-| `SELF_SUPERVISED` | Manifold-SimCLR | 按原协议允许的 source-side data | evaluation labels 不参与预训练或选参 |
+| `SOURCE_ONLY` | MDRM, TSLDA, KernelSVM, FGMDRM, SPDNet, MFACC | source/train EEG, covariance, and labels | reference, selector, and classifier are train-only |
+| `TRANSDUCTIVE_UNLABELED_TARGET` | RA, MEKT-R | source labels plus target EEG/covariance/statistics | target labels appear only after prediction for metrics |
+| `TARGET_CALIBRATION_LABELED` | RPA, TSA | source data plus labels from a frozen calibration subset | evaluation labels do not enter alignment or training |
+| `SELF_SUPERVISED` | Manifold-SimCLR | source-side data allowed by the original protocol | evaluation labels do not enter pretraining or selection |
 
-是否允许访问目标域信息由论文方法契约决定。无标签目标域统计不等于 label leakage；带标签校准也不
-能与 source-only 结果在不披露协议的情况下直接并表。
+The paper's method contract determines whether target information is allowed. Unlabelled target statistics are not label leakage, and labelled calibration results cannot be placed beside source-only results without protocol disclosure.
 
-## 三类任务
+## Tasks
 
-### Binary Left/Right MI
+### Binary left/right MI
 
-18 个来源数据集、389 名受试者、59,216 个试次。完整协议 84 folds，代表协议每个数据集抽取两个
-既有 fold，共 36 folds。主要表示为空间协方差与 MI 频带信息。
+The 18-source release contains 389 subjects and 59,216 trials. The full protocol has 84 folds; the representative protocol selects two existing folds per dataset, for 36 folds. The primary representation is spatial covariance over the MI band.
 
-### 05 three-class MI
+### MI3
 
-独立的 8-dataset × 2-fold 代表协议，共 16 folds。必须逐方法检查多分类 endpoint；不能把
-binary decision rule 静默扩展。KernelSVM、MFACC 已按摘要记录为支持多分类，MEKT-R 保持
-`BINARY_ONLY`。
+The archived representative protocol contains `8 datasets × 2 folds = 16 folds`. Multiclass endpoints must be checked method by method; a binary decision rule cannot be silently extended. KernelSVM and MFACC are recorded as multiclass-compatible, while MEKT-R remains `BINARY_ONLY`.
 
 ### P300
 
-P300 是 time-locked ERP 任务，不应机械压缩为 MI-style plain spatial SCM。冻结 reduced LOGO
-协议为 85 folds。TSA 和 MEKT-R 使用 ERP-aware route；TSLDA 保留真实 zero-feature failures；
-SPDNet 保留经过审计的 spectral backward 和 Stiefel/BiMap update。
+P300 is a time-locked ERP task and should not be compressed mechanically into MI-style plain spatial SCM. The frozen reduced LOGO protocol contains 85 folds. TSA and MEKT-R use ERP-aware routes; TSLDA preserves genuine zero-feature failures; SPDNet preserves the audited spectral backward and Stiefel/BiMap updates.
 
-## 状态汇总
+## Status matrix
 
-| Method | Binary MI（36） | 05 三分类 MI（16） | P300 reduced LOGO（85） |
+| Method | Binary MI (36) | MI3 (16) | P300 reduced LOGO (85) |
 |---|---|---|---|
 | MDRM | FORMAL 36/36 | FORMAL 16/16 | FORMAL 85/85 |
 | TSLDA | PARTIAL 32/36 | FORMAL 16/16 | PARTIAL 35/85 valid |
@@ -190,23 +169,21 @@ SPDNet 保留经过审计的 spectral backward 和 Stiefel/BiMap update。
 | Manifold-SimCLR | PARTIAL_RECONSTRUCTION 36/36 | IMPLEMENTATION_BLOCKED | IMPLEMENTATION_BLOCKED |
 | MEKT-R | FORMAL 36/36 | BINARY_ONLY | FORMAL 85/85 |
 
-`FORMAL` 表示摘要记录了按冻结协议完成的结果；`PARTIAL` 保留真实方法或数值失败；
-`BINARY_ONLY` 和 `IMPLEMENTATION_BLOCKED` 是 fidelity/scope 状态，不是性能分数。
+`FORMAL` means that the delivered summary records completion under the frozen protocol. `PARTIAL` retains real method or numerical failures. `BINARY_ONLY` and `IMPLEMENTATION_BLOCKED` are fidelity or scope states, not performance scores.
 
-## 交付摘要记录的工作产物路径
+## Paths recorded by the delivered summary
 
-以下路径保留原工作区命名，用于理解材料之间的关系：
+These names preserve the original workspace relationships:
 
-| 作用 | 原工作区相对路径 |
+| Purpose | Original relative path |
 |---|---|
-| Binary MI 完整 split | `evaluation/within_dataset_splits.json` |
-| Binary MI 代表 fold | `evaluation/representative_2fold_subset.json` |
-| Adapter 总报告 | `experiments/MASTER_ADAPTER_BENCHMARK_REPORT.md` |
-| MEKT-R 规范与报告 | `experiments/MEKT_adapter/MEKT_METHOD_SPEC.md`、`MEKT_FINAL_REPORT.md` |
+| Binary MI full splits | `evaluation/within_dataset_splits.json` |
+| Binary MI representative folds | `evaluation/representative_2fold_subset.json` |
+| Master adapter report | `experiments/MASTER_ADAPTER_BENCHMARK_REPORT.md` |
+| MEKT-R specification and report | `experiments/MEKT_adapter/MEKT_METHOD_SPEC.md`, `MEKT_FINAL_REPORT.md` |
 | P300 benchmark | `P300_benchmark/` |
-| 05 三分类 benchmark | `05_benchmark/` |
+| MI3 benchmark | `05_benchmark/` |
 | P300 fidelity repair | `P300_benchmark/experiments/*_fidelity_repair/` |
-| 05 多分类兼容性审计 | `05_benchmark/experiments/MEKT_R_05_MULTICLASS_COMPATIBILITY_AUDIT.md` |
+| MI3 multiclass compatibility audit | `05_benchmark/experiments/MEKT_R_05_MULTICLASS_COMPATIBILITY_AUDIT.md` |
 
-这些路径记录 method/input/protocol provenance。跨任务汇总时仍需保留任务、split、信息边界、
-coverage 和 fidelity status。
+These paths record method, input, and protocol provenance. A cross-task summary must still retain task, split, information regime, coverage, and fidelity status.

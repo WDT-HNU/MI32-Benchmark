@@ -1,22 +1,22 @@
-## 改动范围
+## Scope
 
-- [ ] 仅文档或报告
-- [ ] 数据语义或数据统一
-- [ ] 模型输入适配器
-- [ ] 模型结构或权重
-- [ ] 训练或评估协议
+- [ ] Documentation or reporting only
+- [ ] Data semantics or harmonization
+- [ ] Model input adapter
+- [ ] Model architecture or checkpoint
+- [ ] Training or evaluation protocol
 
-## 证据
+## Evidence
 
-请说明官方来源、固定的源码或权重身份、测试，以及是否使用了真实 CUDA 和真实数据。
+State the official source, pinned source or checkpoint identity, tests, and whether real CUDA and real data were used.
 
-## 结果有效性
+## Result validity
 
-列出本次改动会使哪些历史结果失效；如果没有，请说明原因。
+List historical results invalidated by this change. If none are invalidated, explain why.
 
-## 检查清单
+## Checklist
 
-- [ ] 未提交凭据、EEG 信号文件、私有 URL 或权重。
-- [ ] 仅训练集统计量不能访问验证或测试受试者。
-- [ ] 测试和文档已同步更新。
-- [ ] 结论明确区分静态检查、CPU/stub、CUDA 预检和正式运行证据。
+- [ ] No credentials, EEG signals, private URLs, or checkpoints are committed.
+- [ ] Train-only statistics cannot access validation or test subjects.
+- [ ] Tests and documentation are updated together.
+- [ ] Claims distinguish static checks, CPU/stub checks, CUDA preflight, and formal run evidence.

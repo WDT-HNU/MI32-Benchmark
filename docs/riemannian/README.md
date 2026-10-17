@@ -1,30 +1,25 @@
-# 黎曼几何方法
+# Riemannian methods
 
-这里保存 11 种黎曼几何方法的输入表示、信息条件、任务适用范围和 coverage。它不是一个只针对
-Binary MI 的独立分支；现有方法状态同时覆盖 MI 二分类、MI 三分类和 P300。
+This section records input representations, information regimes, task applicability, and coverage for eleven Riemannian methods. It is not an MI2-only branch: the archived status covers MI2, MI3, and P300.
 
 ```text
-每个任务的冻结数据与 split
+frozen task data and split
 └── method-specific adapter
     └── official input contract
         └── frozen method core
-            └── evaluation + coverage reporting
+            └── evaluation and coverage report
 ```
 
-## 跨任务状态
+## Cross-task status
 
-| 任务 | 协议 | 当前覆盖 |
+| Task | Protocol | Current coverage |
 |---|---|---|
-| MI 二分类 | Binary MI representative 36 folds | 多数方法 formal；TSLDA partial；Manifold-SimCLR 为非正式重建 |
-| MI 三分类 | 05 representative 16 folds | 多数方法 16/16；MFACC 13/16；MEKT-R 保持 binary-only |
-| P300 | reduced frozen LOGO 85 folds | 多数方法 85/85；TSLDA 保留 zero-feature failures |
+| MI2 | Binary MI representative 36 folds | most methods formal; TSLDA partial; Manifold-SimCLR reconstructed exploratory |
+| MI3 | representative 16 folds | most methods 16/16; MFACC 13/16; MEKT-R remains binary-only |
+| P300 | reduced frozen LOGO 85 folds | most methods 85/85; TSLDA retains zero-feature failures |
 
-当前归档的方法包括 MDRM、TSLDA、KernelSVM、FGMDRM、RA、SPDNet、MFACC、RPA、TSA、
-Manifold-SimCLR 和 MEKT-R。完整定义见[方法汇总](METHODS.md)。
+The archive covers MDRM, TSLDA, KernelSVM, FGMDRM, RA, SPDNet, MFACC, RPA, TSA, Manifold-SimCLR, and MEKT-R. See the [method summary](METHODS.md) for definitions.
 
-Binary MI 的 18-source 数据契约见
-[数据卡片](../../benchmark/datasets/binary_mi/DATASET_CARD.md)。它和深度模型使用的 MI2 派生视图
-属于同一个二分类任务，但冻结 release 不同；两边结果不能省略数据身份后直接排名。
+The 18-source Binary MI contract is documented in its [dataset card](../../benchmark/datasets/binary_mi/DATASET_CARD.md). It defines the same binary task as the MI2 view used by deep models but is a different frozen release; the two result sets cannot be ranked without retaining data identity.
 
-返回[项目总览](../../README.md)，或查看同样覆盖三个任务的
-[深度学习方法](../deep_learning/README.md)。
+Return to the [project overview](../../README.md), or compare with [traditional methods](../traditional/README.md) and [deep models](../deep_learning/README.md).

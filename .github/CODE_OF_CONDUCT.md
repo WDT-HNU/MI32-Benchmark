@@ -1,4 +1,3 @@
-# 行为准则
+# Code of conduct
 
-请尊重他人，以证据为依据，并谨慎处理人体受试者数据。骚扰、人身攻击、伪造结果、隐瞒针对
-测试集的调参，以及未经授权分享数据，均不可接受。维护者可以移除违反这些规则的贡献或参与者。
+Treat others with respect, base technical claims on evidence, and handle human-participant data carefully. Harassment, personal attacks, fabricated results, undisclosed test-set tuning, and unauthorized data sharing are unacceptable. Maintainers may remove contributions or participants that violate these rules.

@@ -1,38 +1,37 @@
-# 项目状态
+# Project status
 
-这里按三个任务汇总仓库已经归档的内容。
+This page summarizes material currently archived in the repository. Status describes evidence scope, not a claim that every task-method cell is directly comparable.
 
-## 任务与方法矩阵
+## Task × method matrix
 
-| 任务 | 任务专用深度模型 | EEG 基础与长序列模型 | 黎曼几何方法 |
+| Task | Traditional methods | Deep models | Riemannian methods |
 |---|---|---|---|
-| MI 三分类 | 4 个模型已有当前结果 | LaBraM、EEGMamba、CodeBrain 已有结果；Uni-NTFM 为协议路线 | 05 代表协议已归档 |
-| MI 二分类 | 4 个模型完成 fold 0 | 3 个模型完成 fold 0 | Binary MI 代表 36-fold 状态已归档 |
-| P300 | 4 个模型完成 102 sampled LOGO folds | 3 个模型完成同一 102 folds | reduced 85-fold 状态已归档 |
+| MI3 | 7-method 2026-09-04 snapshot | 7 models with unequal fold coverage; Uni-NTFM protocol route | representative 16-fold status archived |
+| MI2 | 7-method 2026-09-04 snapshot | 7 models on fold 0 of the MI32-derived view | representative 36-fold status on the Binary MI release |
+| P300 | 16-method full LOGO report, 873 folds | 7 models on the fixed 102-fold sample | reduced frozen 85-fold status |
 
-## 数据
+## Data records
 
-- MI32 common-32 v4：8 个来源、230 名受试者、97,608 个三分类 trials；
-- MI2 派生视图：同一批受试者，保留左右手后为 48,804 trials；
-- P300：15 个来源、158,667 trials，深度模型协议使用 102 sampled LOGO folds；
-- Binary MI 黎曼数据契约：18 个来源、389 名受试者、59,216 trials，完整 84 folds、代表 36 folds。
+- MI32 common-32 v4: 8 sources, 230 subjects, 97,608 three-class trials.
+- MI2 derived view: the same 230 subjects, 48,804 left/right trials.
+- Binary MI contract: 18 sources, 389 subjects, 59,216 trials, 84 full folds and 36 representative folds.
+- P300 contract: 15 reported eligible datasets, 16 channels, 200 Hz, and 0–600 ms epochs.
+- Traditional MI3 historical snapshot: 8 datasets, 225 subjects, and 94,856 trials as reported on 2026-09-04.
 
-## 深度方法
+## Traditional methods
 
-EEGNet、TSception、RGNN、EEG-Conformer、LaBraM、EEGMamba、CodeBrain 和 Uni-NTFM 均有明确的
-输入适配、模型说明或结构测试。现有正式结果覆盖前 7 个模型；Uni-NTFM 保留独立协议路线。
+The new archive contains the reviewed P300 data contract, the 16-method full P300 report, the three-task 2026-09-04 progress snapshot, and two machine-readable result transcriptions. The traditional report values are labelled `report_transcription`; they are not presented as newly recomputed predictions.
 
-跨任务结果见[深度模型结果](../deep_learning/RESULTS.md)。MI3 的逐运行 CSV 和 manifest 位于
-`benchmark/results/mi32-common32-v4/current-evidence-20260911/`。
+## Deep models
 
-## 黎曼几何方法
+EEGNet, TSception, RGNN, EEG-Conformer, LaBraM, EEGMamba, CodeBrain, and Uni-NTFM have explicit input adapters, model definitions, or structural tests. Current formal results cover the first seven. Uni-NTFM remains a separate protocol route.
 
-已归档 MDRM、TSLDA、KernelSVM、FGMDRM、RA、SPDNet、MFACC、RPA、TSA、
-Manifold-SimCLR 和 MEKT-R 的输入、信息条件、适用任务和 coverage。状态覆盖 MI2、MI3、P300，
-并保留 partial、binary-only 和 implementation-blocked 等真实边界。
+MI3 run CSVs and manifests are under `benchmark/results/mi32-common32-v4/current-evidence-20260911/`. Cross-task summaries are in [deep-model results](../deep_learning/RESULTS.md).
 
-## 归档原则
+## Riemannian methods
 
-Git 保存代码、元数据、清单、测试和体积较小的结果。EEG 信号、上游源码树和预训练权重单独获取，
-并按记录的哈希和提交身份核验。任何结果都要带任务、数据 release、split、adapter 和 coverage，
-不能只用模型名称代替运行证据。
+The archive records the input representation, information regime, task applicability, and coverage of MDRM, TSLDA, KernelSVM, FGMDRM, RA, SPDNet, MFACC, RPA, TSA, Manifold-SimCLR, and MEKT-R. Partial, binary-only, and implementation-blocked states are retained.
+
+## Archiving rule
+
+Git stores code, metadata, manifests, tests, and compact results. EEG signals, upstream source trees, and pretrained weights are obtained separately and checked against recorded identities. A result must include task, release, split, adapter, implementation, and coverage; the method name alone is insufficient.

@@ -1,14 +1,12 @@
-# 深度模型跨任务结果
+# Deep-model results across tasks
 
-深度模型已经在 MI 三分类、MI 左右手二分类和 P300 三个任务上运行。三个任务的协议不同，下面分开
-报告，不计算跨任务总分。
+Deep models have recorded runs on MI3, MI2, and P300. The protocols differ, so results are reported by task and no cross-task aggregate score is calculated.
 
-## MI 三分类
+## MI3
 
-当前文件位于 `results/mi32-common32-v4/current-evidence-20260911/`。各模型覆盖的测试折不同，
-因此表格用于核对现有证据，不构成七模型最终排名。
+Current files are under `benchmark/results/mi32-common32-v4/current-evidence-20260911/`. Test-fold coverage differs by model; this table inventories current evidence and is not a final seven-model ranking.
 
-| 模型 | 折 | Macro-F1 | 平衡准确率 | 准确率 |
+| Model | Fold | Macro-F1 | Balanced accuracy | Accuracy |
 |---|---:|---:|---:|---:|
 | EEG-Conformer | 0 | 0.579492 | 0.599415 | 0.588935 |
 | EEGNet | 0 | 0.555890 | 0.568942 | 0.570968 |
@@ -23,12 +21,11 @@
 | LaBraM | 0 | 0.544850 | 0.547383 | 0.574403 |
 | LaBraM | 2 | 0.466047 | 0.468288 | 0.494127 |
 
-## MI 左右手二分类
+## MI2
 
-当前可报告范围为 fold 0。测试集包含 45 名未参与训练的受试者和 9,462 个试次，左右类别各
-4,731 个。
+The reportable scope is fold 0. The test set contains 45 subjects excluded from training and 9,462 trials, with 4,731 trials per class.
 
-| 模型 | ACC | 平衡准确率 | Macro-F1 |
+| Model | Accuracy | Balanced accuracy | Macro-F1 |
 |---|---:|---:|---:|
 | EEGNet | 0.7106 | 0.7106 | 0.7105 |
 | TSception | 0.6972 | 0.6972 | 0.6947 |
@@ -38,14 +35,13 @@
 | EEGMamba | 0.6840 | 0.6840 | 0.6840 |
 | CodeBrain | 0.6721 | 0.6721 | 0.6716 |
 
-这些数字只能写成 fold 0 test，不能写成五折平均。
+These values are fold-0 test results, not five-fold means.
 
 ## P300
 
-当前协议固定抽取 102 个 within-subject LOGO folds，7 个模型共 714 次运行。表中指标由保存的
-sampled-fold predictions 汇总计算。
+The frozen protocol samples 102 within-subject LOGO folds. Seven models produced 714 runs. Metrics were aggregated from saved sampled-fold predictions.
 
-| 模型 | PR-AUC | ROC-AUC | 平衡准确率 | Macro-F1 |
+| Model | PR-AUC | ROC-AUC | Balanced accuracy | Macro-F1 |
 |---|---:|---:|---:|---:|
 | EEGNet | 0.3290 | 0.8186 | 0.7285 | 0.6256 |
 | TSception | 0.4300 | 0.8395 | 0.7400 | 0.6476 |
@@ -55,17 +51,14 @@ sampled-fold predictions 汇总计算。
 | EEGMamba | 0.4972 | 0.8595 | 0.7435 | 0.6916 |
 | CodeBrain | 0.4972 | 0.8584 | 0.7380 | 0.6940 |
 
-RGNN 使用 surrogate 特征流程，不进入完整官方 RGNN 的正式排名。P300 的类别高度不平衡，普通
-准确率不能替代 PR-AUC、平衡准确率和 Macro-F1。
+RGNN uses a surrogate feature route and is not ranked as a complete official RGNN reproduction. Because P300 is highly imbalanced, ordinary accuracy cannot replace PR-AUC, balanced accuracy, or Macro-F1.
 
-## 证据边界
+## Evidence boundaries
 
-- MI2 只有 fold 0，不能外推为跨折稳定排名；
-- MI3 的模型 fold 覆盖不一致，不能直接发布七模型总排名；
-- P300 是 102/873 的预先冻结抽样 LOGO，不是完整枚举；
-- Uni-NTFM 当前为结构和协议路线，没有正式训练结果；
-- 旧的 32→60 EEGMamba、750→800、LaBraM CLS pooling、线性重采样、per-trial z-score，或
-  CodeBrain mean pooling / `Linear(200,classes)` 结果不进入当前证据。
+- MI2 covers fold 0 only and cannot establish cross-fold stability.
+- MI3 model coverage differs, so a complete seven-model rank is not supported.
+- P300 uses a frozen 102/873 LOGO sample, not all folds.
+- Uni-NTFM has a structure and protocol route but no formal training result.
+- Results from the superseded 32→60 EEGMamba adapter, 750→800 padding, LaBraM CLS pooling, linear resampling, per-trial z-scoring, or CodeBrain mean pooling / `Linear(200,classes)` are excluded.
 
-机器可读的跨任务摘要见
-[`benchmark/results/cross-task/deep_model_task_summary.csv`](../../benchmark/results/cross-task/deep_model_task_summary.csv)。
+The machine-readable cross-task summary is [`benchmark/results/cross-task/deep_model_task_summary.csv`](../../benchmark/results/cross-task/deep_model_task_summary.csv).

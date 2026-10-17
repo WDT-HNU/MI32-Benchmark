@@ -1,38 +1,39 @@
-# 公开发布检查清单
+# Public release checklist
 
-以下运行文件相对路径均以 `benchmark/` 为起点。
+Paths below are relative to `benchmark/`.
 
-## 所有权与法律
+## Ownership and legal review
 
-- [ ] 确认项目著作权人和 Apache-2.0 许可证选择。
-- [ ] 完成 `datasets/mi32/source_redistribution_review.csv` 的每一行。
-- [ ] 核验固定提交处的第三方许可证。
-- [ ] 确认权重是允许再分发，还是只能提供下载入口。
-- [ ] 补齐模型和数据集引用。
+- [ ] Confirm project copyright holders and the Apache-2.0 licence choice.
+- [ ] Complete every row of `datasets/mi32/source_redistribution_review.csv`.
+- [ ] Verify third-party licences at the pinned commits.
+- [ ] Determine whether each checkpoint may be redistributed or only linked.
+- [ ] Complete model and dataset citations.
 
-## 可复现性
+## Reproducibility
 
-- [ ] 运行 `python scripts/verify_repository.py --release` 且无失败项。
-- [ ] 在干净的 Linux/CUDA 主机上重建环境。
-- [ ] 从文档中的公开 URL 拉取全部上游仓库和权重。
-- [ ] 按 SHA-256 清单核验完整数据集。
-- [ ] 通过 CPU 结构测试和真实 CUDA/数据门禁。
-- [ ] 从全新 clone 至少完成一次干净的 smoke run。
-- [ ] 确认所有正式结果均包含运行配置、运行清单、适配器清单、源码快照、环境身份、数据集身份和输出哈希。
+- [ ] Run `python scripts/verify_repository.py --release` with no failures.
+- [ ] Rebuild the environment on a clean Linux/CUDA host.
+- [ ] Fetch every upstream repository and checkpoint from documented public locations.
+- [ ] Verify the full dataset against its SHA-256 manifest.
+- [ ] Pass CPU structural tests and the real CUDA/data gate.
+- [ ] Complete at least one clean smoke run from a fresh clone.
+- [ ] Confirm that every formal result includes run configuration, run manifest, adapter manifest, source snapshot, environment identity, dataset identity, and output hashes.
 
-## 科学结论
+## Scientific claims
 
-- [ ] 每个结果汇总旁都写明准确的测试折覆盖情况。
-- [ ] Uni-NTFM 协议结果不进入正式复现表。
-- [ ] 在给出最终模型排名前运行所有预先声明的折。
-- [ ] 报告来源数据集敏感性和不确定性。
-- [ ] 查看测试结果之前，先记录任何伪迹排除规则。
+- [ ] State exact test-fold coverage next to every result summary.
+- [ ] Keep Uni-NTFM protocol results outside the formal-reproduction table.
+- [ ] Run every predeclared fold before publishing a final model ranking.
+- [ ] Report source-dataset sensitivity and uncertainty.
+- [ ] Record artifact-exclusion rules before examining test outcomes.
+- [ ] Keep traditional report transcriptions distinct from prediction-derived result packages.
 
 ## GitHub
 
-- [ ] 启用分支保护和必需 CI。
-- [ ] 启用 Dependabot 和依赖审查。
-- [ ] 在可用时启用 secret scanning 和 push protection。
-- [ ] 创建带签名的语义化标签和 GitHub release。
-- [ ] 大型数据和权重发布在 Git 历史之外，并附 SHA-256 清单。
-- [ ] 只有许可证审查通过后，才归档可引用版本（例如 Zenodo）。
+- [ ] Enable branch protection and required CI.
+- [ ] Enable Dependabot and dependency review.
+- [ ] Enable secret scanning and push protection where available.
+- [ ] Create a signed semantic tag and GitHub release.
+- [ ] Keep large data and checkpoints outside Git history with SHA-256 manifests.
+- [ ] Archive a citable version, such as Zenodo, only after licence review passes.

@@ -1,30 +1,31 @@
-# Benchmark 工作区
+# Benchmark workspace
 
-这里保存参与运行和验证的内容。科学主线是三个任务，代码和证据则按用途归档。
+This directory contains runnable and verifiable material. The scientific structure is task-first; files are grouped by engineering purpose.
 
 ```text
 benchmark/
-├── datasets/          MI3、MI2、P300 相关数据契约和元数据
-├── dataset_tools/     数据构建与检查
-├── model_adapters/    深度模型输入适配
-├── runners/           训练与评测程序
-├── configs/           数据、模型和评测固定配置
-├── scripts/           下载、检查、运行、汇总和发布入口
-├── tests/             结构、数据语义和泄露门禁
-├── results/           各任务结果和运行证据
-├── requirements/      环境依赖
-└── THIRD_PARTY_LICENSES/  上游代码许可证原文
+├── datasets/              MI3, MI2, and P300 data contracts and metadata
+├── dataset_tools/         dataset construction and validation
+├── model_adapters/        deep-model input adapters
+├── runners/               training and evaluation programs
+├── configs/               pinned data, model, and evaluation settings
+├── scripts/               fetch, verify, run, collect, and package entry points
+├── tests/                 structure, data-semantic, and leakage gates
+├── results/               task results and run evidence
+├── requirements/          environment specifications
+└── THIRD_PARTY_LICENSES/  retained upstream licence texts
 ```
 
-| 目标 | 入口 |
+| Goal | Entry point |
 |---|---|
-| 查看三个任务的数据 | [datasets/README.md](datasets/README.md) |
-| 查看深度模型和基础模型 | [项目文档](../docs/deep_learning/README.md) |
-| 查看黎曼方法 | [项目文档](../docs/riemannian/README.md) |
-| 查看跨任务实验矩阵 | [技术导读](../docs/TECHNICAL_GUIDE.md) |
-| 查看深度模型跨任务结果 | [结果说明](../docs/deep_learning/RESULTS.md) |
+| Inspect task data contracts | [datasets/README.md](datasets/README.md) |
+| Inspect traditional baselines | [documentation](../docs/traditional/README.md) |
+| Inspect deep and foundation models | [documentation](../docs/deep_learning/README.md) |
+| Inspect Riemannian methods | [documentation](../docs/riemannian/README.md) |
+| Read the full experiment matrix | [technical guide](../docs/TECHNICAL_GUIDE.md) |
+| Read cross-task deep results | [result notes](../docs/deep_learning/RESULTS.md) |
 
-所有运行命令均以本目录为工作目录：
+Run commands from this directory:
 
 ```bash
 cd benchmark
@@ -33,4 +34,4 @@ python scripts/verify_dataset.py datasets/mi32/metadata
 make cpu-test
 ```
 
-返回[项目首页](../README.md)。
+Return to the [project home](../README.md).

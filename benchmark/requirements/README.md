@@ -1,10 +1,7 @@
-# 环境配置
+# Environment
 
-正式 fold-0 运行记录的环境为 RTX 4090 D、Python 3.12.3、PyTorch 2.8.0+cu128、
-CUDA 12.8、MNE 1.12.1、NumPy 2.3.2、SciPy 1.18.0 和 pandas 3.0.5。
+Recorded formal fold-0 runs used an RTX 4090 D, Python 3.12.3, PyTorch 2.8.0+cu128, CUDA 12.8, MNE 1.12.1, NumPy 2.3.2, SciPy 1.18.0, and pandas 3.0.5.
 
-`core.txt` 提供数据工具和 4 种监督模型所需依赖；`foundation.txt` 加入封存配置所需的
-LaBraM 和 Mamba 依赖。CUDA wheel 与平台相关，因此请先从 CUDA 12.8 索引安装 PyTorch，
-再安装这些依赖文件。
+`core.txt` contains the data tools and dependencies for the four supervised architectures. `foundation.txt` adds LaBraM and Mamba dependencies required by the sealed configuration. CUDA wheels are platform-specific, so install PyTorch from the CUDA 12.8 index before these requirement files.
 
-该环境配置记录的是成功运行条件，不表示仅用于 CPU 结构检查的 stub 与 CUDA 内核数值等价。
+This environment records successful execution conditions. It does not imply that a CPU-only structural stub is numerically equivalent to a CUDA kernel.

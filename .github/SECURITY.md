@@ -1,8 +1,7 @@
-# 安全说明
+# Security
 
-请勿在公开 issue 中提交私有数据位置、凭据、签名 URL、SSH 密码、token 或受试者级敏感信息。
+Do not post private data locations, credentials, signed URLs, SSH passwords, tokens, or subject-level sensitive information in a public issue.
 
-安全问题请通过仓库 Security 页面提供的私密漏洞报告渠道提交；如果该入口不可用，请私下联系
-仓库所有者，不要公开漏洞细节。
+Report security concerns through the repository's private vulnerability-reporting channel on the Security page. If that channel is unavailable, contact the repository owner privately and do not publish vulnerability details.
 
-支持范围：仅最新的带标签版本。
+Supported versions: the latest tagged release only.

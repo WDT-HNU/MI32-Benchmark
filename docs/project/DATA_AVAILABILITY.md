@@ -1,34 +1,33 @@
-# 获取 MI32 数据
+# Accessing MI32 data
 
-信号文件约 8.7 GB，因此不放进 Git。仓库中提供的是：
+The signal package is approximately 8.7 GB and is not stored in Git. The repository provides:
 
-- 数据形状、通道顺序、标签和预处理方法；
-- 受试者来源和受试者级数据划分；
-- 插值覆盖情况和质量检查标记；
-- 230 个受试者文件的 SHA-256；
-- 数据加载器和 32 通道 RGNN 邻接矩阵。
+- shapes, channel order, labels, and preprocessing contract;
+- subject provenance and subject-level splits;
+- interpolation coverage and quality flags;
+- SHA-256 values for 230 subject files;
+- a loader and the 32-channel RGNN adjacency matrix.
 
-以下命令和相对路径均以仓库中的 `benchmark/` 为工作目录。
+Commands and relative paths below use `benchmark/` as the working directory.
 
-## 三种准备数据的方式
+## Three preparation routes
 
-### 1. 下载已发布的数据包
+### 1. Download an approved package
 
-让 `MI32_DATA_URL` 指向经过批准的机构、Zenodo 或 Hugging Face 文件：
+Point `MI32_DATA_URL` to an approved institutional, Zenodo, or Hugging Face artifact:
 
 ```bash
 python scripts/fetch_dataset.py --url "$MI32_DATA_URL" --out datasets/mi32/full
 ```
 
-### 2. 使用已有副本
+### 2. Use an existing authorized copy
 
 ```bash
 python scripts/verify_dataset.py /path/to/MI32_COMMON32_V4 --full
 ```
 
-### 3. 重建 common-32 版本
+### 3. Rebuild common-32
 
-从整理后的前置数据开始，运行 `dataset_tools/build_mi3_32_interp.py`。
+Starting from the curated precursor data, run `dataset_tools/build_mi3_32_interp.py`.
 
-无论采用哪种方式，最后都要运行完整检查器。它会核对运行器使用的数据约定、划分文件和哈希。
-各来源数据集的访问与再分发情况记录在 `datasets/mi32/source_redistribution_review.csv`。
+Whichever route is used, finish with the full verifier. It checks the data contract used by the runners, the split file, and hashes. Source access and redistribution notes are tracked in `datasets/mi32/source_redistribution_review.csv`.

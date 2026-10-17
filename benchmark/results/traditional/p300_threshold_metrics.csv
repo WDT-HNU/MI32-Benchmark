@@ -1,0 +1,17 @@
+method,roc_auc,pr_auc,balanced_accuracy,precision,recall,f1,specificity,fold_scope,provenance
+BLDA,0.830,0.575,0.723,0.282,0.850,0.399,0.597,873_LOGO,report_transcription
+SWLDA,0.828,0.570,0.604,0.672,0.227,0.301,0.981,873_LOGO,report_transcription
+Flatten + shrinkage LDA,0.827,0.569,0.685,0.623,0.412,0.475,0.958,873_LOGO,report_transcription
+DWT + shrinkage LDA,0.824,0.564,0.677,0.628,0.395,0.463,0.959,873_LOGO,report_transcription
+L1 logistic,0.817,0.541,0.743,0.415,0.680,0.503,0.806,873_LOGO,report_transcription
+Flatten + RBF-SVM,0.811,0.540,0.710,0.504,0.538,0.505,0.881,873_LOGO,report_transcription
+Flatten + linear SVM,0.808,0.523,0.732,0.411,0.657,0.494,0.807,873_LOGO,report_transcription
+DWT + linear SVM,0.807,0.521,0.729,0.410,0.654,0.492,0.805,873_LOGO,report_transcription
+ERP statistics + LDA,0.793,0.506,0.636,0.559,0.306,0.362,0.965,873_LOGO,report_transcription
+PCA64 + LDA,0.791,0.493,0.591,0.605,0.212,0.284,0.969,873_LOGO,report_transcription
+ERP statistics + linear SVM,0.782,0.482,0.717,0.366,0.672,0.459,0.762,873_LOGO,report_transcription
+SelectKBest60 + LDA,0.760,0.437,0.583,0.495,0.196,0.249,0.970,873_LOGO,report_transcription
+Template correlation,0.716,0.380,0.652,0.251,0.694,0.342,0.609,873_LOGO,report_transcription
+Time-lagged template,0.698,0.354,0.637,0.242,0.676,0.327,0.598,873_LOGO,report_transcription
+xDAWN + LDA,0.629,0.346,0.585,0.330,0.218,0.246,0.952,873_LOGO,report_transcription
+xDAWN + linear SVM,0.619,0.315,0.593,0.262,0.479,0.327,0.707,873_LOGO,report_transcription

@@ -1,0 +1,31 @@
+snapshot_date,task,method,accuracy_mean,accuracy_sd,balanced_accuracy_mean,balanced_accuracy_sd,macro_f1_mean,macro_f1_sd,provenance
+2026-09-04,MI2,Band-power + linear SVM,0.564,0.089,0.564,0.089,0.536,0.108,report_transcription
+2026-09-04,MI2,Band-power + shrinkage LDA,0.562,0.088,0.562,0.088,0.533,0.108,report_transcription
+2026-09-04,MI2,DWT + shrinkage LDA,0.533,0.071,0.533,0.071,0.499,0.098,report_transcription
+2026-09-04,MI2,CSP + linear SVM,0.524,0.060,0.525,0.060,0.446,0.103,report_transcription
+2026-09-04,MI2,CSP + shrinkage LDA,0.520,0.059,0.521,0.059,0.433,0.102,report_transcription
+2026-09-04,MI2,Flatten + shrinkage LDA,0.514,0.059,0.514,0.059,0.509,0.061,report_transcription
+2026-09-04,MI2,Regularized CSP + shrinkage LDA,0.513,0.046,0.513,0.045,0.415,0.090,report_transcription
+2026-09-04,MI3,Band-power + shrinkage LDA,0.506,0.017,0.405,0.015,0.392,0.023,report_transcription
+2026-09-04,MI3,DWT + shrinkage LDA,0.501,0.014,0.376,0.014,0.341,0.030,report_transcription
+2026-09-04,MI3,CSP + shrinkage LDA,0.496,0.010,0.343,0.008,0.262,0.027,report_transcription
+2026-09-04,MI3,Regularized CSP + shrinkage LDA,0.496,0.009,0.343,0.008,0.261,0.026,report_transcription
+2026-09-04,MI3,Band-power + linear SVM,0.481,0.026,0.436,0.018,0.435,0.018,report_transcription
+2026-09-04,MI3,Flatten + shrinkage LDA,0.471,0.006,0.372,0.004,0.360,0.006,report_transcription
+2026-09-04,MI3,CSP + linear SVM,0.466,0.028,0.382,0.018,0.367,0.030,report_transcription
+2026-09-04,P300,Flatten + LDA,0.882,0.052,0.685,0.116,0.702,0.118,report_transcription
+2026-09-04,P300,xDAWN + LDA,0.847,0.065,0.585,0.136,0.577,0.153,report_transcription
+2026-09-04,P300,SWLDA,0.880,0.048,0.604,0.102,0.614,0.121,report_transcription
+2026-09-04,P300,Flatten + linear SVM,0.792,0.094,0.732,0.086,0.676,0.099,report_transcription
+2026-09-04,P300,PCA64 + LDA,0.870,0.050,0.591,0.084,0.600,0.106,report_transcription
+2026-09-04,P300,xDAWN + linear SVM,0.680,0.146,0.593,0.136,0.551,0.125,report_transcription
+2026-09-04,P300,DWT(db4) + linear SVM,0.792,0.094,0.729,0.083,0.675,0.096,report_transcription
+2026-09-04,P300,DWT(db4) + shrinkage LDA,0.882,0.052,0.677,0.114,0.695,0.118,report_transcription
+2026-09-04,P300,ERP statistical features + LDA,0.874,0.053,0.636,0.123,0.642,0.134,report_transcription
+2026-09-04,P300,SelectKBest60 + LDA,0.867,0.049,0.583,0.089,0.583,0.110,report_transcription
+2026-09-04,P300,L1 logistic,0.794,0.094,0.743,0.090,0.682,0.102,report_transcription
+2026-09-04,P300,Template correlation,0.611,0.057,0.652,0.067,0.528,0.064,report_transcription
+2026-09-04,P300,BLDA,0.627,0.059,0.723,0.061,0.560,0.083,report_transcription
+2026-09-04,P300,Flatten + RBF-SVM,0.840,0.083,0.709,0.092,0.701,0.104,report_transcription
+2026-09-04,P300,ERP statistical features + linear SVM,0.756,0.102,0.717,0.092,0.644,0.101,report_transcription
+2026-09-04,P300,Time-lagged template matching,0.597,0.070,0.637,0.066,0.514,0.066,report_transcription

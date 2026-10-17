@@ -1,29 +1,26 @@
-# 数据集卡片：MI32 common32 v4
+# Dataset card: MI32 common-32 v4
 
-## 概要
+## Summary
 
-MI32 common32 v4 是由 8 个来源数据集统一得到的三分类运动想象 EEG benchmark，共包含
-230 名受试者和 97,608 个试次。每个试次表示为 250 Hz、伏特单位的
-`float32 [32, 750]` 张量。
+MI32 common-32 v4 harmonizes eight source datasets for three-class motor-imagery benchmarking. It contains 230 subjects and 97,608 trials. Each trial is a volt-scale `float32 [32,750]` tensor sampled at 250 Hz.
 
-本卡片描述的封存版本，其 `SHA256SUMS` 文件哈希为：
+The sealed release has this `SHA256SUMS` file hash:
 
 ```text
 1017a3dd50d11ff9d92d987a40996fc2fd61ace99d465213bdb0316ff52aad06
 ```
 
-## 预期用途
+## Intended use
 
-- 跨受试者三分类运动想象。
-- 可复现地比较任务专用网络和 EEG 基础模型。
-- 审计通道、采样率、单位、数据划分和模型适配器行为。
+- cross-subject, three-class motor-imagery research;
+- reproducible comparison of task-specific networks and EEG foundation models;
+- audit of channel layout, rate, unit, split, and adapter behavior.
 
-本数据集不用于诊断、治疗、身份推断或医疗设备部署。异质的 `non_upper` 是宽泛的 benchmark
-超类，不是临床类别。
+The dataset is not intended for diagnosis, treatment, identity inference, or medical-device deployment. The heterogeneous `non_upper` label is a broad benchmark superclass, not a clinical category.
 
-## 组成
+## Composition
 
-| 来源标识 | 受试者数 | 实测目标通道 | 插值目标通道 |
+| Source ID | Subjects | Measured target channels | Interpolated target channels |
 |---|---:|---:|---:|
 | BNCI2014_001 | 9 | 11 | 21 |
 | PhysionetMI | 109 | 32 | 0 |
@@ -34,50 +31,43 @@ MI32 common32 v4 是由 8 个来源数据集统一得到的三分类运动想象
 | Zhou2016 | 4 | 14 | 18 |
 | Zhou2020 | 8 | 16 | 16 |
 
-左上肢、右上肢和非上肢想象的标签数量准确为 `24,402 / 24,402 / 48,804`。受试者内部的
-筛选目标为 `1:1:2`。
+The exact counts for left-upper, right-upper, and non-upper imagery are `24,402 / 24,402 / 48,804`. Per-subject selection targets a `1:1:2` ratio.
 
-## 统一信号约定
+## Signal contract
 
-- 固定通道顺序：`Fp1, Fp2, AF3, AF4, F7, F3, Fz, F4, F8, FC5, FC3, FCz, FC4, FC6,
-  T7, C3, Cz, C4, T8, CP5, CP3, CPz, CP4, CP6, P7, P3, Pz, P4, P8, O1, Oz, O2`.
-- 采样率：250 Hz。
-- epoch 长度：3 秒，750 个采样点。
-- 存储单位：伏特。
-- 数据中不内嵌运行时归一化。
-- `channel_mask=True` 表示发布的 32 个通道都可供模型使用。
-- `measured_mask=True` 表示来源数据中的实测值；`False` 表示插值值。
+- Channel order: `Fp1, Fp2, AF3, AF4, F7, F3, Fz, F4, F8, FC5, FC3, FCz, FC4, FC6, T7, C3, Cz, C4, T8, CP5, CP3, CPz, CP4, CP6, P7, P3, Pz, P4, P8, O1, Oz, O2`.
+- Sampling rate: 250 Hz.
+- Epoch duration: 3 seconds, 750 samples.
+- Storage unit: volts.
+- No runtime normalization is embedded in the data.
+- `channel_mask=True` means all 32 released channels are model-valid.
+- `measured_mask=True` denotes a measured source channel; `False` denotes interpolation.
 
-## 缺失通道处理
+## Missing-channel handling
 
-缺失的目标电极使用全部可用实测来源通道估计。插值采用 MNE-Python 实现的 Perrin 球面样条
-矩阵，使用 `standard_1005` 模板坐标和 `alpha=1e-5`。直接实测的目标通道不做数值修改地复制；
-下游模型不得把插值通道置零。
+Missing target electrodes are estimated from all available measured source channels. Interpolation uses the Perrin spherical-spline matrix implemented by MNE-Python with `standard_1005` template coordinates and `alpha=1e-5`. Directly measured target channels are copied without numerical modification. Downstream models must not zero interpolated channels.
 
-模板电极坐标是一项局限：使用的是通用坐标，而不是每位受试者实际数字化的电极位置。
+Template rather than participant-digitized coordinates are a limitation.
 
-## 数据划分与泄露控制
+## Splits and leakage control
 
-所有划分均以受试者为单位。受试者不超过 10 人的数据集使用 LOSO；更大的数据集使用五折
-GroupKFold。测试折为 `f` 时，若 `f=0`，运行器使用 fold 1 作为验证集，否则使用 fold 0；
-其余受试者全部用于训练。
+All splits are subject-level. Datasets with at most ten subjects use leave-one-subject-out; larger datasets use five-fold GroupKFold. For test fold `f`, the runner uses fold 1 as validation when `f=0`, otherwise fold 0; all remaining subjects are used for training.
 
-同一受试者不能出现在多个角色中。模型适配器的统计量只能用训练受试者拟合，并用划分哈希封存。
+A subject cannot occupy multiple roles. Learned adapter statistics are fitted on training subjects only and sealed with a split hash.
 
-## 质量控制
+## Quality control
 
-该版本不含 NaN、Inf 或平坦试次。稳健极值筛查标记了 501 个待复核试次，这些试次仍保留在封存
-数据中。任何排除或敏感性分析都必须在训练前声明，不能根据验证集或测试集结果选择规则。
+The release contains no NaN, Inf, or flat trials. Robust extreme-value screening marks 501 trials for review; those trials remain in the sealed dataset. Any exclusion or sensitivity analysis must be declared before training and cannot be selected from validation or test outcomes.
 
-## 已知局限
+## Known limitations
 
-- `non_upper` 会因来源数据集不同而表示脚、舌或静息。
-- `hands`、`both_hands` 和 `both_hand` 边界事件已在上游处理中排除。
-- 来源实验协议、硬件、参考方式和受试人群仍然异质。
-- 各来源数据集的插值比例不同，可能成为域线索。
-- 从原始数据生成整理后前置数据的完整构建器尚未包含在该 alpha 仓库中。
+- `non_upper` may represent feet, tongue, or rest depending on the source dataset.
+- `hands`, `both_hands`, and `both_hand` boundary events were excluded upstream.
+- Source protocols, hardware, references, and participant populations remain heterogeneous.
+- Interpolation rates differ by source and may become a domain cue.
+- The alpha repository does not include the full raw-to-curated precursor builder.
 
-## 文件结构
+## File layout
 
 ```text
 MI32_COMMON32_V4/
@@ -93,11 +83,8 @@ MI32_COMMON32_V4/
 └── data/subject_000.npz ... subject_229.npz
 ```
 
-每个 NPZ 包含 `X`、`y`、`channel_mask` 和 `measured_mask`。公开元数据快照位于 `metadata/`；
-信号 NPZ 和 `trials.csv` 只通过经过批准的数据版本分发。
+Each NPZ contains `X`, `y`, `channel_mask`, and `measured_mask`. The public metadata snapshot is under `metadata/`; signal NPZ files and `trials.csv` are distributed only through an approved data release.
 
-## 访问与授权
+## Access and licensing
 
-本仓库不授予 8 个来源数据集的再分发权。发布公开合并包之前，维护者必须为每个来源记录官方
-访问 URL、版本/日期、所需协议、再分发许可和必要引用。审查完成前，请使用有权访问的本地
-封存副本，或从合法取得的来源自行重建。
+This repository does not grant redistribution rights for the eight source datasets. Before publishing a merged package, maintainers must record the official access URL, version/date, required agreement, redistribution permission, and citation for every source. Until that review is complete, use an authorized local copy or rebuild from legally obtained sources.

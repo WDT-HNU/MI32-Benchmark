@@ -1,6 +1,5 @@
-# 元数据快照
+# Metadata snapshot
 
-这些文件复制自封存的 `4.0-common32` 版本。`SHA256SUMS` 还列出了 230 个有意不放入 Git 的
-信号 NPZ 文件。`scripts/verify_dataset.py` 既可检查该纯元数据快照，也可检查有权使用的完整版本。
+These files were copied from the sealed `4.0-common32` release. `SHA256SUMS` also lists 230 signal NPZ files intentionally excluded from Git. `scripts/verify_dataset.py` can verify either this metadata-only snapshot or an authorized full release.
 
-原版本的 README 保存在 `README.md`。
+The release's original README is preserved as `README.md`.

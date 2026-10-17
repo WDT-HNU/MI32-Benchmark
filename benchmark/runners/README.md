@@ -1,22 +1,19 @@
-# 训练入口
+# Training entry points
 
-这里集中存放深度模型在各任务中调用的训练程序。当前公开运行器以 MI3 为主，通常不需要直接执行
-这些文件，统一从
-[`scripts/benchmark.py`](../scripts/benchmark.py) 进入，可以避免遗漏数据身份、权重和运行清单检查。
+This directory contains deep-model training programs. The public runners currently concentrate on MI3. Use [`scripts/benchmark.py`](../scripts/benchmark.py) instead of calling files directly so dataset identity, checkpoint, and run-manifest checks are not skipped.
 
-| 文件 | 负责内容 |
+| File | Responsibility |
 |---|---|
-| `mi3_eegnet.py` | EEGNet、TSception、RGNN、EEG-Conformer |
-| `mi3_foundation.py` | LaBraM、EEGMamba、CodeBrain |
-| `uni_mi3_supervised.py` | Uni-NTFM 独立协议评测 |
-| `mi3_deep_models.py` | 传统深度模型兼容导出 |
-| `remote_mi3_deep_models.py` | 远程运行所需的冻结兼容实现 |
+| `mi3_eegnet.py` | EEGNet, TSception, RGNN, EEG-Conformer |
+| `mi3_foundation.py` | LaBraM, EEGMamba, CodeBrain |
+| `uni_mi3_supervised.py` | separate Uni-NTFM protocol benchmark |
+| `mi3_deep_models.py` | compatibility exports for task-specific deep models |
+| `remote_mi3_deep_models.py` | frozen compatibility implementation for remote runs |
 
-例如，EEGNet 的统一入口是：
+Example:
 
 ```bash
 python scripts/benchmark.py run --model eegnet --data datasets/mi32/full --output outputs/eegnet
 ```
 
-模型输入适配放在 [`model_adapters/`](../model_adapters/)，结构与数据语义检查放在
-[`tests/`](../tests/)。
+Input adapters are under [`model_adapters/`](../model_adapters/); structural and data-semantic checks are under [`tests/`](../tests/).
